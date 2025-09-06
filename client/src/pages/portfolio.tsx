@@ -61,7 +61,7 @@ export default function Portfolio() {
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      rootMargin: '0px 0px -20px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -493,8 +493,8 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="py-20 px-4 bg-portfolio-background relative">
         {/* Subtle grid pattern background */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="grid-pattern"></div>
+        <div className="absolute inset-0 opacity-2">
+          <div className="honeycomb-pattern"></div>
         </div>
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-16 fade-in">
