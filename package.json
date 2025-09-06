@@ -5,12 +5,16 @@
   "license": "MIT",
   "homepage": "https://mrohitth.github.io/my-website",
   "scripts": {
-    "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
-    "check": "tsc",
-    "db:push": "drizzle-kit push"
-  },
+  "dev": "NODE_ENV=development tsx server/index.ts",
+  "build:frontend": "vite build --outDir dist-frontend",
+  "build:backend": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+  "build": "npm run build:frontend && npm run build:backend",
+  "deploy:frontend": "npm run build:frontend && rm -rf docs && mv dist-frontend docs",
+  "start": "NODE_ENV=production node dist/index.js",
+  "check": "tsc",
+  "db:push": "drizzle-kit push"
+},
+
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
