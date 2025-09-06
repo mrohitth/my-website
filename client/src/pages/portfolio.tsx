@@ -95,16 +95,30 @@ export default function Portfolio() {
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+  try {
+    const response = await fetch('http://localhost:5000/send-contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      alert('Message sent successfully!');
       setFormData({ name: '', email: '', message: '' });
-      // You would implement actual form submission logic here
-    }, 2000);
-  };
+    } else {
+      alert('Failed to send message. Please try again.');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('An error occurred. Please try again.');
+  }
+
+  setIsSubmitting(false);
+};
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -373,7 +387,7 @@ export default function Portfolio() {
             <div className="fade-in md:col-span-1 lg:col-span-2 space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
-                <div className="space-y-3 md:space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
+                <div className="space-y-3 md:space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose text-justify">
                   <p data-testid="about-paragraph-1">
                     I’m a data engineer passionate about building scalable, reliable systems that turn raw data into actionable insights. I specialize in designing robust ETL pipelines, orchestrating complex workflows, and creating analytics platforms that enable data-driven decision-making at scale. Leveraging my expertise in AI and ML, I enhance data engineering solutions with intelligent automation, predictive modeling, and ML-ready infrastructure, bridging the gap between traditional pipelines and advanced analytics. Continuously exploring new technologies, I focus on solving complex data challenges and delivering solutions that drive meaningful business impact.
                   </p>
