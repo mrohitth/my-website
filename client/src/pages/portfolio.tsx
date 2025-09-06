@@ -304,12 +304,12 @@ export default function Portfolio() {
           {subtleFlowElements.map((element) => (
             <div
               key={element.id}
-              className="absolute rounded-full bg-portfolio-primary/70 subtle-flow"
+              className="absolute rounded-full bg-cyan-400/80 subtle-flow"
               style={{
                 top: `${element.top}%`,
                 left: '-8px',
-                width: `${element.width}px`,
-                height: '2px',
+                width: `${element.width * 2}px`,
+                height: '3px',
                 animationDuration: `${element.duration}s`,
                 animationDelay: `${element.delay}s`
               }}
