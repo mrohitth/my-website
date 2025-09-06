@@ -15,6 +15,9 @@ export default function Portfolio() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   
   // Typing animation for roles
   const roles = [
@@ -39,11 +42,38 @@ export default function Portfolio() {
 
   // Typing animation for roles
   useEffect(() => {
-    const interval = setInterval(() => {
+    const currentRole = roles[currentRoleIndex];
+
+    let typingSpeed = isDeleting ? 50 : 100; // faster delete
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && displayedText.length < currentRole.length) {
+      // typing forward
+      timeout = setTimeout(() => {
+        setDisplayedText(currentRole.slice(0, displayedText.length + 1));
+      }, typingSpeed);
+    } else if (isDeleting && displayedText.length > 0) {
+      // deleting backwards
+      timeout = setTimeout(() => {
+        setDisplayedText(currentRole.slice(0, displayedText.length - 1));
+      }, typingSpeed);
+    } else if (!isDeleting && displayedText.length === currentRole.length) {
+      // pause before deleting
+      timeout = setTimeout(() => setIsDeleting(true), 1500);
+    } else if (isDeleting && displayedText.length === 0) {
+      // move to next word
+      setIsDeleting(false);
       setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, currentRoleIndex]);
+
+  return (
+    <div>
+      <h2 className="typing-animation">{displayedText}</h2>
+    </div>
+  );
 
   // Generate stable flowing elements with CSS animations (memoized to prevent re-renders)
   const subtleFlowElements = useMemo(() => 
