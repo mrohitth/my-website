@@ -160,34 +160,27 @@
   
   /* Typing animation for role changes */
   .typing-animation {
-  display: inline-block;
-  color: hsl(210 100% 60%);
-  font-weight: 500;
-  white-space: nowrap;      /* Prevent line breaks */
-  overflow: hidden;         /* Hide overflow for typing effect */
-  border-right: 2px solid hsl(210 100% 60%); /* cursor */
-  /* animation: typing 2s steps(30, end) forwards; /* run once */
-    }
+    position: relative;
+    display: inline-block;
+    color: hsl(210 100% 60%);
+    font-weight: 500;
+  }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
+  .typing-animation::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: hsl(210 100% 60%);
+    animation: blink 1s infinite;
+  }
 
-    .typing-animation::after {
-      content: '';
-      display: inline-block;
-      color: hsl(210 100% 60%);
-      font-weight: 500;
-      background: hsl(210 100% 60%);
-      margin-left: 2px;
-      border-right: 2px solid hsl(210 100% 60%); 
-      animation: blink 0.85s step-end infinite;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
 
 
 
