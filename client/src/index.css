@@ -160,28 +160,25 @@
   
   /* Typing animation for role changes */
   .typing-animation {
-    position: relative;
-    display: inline-block;
-    color: hsl(210 100% 60%);
-    font-weight: 500;
+  display: inline-block;
+  color: hsl(210 100% 60%);
+  font-weight: 500;
+  white-space: nowrap;       /* Prevent wrapping */
+  overflow: hidden;          /* Hide overflow for typing effect */
+  border-right: 2px solid hsl(210 100% 60%); /* cursor */
+  animation: typing 3s steps(30) infinite, blink 0.7s step-end infinite;
   }
-  
-  .typing-animation::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 0;
-    height: 100%;
-    width: 2px;
-    background: hsl(210 100% 60%);
-    animation: blink 1s infinite;
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
   }
-  
+
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    50% { border-color: transparent; }
   }
-  
+
+
   /* Subtle flow animation - almost invisible data movement */
   .subtle-flow {
     animation-name: gentle-flow;
