@@ -375,14 +375,7 @@ export default function Portfolio() {
                 <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
                 <div className="space-y-3 md:space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
                   <p data-testid="about-paragraph-1">
-                    I'm a passionate engineer who bridges the gap between data science and robust software engineering. 
-                    My journey began with traditional development, but I discovered my true calling in the world 
-                    of data engineering and machine learning systems.
-                  </p>
-                  <p data-testid="about-paragraph-2">
-                    I specialize in building scalable data pipelines, designing ML infrastructure, and creating 
-                    analytics platforms that turn raw data into business value. My experience spans from ETL 
-                    orchestration to model deployment, always with a focus on reliability and performance.
+                    I’m a data engineer passionate about building scalable, reliable systems that turn raw data into actionable insights. I specialize in designing robust ETL pipelines, orchestrating complex workflows, and creating analytics platforms that enable data-driven decision-making at scale. Leveraging my expertise in AI and ML, I enhance data engineering solutions with intelligent automation, predictive modeling, and ML-ready infrastructure, bridging the gap between traditional pipelines and advanced analytics. Continuously exploring new technologies, I focus on solving complex data challenges and delivering solutions that drive meaningful business impact.
                   </p>
                 </div>
               </div>
@@ -684,7 +677,7 @@ export default function Portfolio() {
                     <Github className="h-5 w-5" />
                   </a>
                   <a 
-                    href="#" 
+                    href="https://linkedin.com/in/mrohitth/"
                     className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
                     data-testid="link-linkedin"
                   >
