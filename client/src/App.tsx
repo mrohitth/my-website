@@ -26,8 +26,9 @@ function HashLocationRouter({ children }: { children: React.ReactNode }) {
 function AppRouter() {
   return (
     <HashLocationRouter>
+      {/* Only the Portfolio route */}
       <Portfolio path="/" />
-      <NotFound default />
+      {/* Remove NotFound entirely */}
     </HashLocationRouter>
   );
 }
