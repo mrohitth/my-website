@@ -677,7 +677,7 @@ export default function Portfolio() {
                     <Github className="h-5 w-5" />
                   </a>
                   <a 
-                    href="https://linkedin.com/in/mrohitth/"
+                    href="https://www.linkedin.com/in/mrohitth/"
                     className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
                     data-testid="link-linkedin"
                   >
