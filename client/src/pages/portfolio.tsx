@@ -235,7 +235,7 @@ export default function Portfolio() {
     <div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-md border-b border-portfolio-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
@@ -250,7 +250,7 @@ export default function Portfolio() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+              <div className="flex items-baseline space-x-8">
                 <button 
                   onClick={() => scrollToSection('hero')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
