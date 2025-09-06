@@ -183,7 +183,6 @@
   }
 
 
-
   /* Subtle flow animation - almost invisible data movement */
   .subtle-flow {
     animation-name: gentle-flow;
@@ -257,7 +256,7 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
