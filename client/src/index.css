@@ -166,7 +166,7 @@
   white-space: nowrap;      /* Prevent line breaks */
   overflow: hidden;         /* Hide overflow for typing effect */
   border-right: 2px solid hsl(210 100% 60%); /* cursor */
-  animation: typing 2s steps(30, end) forwards; /* run once */
+  /* animation: typing 2s steps(30, end) forwards; /* run once */
     }
 
     @keyframes typing {
@@ -177,11 +177,12 @@
     .typing-animation::after {
       content: '';
       display: inline-block;
-      width: 2px;
-      height: 1em;
+      color: hsl(210 100% 60%);
+      font-weight: 500;
       background: hsl(210 100% 60%);
       margin-left: 2px;
-      animation: blink 0.7s step-end infinite;
+      border-right: 2px solid hsl(210 100% 60%); 
+      animation: blink 0.85s step-end infinite;
     }
 
     @keyframes blink {
