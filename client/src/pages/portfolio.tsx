@@ -342,7 +342,7 @@ export default function Portfolio() {
                 <ExternalLink className="ml-2 h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
+                //variant="outline"
                 onClick={() => scrollToSection('contact')}
                 //className="bg-transparent border-portfolio-border text-portfolio-foreground hover:bg-portfolio-secondary/60 hover:text-portfolio-foreground px-8 py-3 font-medium"
                 className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium"
