@@ -493,7 +493,7 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="py-20 px-4 bg-portfolio-background relative">
         {/* Subtle grid pattern background */}
-        <div className="absolute inset-0 opacity-2">
+        <div className="absolute inset-0 opacity-4">
           <div className="honeycomb-pattern"></div>
         </div>
         <div className="max-w-6xl mx-auto relative">
