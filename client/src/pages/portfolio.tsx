@@ -649,26 +649,26 @@ export default function Portfolio() {
                 <div className="flex items-center space-x-3">
                   <Mail className="text-portfolio-primary text-lg" />
                   <a 
-                    href="mailto:your.email@example.com" 
+                    href="mailto:mathew.rohit.thomson@gmail.com"
                     className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
                     data-testid="link-email"
                   >
-                    your.email@example.com
+                    mathew.rohit.thomson@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="text-portfolio-primary text-lg" />
                   <a 
-                    href="tel:+1234567890" 
+                    href="tel:+14122142233"
                     className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
                     data-testid="link-phone"
                   >
-                    +1 (234) 567-890
+                    +1 (412) 214-2233
                   </a>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="text-portfolio-primary text-lg" />
-                  <span className="text-portfolio-foreground" data-testid="text-location">Your City, Country</span>
+                  <span className="text-portfolio-foreground" data-testid="text-location">Virginia, USA</span>
                 </div>
               </div>
               
@@ -677,7 +677,7 @@ export default function Portfolio() {
                 <h3 className="text-lg font-semibold mb-4" data-testid="social-title">Follow me</h3>
                 <div className="flex space-x-4">
                   <a 
-                    href="#" 
+                    href="https://github.com/mrohitth"
                     className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
                     data-testid="link-github"
                   >
