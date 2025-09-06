@@ -530,9 +530,8 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-16 fade-in">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <TrendingUp className="text-portfolio-primary h-8 w-8" />
+            <BarChart3 className="text-portfolio-primary h-8 w-8" />
               <h2 className="text-4xl font-bold" data-testid="projects-title">My Projects</h2>
-              <BarChart3 className="text-portfolio-primary h-8 w-8" />
             </div>
             <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto" data-testid="projects-description">
               Data-driven solutions that transform business operations and unlock insights from complex datasets.
