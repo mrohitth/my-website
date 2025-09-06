@@ -163,20 +163,31 @@
   display: inline-block;
   color: hsl(210 100% 60%);
   font-weight: 500;
-  white-space: nowrap;       /* Prevent wrapping */
-  overflow: hidden;          /* Hide overflow for typing effect */
+  white-space: nowrap;      /* Prevent line breaks */
+  overflow: hidden;         /* Hide overflow for typing effect */
   border-right: 2px solid hsl(210 100% 60%); /* cursor */
-  animation: typing 3s steps(30) infinite, blink 0.7s step-end infinite;
-  }
+  animation: typing 2s steps(30, end) forwards; /* run once */
+    }
 
-  @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-  }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
 
-  @keyframes blink {
-    50% { border-color: transparent; }
-  }
+    .typing-animation::after {
+      content: '';
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: hsl(210 100% 60%);
+      margin-left: 2px;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
 
 
   /* Subtle flow animation - almost invisible data movement */
