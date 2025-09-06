@@ -18,11 +18,22 @@ export default function Portfolio() {
   
   // Typing animation for roles
   const roles = [
-    "Full-stack Developer",
-    "Data Pipeline Architect", 
-    "ML Engineering Enthusiast",
-    "Analytics Problem Solver"
-  ];
+  "Data Engineer",
+  "Python Ninja",
+  "Cloud Explorer",
+  "Data Storyteller",
+  "Data Pipeline Architect",
+  "Algorithm Tinkerer",
+  "Big Data Wrangler",
+  "AI/ML Enthusiast",
+  "Code Alchemist",
+  "Tech Curious",
+  "Insights Seeker",
+  "SQL Sorcerer",
+  "Analytics Problem Solver",
+  "Model Builder",
+  "Problem Solver Extraordinaire"
+];
 
   // Subtle data flow animation (no React state needed - using CSS animations)
 
@@ -195,7 +206,7 @@ export default function Portfolio() {
                 className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors"
                 data-testid="logo-button"
               >
-                Your Name
+                Mathew Rohit Thomson
               </button>
             </div>
             
@@ -311,7 +322,7 @@ export default function Portfolio() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6" data-testid="hero-title">
-              Hey, I'm <span className="gradient-text">Your Name</span>
+              Hey, I'm <span className="gradient-text">Mathew</span>
             </h1>
             <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-8 max-w-2xl mx-auto h-16 flex items-center justify-center" data-testid="hero-description">
               <span className="typing-animation">
@@ -319,7 +330,7 @@ export default function Portfolio() {
               </span>
             </div>
             <p className="text-lg text-portfolio-muted-foreground/80 mb-8 max-w-2xl mx-auto" data-testid="hero-subtitle">
-              passionate about transforming data into actionable insights and building scalable solutions
+              Engineer of pipelines, architect of insights—building data-driven solutions that simplify complexity and empower smarter decisions at scale
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
@@ -333,7 +344,8 @@ export default function Portfolio() {
               <Button
                 variant="outline"
                 onClick={() => scrollToSection('contact')}
-                className="bg-transparent border-portfolio-border text-portfolio-foreground hover:bg-portfolio-secondary/60 hover:text-portfolio-foreground px-8 py-3 font-medium"
+                //className="bg-transparent border-portfolio-border text-portfolio-foreground hover:bg-portfolio-secondary/60 hover:text-portfolio-foreground px-8 py-3 font-medium"
+                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium"
                 data-testid="button-contact"
               >
                 Get In Touch
@@ -708,7 +720,7 @@ export default function Portfolio() {
       <footer className="py-8 px-4 bg-portfolio-background border-t border-portfolio-border">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-portfolio-muted-foreground" data-testid="footer-text">
-            © 2024 Your Name. All rights reserved. Built with ❤️ and modern web technologies.
+            © 2025 Mathew Rohit Thomson. All rights reserved. Built with ❤️ and modern web technologies.
           </p>
         </div>
       </footer>
