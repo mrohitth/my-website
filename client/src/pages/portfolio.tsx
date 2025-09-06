@@ -15,7 +15,6 @@ export default function Portfolio() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
   
   // Typing animation for roles
   const roles = [
@@ -40,26 +39,11 @@ export default function Portfolio() {
 
   // Typing animation for roles
   useEffect(() => {
-    let charIndex = 0;
-    const typingInterval = setInterval(() => {
-      setDisplayedText(roles[currentRoleIndex].slice(0, charIndex + 1));
-      charIndex++;
-      if (charIndex === roles[currentRoleIndex].length) {
-        clearInterval(typingInterval);
-      }
-    }, 100); // typing speed per character
-  }, [currentRoleIndex]);
-
-  useEffect(() => {
-    const roleInterval = setInterval(() => {
+    const interval = setInterval(() => {
       setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
-    }, 3000); // change role every 3 seconds
-    return () => clearInterval(roleInterval);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
-
-  return (
-    <div className="typing-animation">{displayedText}</div>
-  );
 
   // Generate stable flowing elements with CSS animations (memoized to prevent re-renders)
   const subtleFlowElements = useMemo(() => 
