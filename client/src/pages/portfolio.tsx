@@ -312,7 +312,7 @@ export default function Portfolio() {
                 height: '3px',
                 animationDuration: `${element.duration}s`,
                 animationDelay: `${element.delay}s`,
-                filter: 'blur(0.5px)' // very subtle blur
+                filter: 'blur(1.5px)' // very subtle blur
               }}
             />
           ))}
