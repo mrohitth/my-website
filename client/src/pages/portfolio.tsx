@@ -304,7 +304,7 @@ export default function Portfolio() {
           {subtleFlowElements.map((element) => (
             <div
               key={element.id}
-              className="absolute rounded-full bg-portfolio-primary/75 subtle-flow blur-sm shadow-lg"
+              className="absolute rounded-full bg-cyan-400/75 subtle-flow blur-sm shadow-lg"
               style={{
                 top: `${element.top}%`,
                 left: '-8px',
