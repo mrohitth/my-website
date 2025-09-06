@@ -69,12 +69,6 @@ export default function Portfolio() {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentRoleIndex]);
 
-  return (
-    <div>
-      <h2 className="typing-animation">{displayedText}</h2>
-    </div>
-  );
-
   // Generate stable flowing elements with CSS animations (memoized to prevent re-renders)
   const subtleFlowElements = useMemo(() => 
     Array.from({ length: 10 }, (_, i) => ({
@@ -371,7 +365,7 @@ export default function Portfolio() {
             </h1>
             <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-8 max-w-2xl mx-auto h-16 flex items-center justify-center" data-testid="hero-description">
               <span className="typing-animation">
-                {roles[currentRoleIndex]}
+                {displayedText}
               </span>
             </div>
             <p className="text-lg text-portfolio-muted-foreground/80 mb-8 max-w-2xl mx-auto" data-testid="hero-subtitle">
