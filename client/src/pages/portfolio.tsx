@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile.jpg';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
 import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
+import MLNetworkBackground from "@/components/MLNetworkBackground";
 
 export default function Portfolio() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -346,79 +347,70 @@ export default function Portfolio() {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="hero-gradient min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-        {/* Subtle Flow Animation Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Very subtle flowing elements */}
-          {subtleFlowElements.map((element) => (
-            <div
-              key={element.id}
-              className="absolute rounded-full bg-cyan-400/75 subtle-flow"
-              style={{
-                top: `${element.top}%`,
-                left: '-8px',
-                width: `${element.width * 1.25}px`,
-                height: '3px',
-                animationDuration: `${element.duration}s`,
-                animationDelay: `${element.delay}s`,
-                filter: 'blur(1.5px)' // very subtle blur
-              }}
-            />
-          ))}
-          {/* Gentle gradient overlay to soften edges */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-portfolio-background/20 to-portfolio-background/40" />
-        </div>
-        
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          {/* Profile Picture with Animated Glow */}
-          <div className="fade-in mb-10 flex justify-center relative">
-            {/* Glowing ring behind the image */}
-            <div className="absolute w-56 h-56 md:w-72 md:h-72 rounded-full bg-portfolio-primary/20 animate-pulse"></div>
+        <section id="hero" className="hero-gradient min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+          {/* ML Network Animated Background */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <MLNetworkBackground />
+          </div>
 
-            {/* Circular profile image */}
-            <div className="relative w-46 h-46 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-portfolio-primary/30 shadow-lg">
-              <img
-                src={profilePic}
-                alt="Mathew Thomson"
-                className="w-full h-full object-cover"
+          {/* Subtle Flow Animation Background */}
+          <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+            {subtleFlowElements.map((element) => (
+              <div
+                key={element.id}
+                className="absolute rounded-full bg-cyan-400/75 subtle-flow"
+                style={{
+                  top: `${element.top}%`,
+                  left: '-8px',
+                  width: `${element.width * 1.25}px`,
+                  height: '3px',
+                  animationDuration: `${element.duration}s`,
+                  animationDelay: `${element.delay}s`,
+                  filter: 'blur(1.5px)',
+                }}
               />
-            </div>
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-portfolio-background/20 to-portfolio-background/40" />
           </div>
 
-          <div className="fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6" data-testid="hero-title">
-              Hey, I'm <span className="gradient-text">Mathew</span>
-            </h1>
-            <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-12 max-w-2xl mx-auto h-16 flex items-center justify-center" data-testid="hero-description">
-              <span className="typing-animation">
-                {displayedText}
-              </span>
+          {/* Hero Content */}
+          <div className="relative z-20 max-w-4xl mx-auto text-center">
+            <div className="fade-in mb-6 md:mb-12 flex justify-center relative">
+              {/* Profile image */}
+              <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
+                <img src={profilePic} alt="Mathew Thomson" className="w-full h-full object-cover" />
+              </div>
             </div>
-            <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto" data-testid="hero-subtitle">
-              Engineer of pipelines, architect of insights; building data-driven solutions that simplify complexity and empower smarter decisions at scale
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button
-                onClick={() => scrollToSection('projects')}
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
-                data-testid="button-view-work"
-              >
-                View My Work
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                //variant="outline"
-                onClick={() => scrollToSection('contact')}
-                //className="bg-transparent border-portfolio-border text-portfolio-foreground hover:bg-portfolio-secondary/60 hover:text-portfolio-foreground px-8 py-3 font-medium"
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
-                data-testid="button-contact"
-              >
-                Get In Touch
-              </Button>
+
+            <div className="fade-in">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-6">
+                Hey, I'm <span className="gradient-text">Mathew</span>
+              </h1>
+              <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-8 max-w-2xl mx-auto h-16 flex items-center justify-center">
+                <span className="typing-animation">{displayedText}</span>
+              </div>
+              <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto">
+                Engineer of pipelines, architect of insights; building data-driven solutions that simplify complexity and empower smarter decisions at scale
+              </p>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <Button
+                  onClick={() => scrollToSection('projects')}
+                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
+                >
+                  View My Work
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={() => scrollToSection('contact')}
+                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
+                >
+                  Get In Touch
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
 
       {/* About Section */}
       <section id="about" className="py-20 px-4 bg-portfolio-secondary">
@@ -429,7 +421,7 @@ export default function Portfolio() {
               <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl bg-portfolio-muted flex items-center justify-center" data-testid="profile-picture">
                 <User size={80} className="text-portfolio-muted-foreground" />
                 {/* Replace with actual image: */}
-                {/* <img src="your-profile-photo.jpg" alt="Your Name" className="w-full h-full object-cover rounded-2xl"> */}
+                {/*<img src={profilePic} alt="Your Name" className="w-full h-full object-cover rounded-2xl"/> */}
               </div>
             </div>
             

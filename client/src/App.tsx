@@ -8,6 +8,7 @@ import Portfolio from "@/pages/portfolio";
 import NotFound from "@/pages/not-found";
 import { useState } from "react";
 import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
+import MLNetworkBackground from "@/components/mlnetworkbackground";
 
 // Hash location for GitHub Pages
 function HashLocationRouter({ children }: { children: React.ReactNode }) {

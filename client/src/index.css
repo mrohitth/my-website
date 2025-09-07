@@ -318,3 +318,14 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #1f1f1f inset; /* overrides autofill bg */
   transition: background-color 5000s ease-in-out 0s;  /* prevents flash */
 }
+
+/* for glowing ring animation around focused input */
+@keyframes glowPulseSlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+.animate-glow-slow {
+  animation: glowPulseSlow 6s ease-in-out infinite;
+}
+
