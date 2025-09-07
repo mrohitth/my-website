@@ -237,7 +237,7 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
       {/* Render your custom cursor here */}
-      <ParticleCursor />
+      <NetworkCursor />
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-md border-b border-portfolio-border">
         <div className="px-4 sm:px-6 lg:px-8">
