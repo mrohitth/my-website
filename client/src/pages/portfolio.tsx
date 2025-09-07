@@ -27,18 +27,18 @@ export default function Portfolio() {
   "Data Engineer",
   "Python Ninja",
   "Cloud Explorer",
-  "Data Storyteller",
+  //"Data Storyteller",
   "Data Pipeline Architect",
-  "Algorithm Tinkerer",
-  "Big Data Wrangler",
-  "AI/ML Enthusiast",
-  "Code Alchemist",
-  "Tech Curious",
-  "Insights Seeker",
   "SQL Sorcerer",
-  "Analytics Problem Solver",
-  "Model Builder",
-  "Problem Solver Extraordinaire"
+  //"Algorithm Tinkerer",
+  "Big Data Wrangler",
+  //"AI/ML Enthusiast",
+  //"Code Alchemist",
+  //"Tech Curious",
+  //"Insights Seeker",
+  "Data Whisperer for Machines",
+  "Neural Data Forger",
+  "Machine Intelligence Artisan"
 ];
 
   // Subtle data flow animation (no React state needed - using CSS animations)
