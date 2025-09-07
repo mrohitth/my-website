@@ -83,6 +83,15 @@ export default function Portfolio() {
     })), []
   );
 
+  // Intro animation state
+  const [showIntro, setShowIntro] = useState(true);
+
+  // Hide intro after a short delay
+  useEffect(() => {
+    const timer = setTimeout(() => setShowIntro(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
 
 
 
@@ -237,7 +246,24 @@ export default function Portfolio() {
   ];
 
   return (
-    <div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
+    //<div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
+    //<div className={`min-h-screen bg-portfolio-background text-portfolio-foreground transition-opacity duration-1000 ${ showIntro ? "opacity-0" : "opacity-100" }`} >
+    <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground">
+      {/* Intro overlay */}
+      {showIntro && (
+        <div
+          className="absolute inset-0 bg-portfolio-background z-50 flex items-center justify-center transition-opacity duration-1000"
+        >
+          <div className="pipeline-intro" />
+        </div>
+      )}
+      {/* Main Content */}
+      <div
+        className={`transition-opacity duration-1000 ${
+          showIntro ? "opacity-0" : "opacity-100"
+        }`}
+      >
+
       {/* Render your custom cursor here */}
       <SubtleNetworkCursor />
       {/* Navigation */}
@@ -246,9 +272,26 @@ export default function Portfolio() {
           <div className="flex justify-between items-center h-16 sm:h-20 px-3 sm:px-6 md:px-10 lg:px-15">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <button 
+              <button
+                onMouseMove={(e) => {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                }}
                 onClick={() => scrollToSection('hero')}
-                className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors"
+                //className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors button-3d"
+                className="tilt-button font-bold text-portfolio-primary px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10 transition-colors"
                 style={{ wordSpacing: '0.25rem' }}
                 data-testid="logo-button"
               >
@@ -258,34 +301,100 @@ export default function Portfolio() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="flex items-baseline space-x-8">
-                <button 
+              <div className="flex items-baseline space-x-8" style={{ perspective: '500px' }}>
+                <button
+                onMouseMove={(e) => {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -20;
+                const rotateY = ((x - centerX) / centerX) * -20;
+
+                button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                }}
                   onClick={() => scrollToSection('hero')}
-                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
+                  //className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
+                  //className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground rounded-md button-3d"
+                  className="tilt-button inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-home"
                 >
                   Home
                 </button>
-                <button 
+                <button
+                onMouseMove={(e) => {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -20;
+                const rotateY = ((x - centerX) / centerX) * 20;
+
+                button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                }}
                   onClick={() => scrollToSection('about')}
-                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
+                  className="tilt-button inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-about"
                 >
                   About
                 </button>
-                <button 
+                <button
+                onMouseMove={(e) => {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -20;
+                const rotateY = ((x - centerX) / centerX) * 20;
+
+                button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                }}
                   onClick={() => scrollToSection('projects')}
-                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
+                  className="tilt-button inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-projects"
                 >
                   Projects
                 </button>
-                <button 
+                <button
+                onMouseMove={(e) => {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -20;
+                const rotateY = ((x - centerX) / centerX) * 20;
+
+                button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                }}
                   onClick={() => scrollToSection('contact')}
-                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
+                  className="tilt-button inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-contact"
                 >
@@ -395,14 +504,14 @@ export default function Portfolio() {
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                 <Button
                   onClick={() => scrollToSection('projects')}
-                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
+                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
                 >
                   View My Work
                   {/*<ExternalLink className="ml-2 h-4 w-4" />*/}
                 </Button>
                 <Button
                   onClick={() => scrollToSection('contact')}
-                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
+                  className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
                 >
                   Get In Touch
                 </Button>
@@ -773,6 +882,7 @@ export default function Portfolio() {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
