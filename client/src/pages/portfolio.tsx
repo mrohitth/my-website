@@ -353,15 +353,15 @@ export default function Portfolio() {
           {subtleFlowElements.map((element) => (
             <div
               key={element.id}
-              className="absolute rounded-full bg-cyan-400/75 subtle-flow"
+              className="absolute rounded-full bg-cyan-400/25 subtle-flow"
               style={{
-                top: `${element.top}%`,
-                left: '-8px',
-                width: `${element.width * 1.25}px`,
-                height: '3px',
+                top: `${element.top}%`,       // now chosen from lanes
+                left: '-10px',
+                width: '10px',                // fixed small packet
+                height: '10px',
                 animationDuration: `${element.duration}s`,
                 animationDelay: `${element.delay}s`,
-                filter: 'blur(1.5px)' // very subtle blur
+                opacity: 0.3                  // extra subtle
               }}
             />
           ))}
