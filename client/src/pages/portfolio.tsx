@@ -241,9 +241,9 @@ export default function Portfolio() {
       {/* Render your custom cursor here */}
       <SubtleNetworkCursor />
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-md border-b border-portfolio-border">
+      <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-sm border-b border-portfolio-border">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 px-6 lg:px-12">
+          <div className="flex justify-between items-center h-16 sm:h-20 px-4 sm:px-6 md:px-10 lg:px-20">
             {/* Logo */}
             <div className="flex-shrink-0">
               <button 
@@ -296,15 +296,15 @@ export default function Portfolio() {
             
             {/* Mobile menu button */}
             <div className="md:hidden">
-              <Button
+              <button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-portfolio-foreground hover:text-portfolio-primary p-2"
+                className="text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-200"
                 data-testid="mobile-menu-button"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </Button>
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
             </div>
           </div>
         </div>
@@ -312,31 +312,31 @@ export default function Portfolio() {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden fixed top-16 right-0 h-screen w-64 bg-portfolio-background border-l border-portfolio-border" data-testid="mobile-menu">
-            <div className="flex flex-col space-y-4 p-6">
+            <div className="flex flex-col space-y-5 p-8">
               <button 
                 onClick={() => scrollToSection('hero')}
-                className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200 text-lg text-left"
+                className="text-portfolio-foreground hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-600 hover:text-transparent bg-clip-text transition-colors duration-200 text-lg text-left"
                 data-testid="mobile-nav-home"
               >
                 Home
               </button>
               <button 
                 onClick={() => scrollToSection('about')}
-                className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200 text-lg text-left"
+                className="text-portfolio-foreground hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-600 hover:text-transparent bg-clip-text transition-colors duration-200 text-lg text-left"
                 data-testid="mobile-nav-about"
               >
                 About
               </button>
               <button 
                 onClick={() => scrollToSection('projects')}
-                className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200 text-lg text-left"
+                className="text-portfolio-foreground hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-600 hover:text-transparent bg-clip-text transition-colors duration-200 text-lg text-left"
                 data-testid="mobile-nav-projects"
               >
                 Projects
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
-                className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200 text-lg text-left"
+                className="text-portfolio-foreground hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-600 hover:text-transparent bg-clip-text transition-colors duration-200 text-lg text-left"
                 data-testid="mobile-nav-contact"
               >
                 Contact
