@@ -7,8 +7,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Portfolio from "@/pages/portfolio";
 import NotFound from "@/pages/not-found";
 import { useState } from "react";
-import ParticleCursor from "@/components/particlecursor";
-import NetworkCursor from "@/components/networkcursor";
 import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
 
 // Hash location for GitHub Pages

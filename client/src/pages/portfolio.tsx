@@ -5,8 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
-import ParticleCursor from "@/components/ParticleCursor";
-import NetworkCursor from "@/components/NetworkCursor";
 import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
 
 export default function Portfolio() {
@@ -631,7 +629,7 @@ export default function Portfolio() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground focus-glow"
                     data-testid="input-name"
                   />
                 </div>
@@ -646,7 +644,7 @@ export default function Portfolio() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground focus-glow"
                     data-testid="input-email"
                   />
                 </div>
@@ -661,7 +659,7 @@ export default function Portfolio() {
                     value={formData.message}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground resize-vertical"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground resize-vertical focus-glow"
                     data-testid="input-message"
                   />
                 </div>
