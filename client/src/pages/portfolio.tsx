@@ -243,7 +243,7 @@ export default function Portfolio() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-sm border-b border-portfolio-border">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-20 px-4 sm:px-6 md:px-10 lg:px-20">
+          <div className="flex justify-between items-center h-16 sm:h-20 px-3 sm:px-6 md:px-10 lg:px-15">
             {/* Logo */}
             <div className="flex-shrink-0">
               <button 
@@ -258,10 +258,10 @@ export default function Portfolio() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="flex items-baseline space-x-12">
+              <div className="flex items-baseline space-x-8">
                 <button 
                   onClick={() => scrollToSection('hero')}
-                  className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-home"
                 >
@@ -269,7 +269,7 @@ export default function Portfolio() {
                 </button>
                 <button 
                   onClick={() => scrollToSection('about')}
-                  className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-about"
                 >
@@ -277,7 +277,7 @@ export default function Portfolio() {
                 </button>
                 <button 
                   onClick={() => scrollToSection('projects')}
-                  className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-projects"
                 >
@@ -285,7 +285,7 @@ export default function Portfolio() {
                 </button>
                 <button 
                   onClick={() => scrollToSection('contact')}
-                  className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  className="inline-flex items-center justify-center px-5 py-2.5 text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-md transition-all duration-200"
                   style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-contact"
                 >
@@ -386,7 +386,7 @@ export default function Portfolio() {
               <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-6">
                 Hey, I'm <span className="gradient-text">Mathew</span>
               </h1>
-              <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-8 max-w-2xl mx-auto h-16 flex items-center justify-center">
+              <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-6 max-w-2xl mx-auto h-16 flex items-center justify-center">
                 <span className="typing-animation">{displayedText}</span>
               </div>
               <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto">
@@ -398,7 +398,7 @@ export default function Portfolio() {
                   className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
                 >
                   View My Work
-                  <ExternalLink className="ml-2 h-4 w-4" />
+                  {/*<ExternalLink className="ml-2 h-4 w-4" />*/}
                 </Button>
                 <Button
                   onClick={() => scrollToSection('contact')}
