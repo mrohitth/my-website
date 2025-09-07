@@ -286,20 +286,21 @@ textarea {
   background-color: var(--portfolio-input);
 }
 
-/* Fix Chrome/Edge autofill */
+/* Remove browser autofill yellow/blue and enforce your design */
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px var(--portfolio-input) inset !important;
-  -webkit-text-fill-color: var(--portfolio-foreground) !important;
+  box-shadow: 0 0 0px 1000px var(--background) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
   transition: background-color 5000s ease-in-out 0s; /* prevent flash */
+  border: 1px solid var(--portfolio-border);
 }
 
-/* Uniform focus state */
-input:focus,
-textarea:focus,
-select:focus {
-  color: var(--portfolio-foreground);
-  background-color: var(--portfolio-input);
+/* Keep your focus glow even on autofilled fields */
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.35),
+              0 0 0px 1000px var(--background) inset !important;
   outline: none;
 }
