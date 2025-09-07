@@ -244,6 +244,7 @@ export default function Portfolio() {
               <button 
                 onClick={() => scrollToSection('hero')}
                 className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors"
+                style={{ wordSpacing: '0.25rem' }}
                 data-testid="logo-button"
               >
                 Mathew Thomson
