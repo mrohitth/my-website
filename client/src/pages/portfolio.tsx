@@ -70,7 +70,7 @@ export default function Portfolio() {
   }, [displayedText, isDeleting, currentRoleIndex]);
 
   // Generate stable flowing elements with CSS animations (memoized to prevent re-renders)
-  const subtleFlowElements = useMemo(() => 
+  /*const subtleFlowElements = useMemo(() =>
     Array.from({ length: 10 }, (_, i) => ({
       id: i,
       top: Math.random() * 80 + 10, // Random vertical position
@@ -78,7 +78,18 @@ export default function Portfolio() {
       duration: Math.random() * 8 + 12, // 12-20 second duration (faster than before)
       delay: Math.random() * -15 // Start at different points in animation
     })), []
-  );
+  );*/
+
+    const lanes = [15, 30, 45, 60, 75]; // vertical positions %
+    const subtleFlowElements = useMemo(() =>
+      Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        top: lanes[Math.floor(Math.random() * lanes.length)],
+        duration: Math.random() * 10 + 15,
+        delay: Math.random() * -20
+      })), []
+    );
+
 
 
   // Intersection Observer for fade-in animations
