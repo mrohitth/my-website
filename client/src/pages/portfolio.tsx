@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
+import ParticleCursor from "@/components/ParticleCursor";
 
 export default function Portfolio() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -235,6 +236,8 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
+      {/* Render your custom cursor here */}
+      <ParticleCursor />
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-md border-b border-portfolio-border">
         <div className="px-4 sm:px-6 lg:px-8">

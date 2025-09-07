@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Portfolio from "@/pages/portfolio";
 import NotFound from "@/pages/not-found";
 import { useState } from "react";
+import ParticleCursor from "./components/ParticleCursor";
 
 // Hash location for GitHub Pages
 function HashLocationRouter({ children }: { children: React.ReactNode }) {
