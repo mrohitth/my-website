@@ -16,7 +16,7 @@ export default function MLNetworkBackground() {
     canvas.height = height;
 
     const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
-    const nodeCount = Math.floor((width * height) / 10000); // density based on canvas size
+    const nodeCount = Math.floor((width * height) / 12500); // density based on canvas size
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
