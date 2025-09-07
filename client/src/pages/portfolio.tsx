@@ -252,7 +252,7 @@ export default function Portfolio() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="flex items-baseline space-x-8">
+              <div className="flex items-baseline space-x-12">
                 <button 
                   onClick={() => scrollToSection('hero')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
