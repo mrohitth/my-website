@@ -369,12 +369,12 @@ export default function Portfolio() {
               </span>
             </div>
             <p className="text-lg text-portfolio-muted-foreground/80 mb-8 max-w-2xl mx-auto" data-testid="hero-subtitle">
-              Engineer of pipelines, architect of insights—building data-driven solutions that simplify complexity and empower smarter decisions at scale
+              Engineer of pipelines, architect of insights; building data-driven solutions that simplify complexity and empower smarter decisions at scale
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 onClick={() => scrollToSection('projects')}
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium"
+                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
                 data-testid="button-view-work"
               >
                 View My Work
@@ -384,7 +384,7 @@ export default function Portfolio() {
                 //variant="outline"
                 onClick={() => scrollToSection('contact')}
                 //className="bg-transparent border-portfolio-border text-portfolio-foreground hover:bg-portfolio-secondary/60 hover:text-portfolio-foreground px-8 py-3 font-medium"
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium"
+                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
                 data-testid="button-contact"
               >
                 Get In Touch
