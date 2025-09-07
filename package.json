@@ -6,6 +6,7 @@
   "homepage": "https://mrohitth.github.io/my-website",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
+    "dev:frontend": "vite",
     "build:frontend": "vite build --outDir dist-frontend",
     "build:backend": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "build": "npm run build:frontend && npm run build:backend",

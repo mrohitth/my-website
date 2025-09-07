@@ -629,7 +629,7 @@ export default function Portfolio() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground focus-glow"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground glow"
                     data-testid="input-name"
                   />
                 </div>
@@ -644,7 +644,7 @@ export default function Portfolio() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground focus-glow"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground glow"
                     data-testid="input-email"
                   />
                 </div>
@@ -659,7 +659,7 @@ export default function Portfolio() {
                     value={formData.message}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground resize-vertical focus-glow"
+                    className="w-full bg-portfolio-input border-portfolio-border text-portfolio-foreground resize-vertical glow"
                     data-testid="input-message"
                   />
                 </div>
