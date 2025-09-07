@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import profilePic from '@/assets/profile.jpg';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
 import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
 
@@ -369,19 +370,34 @@ export default function Portfolio() {
         </div>
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
+          {/* Profile Picture with Animated Glow */}
+          <div className="fade-in mb-10 flex justify-center relative">
+            {/* Glowing ring behind the image */}
+            <div className="absolute w-56 h-56 md:w-72 md:h-72 rounded-full bg-portfolio-primary/20 animate-pulse"></div>
+
+            {/* Circular profile image */}
+            <div className="relative w-46 h-46 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-portfolio-primary/30 shadow-lg">
+              <img
+                src={profilePic}
+                alt="Mathew Thomson"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
           <div className="fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6" data-testid="hero-title">
               Hey, I'm <span className="gradient-text">Mathew</span>
             </h1>
-            <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-8 max-w-2xl mx-auto h-16 flex items-center justify-center" data-testid="hero-description">
+            <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-12 max-w-2xl mx-auto h-16 flex items-center justify-center" data-testid="hero-description">
               <span className="typing-animation">
                 {displayedText}
               </span>
             </div>
-            <p className="text-lg text-portfolio-muted-foreground/80 mb-8 max-w-2xl mx-auto" data-testid="hero-subtitle">
+            <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto" data-testid="hero-subtitle">
               Engineer of pipelines, architect of insights; building data-driven solutions that simplify complexity and empower smarter decisions at scale
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={() => scrollToSection('projects')}
                 className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center"
