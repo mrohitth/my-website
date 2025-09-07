@@ -9,12 +9,12 @@ const ParticleCursor: React.FC = () => {
       particle.style.position = "fixed";
       particle.style.left = `${x}px`;
       particle.style.top = `${y}px`;
-      particle.style.width = "6px";
-      particle.style.height = "6px";
+      particle.style.width = "5px";
+      particle.style.height = "5px";
       particle.style.borderRadius = "50%";
       particle.style.backgroundColor = "#0ff"; // Neon data point color
       particle.style.pointerEvents = "none";
-      particle.style.opacity = "0.8";
+      particle.style.opacity = "0.5";
       particle.style.transition = "all 0.3s ease";
       document.body.appendChild(particle);
 

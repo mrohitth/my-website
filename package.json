@@ -9,7 +9,7 @@
     "build:frontend": "vite build --outDir dist-frontend",
     "build:backend": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "build": "npm run build:frontend && npm run build:backend",
-    "deploy:frontend": "npm run build:frontend && rm -rf docs && mv dist-frontend docs",
+    "deploy:frontend": "npm run build:frontend && rm -rf docs && mv client/dist-frontend docs",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"
