@@ -246,7 +246,7 @@ export default function Portfolio() {
                 className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors"
                 data-testid="logo-button"
               >
-                Mathew Rohit Thomson
+                Mathew Thomson
               </button>
             </div>
             
@@ -256,6 +256,7 @@ export default function Portfolio() {
                 <button 
                   onClick={() => scrollToSection('hero')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-home"
                 >
                   Home
@@ -263,6 +264,7 @@ export default function Portfolio() {
                 <button 
                   onClick={() => scrollToSection('about')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-about"
                 >
                   About
@@ -270,6 +272,7 @@ export default function Portfolio() {
                 <button 
                   onClick={() => scrollToSection('projects')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-projects"
                 >
                   Projects
@@ -277,6 +280,7 @@ export default function Portfolio() {
                 <button 
                   onClick={() => scrollToSection('contact')}
                   className="text-portfolio-foreground hover:text-portfolio-primary transition-colors duration-200"
+                  style={{ wordSpacing: '0.5rem' }}
                   data-testid="nav-contact"
                 >
                   Contact
