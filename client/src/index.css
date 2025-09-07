@@ -208,24 +208,6 @@
     }
   }
 
-  .data-flow {
-  position: absolute;
-  top: var(--y-position);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(0, 200, 255, 0.25); /* muted accent */
-  animation: data-move linear infinite;
-  pointer-events: none;
-  }
-
-  @keyframes data-move {
-  from { transform: translateX(-30px); opacity: 0; }
-  20% { opacity: 0.3; }
-  80% { opacity: 0.3; }
-  to { transform: translateX(calc(100vw + 30px)); opacity: 0; }
-  }
-
   /* Reduced motion accessibility */
   @media (prefers-reduced-motion: reduce) {
     .subtle-flow {
