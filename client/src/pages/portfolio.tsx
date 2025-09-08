@@ -131,6 +131,44 @@ export default function Portfolio() {
     setIsMobileMenuOpen(false);
   };
 
+    // Scroll to top function
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    };
+
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setShow(window.scrollY > 300);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+
+  // State for navbar visibility
+    const [navbarHidden, setNavbarHidden] = useState(true);
+
+    // Scroll-based show/hide effect
+    useEffect(() => {
+      const handleScroll = () => {
+        const scrollTop = window.scrollY;
+        const threshold = window.innerHeight * 0.05; // 5% of viewport
+
+        if (scrollTop > threshold) {
+          setNavbarHidden(false); // show navbar after scrolling past threshold
+        } else {
+          setNavbarHidden(true); // hide navbar when near top
+        }
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -257,6 +295,7 @@ export default function Portfolio() {
           <div className="pipeline-intro" />
         </div>
       )}
+
       {/* Main Content */}
       <div
         className={`transition-opacity duration-1000 ${
@@ -266,8 +305,28 @@ export default function Portfolio() {
 
       {/* Render your custom cursor here */}
       <SubtleNetworkCursor />
+
+      {/* Peek indicator */}
+
+
+       {/* Top hover zone */}
+        <div
+          className="fixed top-0 left-0 w-full h-8 z-40 cursor-pointer"
+          onMouseEnter={() => setNavbarHidden(false)}
+          onMouseLeave={() => {
+            if (window.scrollY < window.innerHeight * 0.05) setNavbarHidden(true);
+          }}
+          style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)' }}
+        ></div>
+
+
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-sm border-b border-portfolio-border">
+      {/*<nav className="fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-sm border-b border-portfolio-border">*/}
+      <nav
+        className={`fixed top-0 w-full z-50 bg-portfolio-background/80 backdrop-blur-sm border-b border-portfolio-border transition-transform duration-1000 ${
+            navbarHidden ? "-translate-y-full" : "translate-y-0"
+        }`}
+      >
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 sm:h-20 px-3 sm:px-6 md:px-10 lg:px-15">
             {/* Logo */}
@@ -719,6 +778,17 @@ export default function Portfolio() {
 
       {/* Contact Section */}
       <section id="contact" className="py-20 px-4 bg-portfolio-secondary relative">
+        {show && (
+            <Button
+              onClick={scrollToTop}
+              className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-all"
+            >
+              ↑ Top
+            </Button>
+          )}
+
+
+
         {/* Subtle pulse animation background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="pulse-bg"></div>

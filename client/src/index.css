@@ -259,7 +259,7 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -269,11 +269,14 @@
 ::-webkit-scrollbar-thumb {
   background: hsl(210 100% 60%);
   border-radius: 4px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(210 100% 55%);
+  box-shadow: 0 0 5 20px hsl(210 100% 55%);
 }
+
 
 /* Ensure uniform text + background color in inputs and textareas */
 input,
