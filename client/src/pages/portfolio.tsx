@@ -20,6 +20,7 @@ export default function Portfolio() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentSection, setCurrentSection] = useState("home");
 
   
   // Typing animation for roles
@@ -89,6 +90,25 @@ export default function Portfolio() {
     const timer = setTimeout(() => setShowIntro(false), 600);
     return () => clearTimeout(timer);
   }, []);
+
+ // to check for down arrow
+ useEffect(() => {
+  const handleArrow = () => {
+    const heroSection = document.getElementById("hero");
+    if (!heroSection) return;
+
+    const rect = heroSection.getBoundingClientRect();
+    const threshold = window.innerHeight * 0.15;
+
+    // tolerance so tiny scrolls don’t instantly hide it
+    const inRange = rect.top >= -150 && rect.top <= threshold;
+    setCurrentSection(inRange ? "hero-top" : "other");
+  };
+
+  window.addEventListener("scroll", handleArrow);
+  handleArrow();
+  return () => window.removeEventListener("scroll", handleArrow);
+}, []);
 
 
 
@@ -521,6 +541,14 @@ export default function Portfolio() {
                 </Button>
               </div>
             </div>
+            {currentSection === "hero-top" && (
+            <Button
+              onClick={() => scrollToSection("about")}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-all"
+            >
+              ↓
+            </Button>
+            )}
           </div>
         </section>
 
