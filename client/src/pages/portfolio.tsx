@@ -565,7 +565,7 @@ export default function Portfolio() {
               <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl bg-portfolio-muted flex items-center justify-center" data-testid="profile-picture">
                 <User size={80} className="text-portfolio-muted-foreground" />
                 {/* Replace with actual image: */}
-                {/*<img src={profilePic} alt="Your Name" className="w-full h-full object-cover rounded-2xl"/> */}
+                {<img src={profilePic} alt="Your Name" className="w-full h-full object-cover rounded-2xl"/> }
               </div>
             </div>
             
@@ -573,9 +573,9 @@ export default function Portfolio() {
             <div className="fade-in md:col-span-1 lg:col-span-2 space-y-6 md:space-y-8">
               <div>
                 <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
-                <div className="space-y-3 md:space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose text-justify">
+                <div className="space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose text-left">
                   <p data-testid="about-paragraph-1">
-                    I’m a data engineer passionate about building scalable, reliable systems that turn raw data into actionable insights. I specialize in designing robust ETL pipelines, orchestrating complex workflows, and creating analytics platforms that enable data-driven decision-making at scale. Leveraging my expertise in AI and ML, I enhance data engineering solutions with intelligent automation, predictive modeling, and ML-ready infrastructure, bridging the gap between traditional pipelines and advanced analytics. Continuously exploring new technologies, I focus on solving complex data challenges and delivering solutions that drive meaningful business impact.
+                    Data runs my world. I turn raw numbers into insights, build pipelines that don’t break, and make analytics platforms that teams can actually trust. With AI and ML in my toolkit, I make data workflows smarter and future-ready. I’m always learning, always experimenting, and always focused on results that count.
                   </p>
                 </div>
               </div>
