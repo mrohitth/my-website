@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
+import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
 import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
 import MLNetworkBackground from "@/components/MLNetworkBackground";
@@ -754,20 +755,29 @@ export default function Portfolio() {
       {/* Contact Section */}
       <section id="contact" className="py-20 px-4 bg-portfolio-secondary relative">
         {show && (
-            <Button
-              onClick={scrollToTop}
-              className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-all"
-            >
-              ↑ Top
-            </Button>
-          )}
+          <Button
+            onClick={scrollToTop}
+            className="
+              fixed bottom-8 right-8 rounded-full p-2 shadow-lg
+              z-50 bg-portfolio-primary/90
+              transform transition-transform duration-200
+              hover:-rotate-12 hover:scale-180
+              active:scale-90
+              animate-bounce [animation-duration:2s]
+            "
+          >
+            <img
+              src={cat}
+              alt="Cute cat pointing up"
+              className="w-12 h-12 transform transition-transform duration-200 hover:scale-180 hover:-rotate-12"
+            />
+          </Button>
+        )}
+
 
 
 
         {/* Subtle pulse animation background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="pulse-bg"></div>
-        </div>
         <div className="max-w-4xl mx-auto relative">
           <div className="text-center mb-16 fade-in">
             <h2 className="text-4xl font-bold mb-4" data-testid="contact-title">Let's Connect</h2>
