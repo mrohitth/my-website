@@ -522,8 +522,8 @@ export default function Portfolio() {
               <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-6 max-w-2xl mx-auto h-16 flex items-center justify-center">
                 <span className="typing-animation">{displayedText}</span>
               </div>
-              <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto">
-                Engineer of pipelines, architect of insights; building data-driven solutions that simplify complexity and empower smarter decisions at scale
+              <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-xl mx-auto">
+                Data Engineer with ML expertise - building scalable pipelines and intelligent systems for smarter decisions
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                 <Button
@@ -542,12 +542,14 @@ export default function Portfolio() {
               </div>
             </div>
             {currentSection === "hero-top" && (
-            <Button
-              onClick={() => scrollToSection("about")}
-              className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-blue-500 text-white rounded-full p-3 shadow-lg hover:bg-blue-600 transition-all"
-            >
-              ↓
-            </Button>
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2">
+
+              <button
+                onClick={() => scrollToSection('about')}
+                className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600 transition-all animate-bounce [animation-duration:1.5s]">
+                ↓
+              </button>
+            </div>
             )}
           </div>
         </section>
