@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import profilePic from '@/assets/profile.jpg';
+import profilePic from '@/assets/profile3.jpg';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
 import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
 import MLNetworkBackground from "@/components/MLNetworkBackground";
