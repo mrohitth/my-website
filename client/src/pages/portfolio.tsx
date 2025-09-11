@@ -6,7 +6,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
-import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
+import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
+import { 
+  SiPython, 
+  SiApachespark, 
+  SiApacheairflow, 
+  SiApachekafka, 
+  SiAmazonaws, 
+  SiKubernetes, 
+  SiMongodb, 
+  SiSnowflake, 
+  SiJenkins, 
+  SiGit 
+} from 'react-icons/si';
 import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
 import MLNetworkBackground from "@/components/mlnetworkbackground";
 
@@ -292,7 +304,28 @@ export default function Portfolio() {
     }
   ];
 
-  const skills = ["Python", "SQL", "Apache Spark", "React", "PostgreSQL", "Docker", "AWS", "Pandas", "Apache Kafka", "TensorFlow", "FastAPI", "dbt"];
+  const techStack = [
+    { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL, data processing, ML workflows", color: "text-yellow-400" },
+    { name: "Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing on EMR/EKS", color: "text-orange-500" },
+    { name: "Airflow", icon: SiApacheairflow, level: "Learning", usage: "Workflow orchestration", color: "text-red-400" },
+    { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Streaming pipelines", color: "text-gray-400" },
+    { name: "AWS", icon: SiAmazonaws, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
+    { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration on EKS", color: "text-blue-400" },
+    { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL database", color: "text-green-500" },
+    { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse", color: "text-blue-300" },
+    { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" },
+    { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control", color: "text-orange-600" }
+  ];
+
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "Advanced": return "text-emerald-400 bg-emerald-400/10";
+      case "Intermediate": return "text-blue-400 bg-blue-400/10";
+      case "Learning": return "text-yellow-400 bg-yellow-400/10";
+      case "Next Up": return "text-gray-400 bg-gray-400/10";
+      default: return "text-gray-400 bg-gray-400/10";
+    }
+  };
 
   const experiences = [
     {
