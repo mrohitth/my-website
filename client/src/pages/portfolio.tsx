@@ -783,97 +783,70 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Data Engineering Pipeline Section */}
-      <section id="tech-stack" className="py-20 px-4 bg-portfolio-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 fade-in">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-portfolio-primary to-blue-400 bg-clip-text text-transparent">
-              Data Engineering Pipeline
-            </h2>
-            <p className="text-xl text-portfolio-muted-foreground max-w-3xl mx-auto">
-              <span className="font-medium text-portfolio-primary">From source to insights:</span> My end-to-end data pipeline expertise
-            </p>
-            <div className="mt-4 text-sm text-portfolio-muted-foreground">
-              💡 <em>Hover over tools to see them come alive!</em>
+      {/* Tech Stack Section - Compact Data Engineering Focus */}
+      <section id="tech-stack" className="py-16 px-4 bg-portfolio-secondary">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 fade-in">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <BarChart3 className="text-portfolio-primary h-8 w-8" />
+              <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
             </div>
+            <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
+              End-to-end data pipeline expertise • <span className="text-portfolio-primary">Hover to see animations!</span>
+            </p>
           </div>
           
-          {/* Pipeline Flow */}
-          <div className="space-y-12">
+          {/* Compact Pipeline Categories */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dataEngineeringPipeline.map((stage, stageIndex) => (
-              <div key={stageIndex} className="fade-in">
+              <div key={stageIndex} className="bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-300">
                 {/* Stage Header */}
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-portfolio-card border border-portfolio-border rounded-full">
-                    <span className="text-3xl animate-pulse">{stage.emoji}</span>
-                    <div className="text-left">
-                      <h3 className="text-xl font-bold text-portfolio-foreground">{stage.stage}</h3>
-                      <p className="text-sm text-portfolio-muted-foreground">{stage.description}</p>
-                    </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl">{stage.emoji}</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-portfolio-foreground">{stage.stage}</h3>
+                    <p className="text-xs text-portfolio-muted-foreground">{stage.description}</p>
                   </div>
-                  {/* Flow Arrow (except for last stage) */}
-                  {stageIndex < dataEngineeringPipeline.length - 1 && (
-                    <div className="mt-6 flex justify-center">
-                      <div className="w-px h-8 bg-gradient-to-b from-portfolio-primary to-blue-400 animate-pulse"></div>
-                    </div>
-                  )}
                 </div>
 
-                {/* Tools Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {/* Compact Tools Grid */}
+                <div className="grid grid-cols-2 gap-3">
                   {stage.tools.map((tool, toolIndex) => (
                     <div 
                       key={toolIndex}
-                      className="group relative bg-portfolio-card border border-portfolio-border rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-2 cursor-pointer overflow-hidden"
+                      className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 cursor-pointer"
                       data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
-              >
-                {/* Animated background on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-portfolio-primary/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
+                    >
                       {/* Tech Icon and Name */}
-                      <div className="relative z-10 flex items-center gap-3 mb-3">
-                        <div className={`text-2xl ${tool.color} group-hover:scale-125 group-hover:rotate-12 transition-all duration-300`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
                           <tool.icon />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                             {tool.name}
                           </h4>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 ${getLevelColor(tool.level)}`}>
-                            {getLevelIcon(tool.level)}
-                            {tool.level}
-                          </span>
                         </div>
                       </div>
                       
-                      {/* Usage Description - slides in on hover */}
-                      <div className="relative z-10 overflow-hidden">
-                        <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 opacity-80 group-hover:opacity-100">
-                          {tool.usage}
-                        </p>
-                      </div>
-                      
-                      {/* Animated Skill Level Progress Bar */}
-                      <div className="relative z-10 mt-3 w-full bg-portfolio-muted/20 rounded-full h-2 overflow-hidden">
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-700 group-hover:shadow-md relative ${
-                            tool.level === "Advanced" ? "w-5/6 bg-emerald-400" :
-                            tool.level === "Intermediate" ? "w-3/5 bg-blue-400" :
-                            tool.level === "Learning" ? "w-2/5 bg-yellow-400" :
-                            "w-1/5 bg-gray-400"
-                          }`}
-                        >
-                          {/* Animated shimmer effect */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-pulse"></div>
+                      {/* Level Badge */}
+                      <div className="flex items-center justify-between">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
+                          {getLevelIcon(tool.level)}
+                          {tool.level}
+                        </span>
+                        
+                        {/* Mini Progress Bar */}
+                        <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
+                          <div 
+                            className={`h-1 rounded-full transition-all duration-500 ${
+                              tool.level === "Advanced" ? "w-full bg-emerald-400" :
+                              tool.level === "Intermediate" ? "w-3/4 bg-blue-400" :
+                              tool.level === "Learning" ? "w-1/2 bg-yellow-400" :
+                              "w-1/4 bg-gray-400"
+                            }`}
+                          />
                         </div>
-                      </div>
-                      
-                      {/* Floating particles on hover */}
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="w-1 h-1 bg-portfolio-primary rounded-full animate-ping"></div>
-                      </div>
-                      <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping [animation-delay:0.2s]"></div>
                       </div>
                     </div>
                   ))}
