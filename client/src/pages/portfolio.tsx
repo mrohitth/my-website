@@ -909,7 +909,7 @@ export default function Portfolio() {
           {/* -------------------- New Code Starts Here -------------------- */}
             {/* Horizontal Miscellaneous Skills Card */}
             <div className="mt-12 fade-in">
-              <div className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 cursor-pointer">
+              <div className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)] cursor-pointer">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl">🛠️</span>
                   <div>
