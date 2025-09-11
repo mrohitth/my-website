@@ -615,59 +615,31 @@ export default function Portfolio() {
               </div>
               
               
-              {/* Separator */}
-              <div className="hidden md:block">
-                <div className="w-full h-px bg-portfolio-border"></div>
-              </div>
-              
-              {/* Interactive Tech Stack */}
-              <div>
-                <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                  <Code className="text-portfolio-primary h-6 w-6" aria-hidden="true" />
-                  Tech Stack & Skills
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-testid="skills-container">
-                  {techStack.map((tech, index) => (
-                    <div 
-                      key={index}
-                      className="group relative bg-portfolio-background/40 border border-portfolio-border/50 rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-background/60 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/10 hover:-translate-y-1"
-                      data-testid={`tech-${tech.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
-                    >
-                      {/* Tech Icon and Name */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className={`text-2xl ${tech.color} group-hover:scale-110 transition-transform duration-300`}>
-                          <tech.icon />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
-                            {tech.name}
-                          </h4>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tech.level)}`}>
-                            {tech.level === "Advanced" && <Star className="w-3 h-3 mr-1" />}
-                            {tech.level === "Learning" && <Zap className="w-3 h-3 mr-1" />}
-                            {tech.level}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Usage Description */}
-                      <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
-                        {tech.usage}
-                      </p>
-                      
-                      {/* Skill Level Progress Bar */}
-                      <div className="mt-3 w-full bg-portfolio-muted/20 rounded-full h-1.5">
-                        <div 
-                          className={`h-1.5 rounded-full transition-all duration-500 group-hover:shadow-sm ${
-                            tech.level === "Advanced" ? "w-5/6 bg-emerald-400" :
-                            tech.level === "Intermediate" ? "w-3/5 bg-blue-400" :
-                            tech.level === "Learning" ? "w-2/5 bg-yellow-400" :
-                            "w-1/5 bg-gray-400"
-                          }`}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+              {/* Interactive Stats */}
+              <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-blue-400 transition-colors">
+                    5+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                    Years Experience
+                  </div>
+                </div>
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-emerald-400 transition-colors">
+                    50+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                    Projects Delivered
+                  </div>
+                </div>
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-yellow-400 transition-colors">
+                    10+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                    Technologies
+                  </div>
                 </div>
               </div>
             </div>
@@ -744,6 +716,80 @@ export default function Portfolio() {
                 ))}
               </ol>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dedicated Tech Stack Section */}
+      <section id="tech-stack" className="py-20 px-4 bg-portfolio-background">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 fade-in">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-portfolio-primary to-blue-400 bg-clip-text text-transparent">
+              Tech Stack & Skills
+            </h2>
+            <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto">
+              Technologies I use to build scalable data solutions and intelligent systems
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" data-testid="skills-container">
+            {techStack.map((tech, index) => (
+              <div 
+                key={index}
+                className="group relative bg-portfolio-card border border-portfolio-border rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-2 cursor-pointer overflow-hidden"
+                data-testid={`tech-${tech.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+              >
+                {/* Animated background on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-portfolio-primary/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Tech Icon and Name */}
+                <div className="relative z-10 flex items-center gap-3 mb-3">
+                  <div className={`text-2xl ${tech.color} group-hover:scale-125 group-hover:rotate-12 transition-all duration-300`}>
+                    <tech.icon />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
+                      {tech.name}
+                    </h4>
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 ${getLevelColor(tech.level)}`}>
+                      {tech.level === "Advanced" && <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />}
+                      {tech.level === "Learning" && <Zap className="w-3 h-3 mr-1 group-hover:animate-pulse" />}
+                      {tech.level}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Usage Description - slides in on hover */}
+                <div className="relative z-10 overflow-hidden">
+                  <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 opacity-80 group-hover:opacity-100">
+                    {tech.usage}
+                  </p>
+                </div>
+                
+                {/* Animated Skill Level Progress Bar */}
+                <div className="relative z-10 mt-3 w-full bg-portfolio-muted/20 rounded-full h-2 overflow-hidden">
+                  <div 
+                    className={`h-2 rounded-full transition-all duration-700 group-hover:shadow-md relative ${
+                      tech.level === "Advanced" ? "w-5/6 bg-emerald-400" :
+                      tech.level === "Intermediate" ? "w-3/5 bg-blue-400" :
+                      tech.level === "Learning" ? "w-2/5 bg-yellow-400" :
+                      "w-1/5 bg-gray-400"
+                    }`}
+                  >
+                    {/* Animated shimmer effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-pulse"></div>
+                  </div>
+                </div>
+                
+                {/* Floating particles on hover */}
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-1 h-1 bg-portfolio-primary rounded-full animate-ping"></div>
+                </div>
+                <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping [animation-delay:0.2s]"></div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
