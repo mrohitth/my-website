@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
-import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
+import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp, Code, Zap, Star, Cloud } from 'lucide-react';
 import { 
   SiPython, 
   SiApachespark, 
@@ -309,7 +309,7 @@ export default function Portfolio() {
     { name: "Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing on EMR/EKS", color: "text-orange-500" },
     { name: "Airflow", icon: SiApacheairflow, level: "Learning", usage: "Workflow orchestration", color: "text-red-400" },
     { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Streaming pipelines", color: "text-gray-400" },
-    { name: "AWS", icon: SiAmazon, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
+    { name: "AWS", icon: Cloud, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
     { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration on EKS", color: "text-blue-400" },
     { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL database", color: "text-green-500" },
     { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse", color: "text-blue-300" },
