@@ -285,35 +285,45 @@ textarea {
   background-color: var(--portfolio-input);
 }
 
-/* Enhanced contact form glow effect */
-.glow {
+/* Enhanced contact form styling - override shadcn defaults */
+input.glow,
+textarea.glow {
+  border: 1px solid hsl(var(--portfolio-border)) !important;
   box-shadow: 0 0 0 1px hsl(var(--portfolio-border));
   outline: none;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  border: 1px solid hsl(var(--portfolio-border));
+  background-color: hsl(var(--portfolio-input)) !important;
+  color: hsl(var(--portfolio-foreground)) !important;
 }
 
 /* Professional glow when focused */
-.glow:focus {
-  outline: none;
+input.glow:focus,
+textarea.glow:focus {
+  outline: none !important;
   box-shadow: 
     0 0 0 2px hsl(var(--portfolio-primary) / 0.4),
-    0 0 15px hsl(var(--portfolio-primary) / 0.15);
+    0 0 15px hsl(var(--portfolio-primary) / 0.15) !important;
   border-color: hsl(var(--portfolio-primary)) !important;
 }
 
 /* Fix autofill border issue */
-.glow:-webkit-autofill {
+input.glow:-webkit-autofill,
+textarea.glow:-webkit-autofill {
   border: 1px solid hsl(var(--portfolio-border)) !important;
-  box-shadow: 0 0 0 1px hsl(var(--portfolio-border)), 0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  box-shadow: 
+    0 0 0 1px hsl(var(--portfolio-border)), 
+    0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--portfolio-foreground)) !important;
 }
 
-.glow:-webkit-autofill:focus {
+input.glow:-webkit-autofill:focus,
+textarea.glow:-webkit-autofill:focus {
   border: 1px solid hsl(var(--portfolio-primary)) !important;
   box-shadow: 
     0 0 0 2px hsl(var(--portfolio-primary) / 0.4),
     0 0 15px hsl(var(--portfolio-primary) / 0.15),
     0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--portfolio-foreground)) !important;
 }
 
 /* Autofill fix – make it look identical */

@@ -420,7 +420,7 @@ export default function Portfolio() {
   return (
     //<div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
     //<div className={`min-h-screen bg-portfolio-background text-portfolio-foreground transition-opacity duration-1000 ${ showIntro ? "opacity-0" : "opacity-100" }`} >
-    <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground">
+    <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground subtle-dots">
       {/* Intro overlay */}
       {showIntro && (
         <div
@@ -715,33 +715,50 @@ export default function Portfolio() {
               Experience Journey
             </h3>
             
-            {/* Desktop Horizontal Timeline - Better for 3 items */}
-            <div className="hidden md:block relative max-w-4xl mx-auto">
-              {/* Timeline line */}
-              <div className="absolute top-6 left-0 right-0 h-0.5 bg-portfolio-primary/30" aria-hidden="true"></div>
+            {/* Enhanced Experience Journey - Interactive Timeline */}
+            <div className="hidden md:block relative max-w-5xl mx-auto">
+              {/* Animated Timeline line */}
+              <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-portfolio-primary to-transparent rounded-full" aria-hidden="true">
+                <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full animate-pulse"></div>
+              </div>
               
               <div className="flex justify-between items-start">
                 {experiences.map((exp, index) => (
-                  <div key={index} className="text-center relative flex-1 max-w-xs" data-testid={`experience-${index}`}>
-                    {/* Timeline dot */}
-                    <div className="w-12 h-12 mx-auto bg-portfolio-primary rounded-full flex items-center justify-center relative z-10 mb-4">
-                      <div className="w-5 h-5 bg-portfolio-secondary rounded-full"></div>
+                  <div key={index} className="group text-center relative flex-1 max-w-sm cursor-pointer transform transition-all duration-500 hover:scale-105" data-testid={`experience-${index}`}>
+                    {/* Enhanced Timeline dot with glow */}
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-portfolio-primary to-blue-600 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:shadow-portfolio-primary/40 transition-all duration-500">
+                      <div className="w-8 h-8 bg-portfolio-secondary rounded-full flex items-center justify-center">
+                        {/* Icon based on role */}
+                        {index === 0 && <Database className="w-4 h-4 text-portfolio-primary" />}
+                        {index === 1 && <BarChart3 className="w-4 h-4 text-portfolio-primary" />}
+                        {index === 2 && <Code className="w-4 h-4 text-portfolio-primary" />}
+                      </div>
+                      {/* Floating indicators */}
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping group-hover:animate-pulse"></div>
                     </div>
                     
-                    {/* Experience content */}
-                    <div className="space-y-2">
-                      <h4 className="text-lg font-semibold text-portfolio-foreground" data-testid={`experience-title-${index}`}>
+                    {/* Enhanced Experience content */}
+                    <div className="space-y-3 p-4 bg-portfolio-card/30 rounded-xl border border-portfolio-border/30 group-hover:border-portfolio-primary/50 group-hover:bg-portfolio-card/50 transition-all duration-500 group-hover:shadow-lg">
+                      <h4 className="text-lg font-bold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors" data-testid={`experience-title-${index}`}>
                         {exp.title}
                       </h4>
-                      <p className="text-portfolio-primary/80 font-medium text-sm" data-testid={`experience-company-${index}`}>
+                      <p className="text-portfolio-primary/90 font-semibold text-sm" data-testid={`experience-company-${index}`}>
                         {exp.company}
                       </p>
-                      <p className="text-portfolio-primary font-medium text-xs" data-testid={`experience-period-${index}`}>
+                      <p className="text-portfolio-primary font-medium text-xs bg-portfolio-primary/10 px-2 py-1 rounded-full inline-block" data-testid={`experience-period-${index}`}>
                         {exp.period}
                       </p>
-                      <p className="text-portfolio-muted-foreground text-xs leading-tight" data-testid={`experience-description-${index}`}>
+                      <p className="text-portfolio-muted-foreground text-sm leading-relaxed group-hover:text-portfolio-foreground transition-colors" data-testid={`experience-description-${index}`}>
                         {exp.description}
                       </p>
+                      {/* Progress indicator */}
+                      <div className="w-full bg-portfolio-muted/20 rounded-full h-1.5 mt-3">
+                        <div 
+                          className={`h-1.5 bg-gradient-to-r from-portfolio-primary to-emerald-400 rounded-full transition-all duration-1000 group-hover:shadow-md ${
+                            index === 0 ? "w-full" : index === 1 ? "w-3/4" : "w-1/2"
+                          }`}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -784,7 +801,13 @@ export default function Portfolio() {
       </section>
 
       {/* Tech Stack Section - Compact Data Engineering Focus */}
-      <section id="tech-stack" className="py-16 px-4 bg-portfolio-secondary relative subtle-dots">
+      <section id="tech-stack" className="py-20 px-4 bg-gradient-to-br from-portfolio-secondary to-portfolio-secondary/80 relative border-t-4 border-portfolio-primary/30">
+        {/* Section Header with Clear Distinction */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="bg-portfolio-primary px-6 py-2 rounded-full shadow-lg">
+            <span className="text-white font-bold text-sm tracking-wide">TECHNICAL EXPERTISE</span>
+          </div>
+        </div>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 fade-in">
             <div className="flex items-center justify-center gap-3 mb-4">
