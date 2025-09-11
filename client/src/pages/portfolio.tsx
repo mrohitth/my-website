@@ -715,14 +715,14 @@ export default function Portfolio() {
               Experience Journey
             </h3>
             
-            {/* Desktop Horizontal Timeline */}
-            <div className="hidden md:block relative">
+            {/* Desktop Horizontal Timeline - Better for 3 items */}
+            <div className="hidden md:block relative max-w-4xl mx-auto">
               {/* Timeline line */}
               <div className="absolute top-6 left-0 right-0 h-0.5 bg-portfolio-primary/30" aria-hidden="true"></div>
               
-              <div className="grid grid-cols-4 gap-4">
+              <div className="flex justify-between items-start">
                 {experiences.map((exp, index) => (
-                  <div key={index} className="text-center relative" data-testid={`experience-${index}`}>
+                  <div key={index} className="text-center relative flex-1 max-w-xs" data-testid={`experience-${index}`}>
                     {/* Timeline dot */}
                     <div className="w-12 h-12 mx-auto bg-portfolio-primary rounded-full flex items-center justify-center relative z-10 mb-4">
                       <div className="w-5 h-5 bg-portfolio-secondary rounded-full"></div>
@@ -784,7 +784,7 @@ export default function Portfolio() {
       </section>
 
       {/* Tech Stack Section - Compact Data Engineering Focus */}
-      <section id="tech-stack" className="py-16 px-4 bg-portfolio-secondary">
+      <section id="tech-stack" className="py-16 px-4 bg-portfolio-secondary relative subtle-dots">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 fade-in">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -792,14 +792,17 @@ export default function Portfolio() {
               <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
             </div>
             <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-              End-to-end data pipeline expertise • <span className="text-portfolio-primary">Hover to see animations!</span>
+              <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure • <span className="text-emerald-400">Processing millions of records daily</span>
             </p>
+            <div className="mt-2 text-sm text-portfolio-muted-foreground">
+              💡 <em>Hover cards for interactive animations!</em>
+            </div>
           </div>
           
           {/* Compact Pipeline Categories */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dataEngineeringPipeline.map((stage, stageIndex) => (
-              <div key={stageIndex} className="bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-300">
+              <div key={stageIndex} className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer">
                 {/* Stage Header */}
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl">{stage.emoji}</span>
@@ -814,7 +817,7 @@ export default function Portfolio() {
                   {stage.tools.map((tool, toolIndex) => (
                     <div 
                       key={toolIndex}
-                      className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 cursor-pointer"
+                      className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-1 transform cursor-pointer"
                       data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
                     >
                       {/* Tech Icon and Name */}
