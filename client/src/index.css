@@ -285,17 +285,45 @@ textarea {
   background-color: var(--portfolio-input);
 }
 
-/* Base glow (always visible when field has content) */
-.glow {
-  box-shadow: 0 0 6px rgba(0, 200, 255, 0.25);
+/* Enhanced contact form styling - override shadcn defaults */
+input.glow,
+textarea.glow {
+  border: 1px solid hsl(var(--portfolio-border)) !important;
+  box-shadow: 0 0 0 1px hsl(var(--portfolio-border));
   outline: none;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  background-color: hsl(var(--portfolio-input)) !important;
+  color: hsl(var(--portfolio-foreground)) !important;
 }
 
-/* Stronger glow when focused */
-.glow:focus {
-  outline: none;
-  box-shadow: 0 0 12px rgba(0, 200, 255, 0.45);
+/* Professional glow when focused */
+input.glow:focus,
+textarea.glow:focus {
+  outline: none !important;
+  box-shadow: 
+    0 0 0 2px hsl(var(--portfolio-primary) / 0.4),
+    0 0 15px hsl(var(--portfolio-primary) / 0.15) !important;
+  border-color: hsl(var(--portfolio-primary)) !important;
+}
+
+/* Fix autofill border issue */
+input.glow:-webkit-autofill,
+textarea.glow:-webkit-autofill {
+  border: 1px solid hsl(var(--portfolio-border)) !important;
+  box-shadow: 
+    0 0 0 1px hsl(var(--portfolio-border)), 
+    0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--portfolio-foreground)) !important;
+}
+
+input.glow:-webkit-autofill:focus,
+textarea.glow:-webkit-autofill:focus {
+  border: 1px solid hsl(var(--portfolio-primary)) !important;
+  box-shadow: 
+    0 0 0 2px hsl(var(--portfolio-primary) / 0.4),
+    0 0 15px hsl(var(--portfolio-primary) / 0.15),
+    0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--portfolio-foreground)) !important;
 }
 
 /* Autofill fix – make it look identical */
@@ -303,11 +331,11 @@ input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-box-shadow:
-    0 0 6px rgba(0, 200, 255, 0.25),
-    0 0 0px 1000px var(--portfolio-input) inset !important;
-  -webkit-text-fill-color: var(--portfolio-foreground) !important;
-  caret-color: var(--portfolio-foreground) !important;
-  border: 1px solid var(--portfolio-border);
+    0 0 0 1px hsl(var(--portfolio-border)),
+    0 0 0px 1000px hsl(var(--portfolio-input)) inset !important;
+  -webkit-text-fill-color: hsl(var(--portfolio-foreground)) !important;
+  caret-color: hsl(var(--portfolio-foreground)) !important;
+  border: 1px solid hsl(var(--portfolio-border));
   transition: background-color 5000s ease-in-out 0s; /* prevents flash */
 }
 
@@ -405,4 +433,33 @@ input:-webkit-autofill:focus {
 .btn-jump:hover {
   transform: translateY(-5px);
   font-size: 0.92rem; /* subtle font growth */
+}
+
+/* Subtle background patterns */
+.subtle-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 1px 1px, hsl(var(--portfolio-primary) / 0.08) 1px, transparent 0);
+  background-size: 25px 25px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.subtle-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(hsl(var(--portfolio-border) / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--portfolio-border) / 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.8;
 }

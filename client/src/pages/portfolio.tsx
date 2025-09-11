@@ -6,9 +6,43 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
-import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
-import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
-import MLNetworkBackground from "@/components/MLNetworkBackground";
+import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp, Code, Zap, Star, Cloud } from 'lucide-react';
+import { 
+  SiPython, 
+  SiApachespark, 
+  SiApacheairflow, 
+  SiApachekafka, 
+  SiAmazon,
+  SiKubernetes, 
+  SiMongodb, 
+  SiSnowflake, 
+  SiJenkins, 
+  SiGit,
+  SiPostgresql,
+  SiRedis,
+  SiDocker,
+  SiTerraform,
+  SiGrafana,
+  SiDbt,
+  SiElasticsearch,
+  SiMysql,
+  SiBitbucket,
+  Sisql,
+  SiNumpy,
+  SiPandas,
+  SiOpenCV,
+  SiScikitlearn,
+  SiMatplotlib,
+  SiTensorflow,
+  SiPytorch,
+  Sinlp
+} from 'react-icons/si';
+import { LiaAws, LiaPython } from "react-icons/lia";
+import { GiBrain } from "react-icons/gi";
+import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
+import MLNetworkBackground from "@/components/mlnetworkbackground";
+import ControlMLogo from '@/components/ControlMlogo.tsx';
+import SQLLogo from '@/components/sqllogo.tsx';
 
 export default function Portfolio() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -213,7 +247,7 @@ export default function Portfolio() {
   setIsSubmitting(true);
 
   try {
-    const response = await fetch('http://localhost:5001/send-contact', {
+    const response = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -292,39 +326,137 @@ export default function Portfolio() {
     }
   ];
 
-  const skills = ["Python", "SQL", "Apache Spark", "React", "PostgreSQL", "Docker", "AWS", "Pandas", "Apache Kafka", "TensorFlow", "FastAPI", "dbt"];
+  // Data Engineering Pipeline organized by stages
+  const dataEngineeringPipeline = [
+    {
+      stage: "Data Sources",
+      emoji: "🗄️",
+      description: "Where the data journey begins",
+      tools: [
+        { name: "AWS S3", icon: LiaAws, level: "Advanced", usage: "Data lake, object storage", color: "text-orange-400" },
+        { name: "MySQL", icon: SiMysql, level: "Advanced", usage: "Structured tables, predefined schemas", color: "text-yellow-500" },
+        { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL documents, JSON data", color: "text-green-500" }
+      ]
+    },
+    {
+      stage: "Ingestion & Streaming", 
+      emoji: "🌊",
+      description: "Real-time data flows",
+      tools: [
+        { name: "Apache Spark", icon: SiApachespark, level: "Intermediate", usage: "ETL scripts, data connectors", color: "text-orange-500" },
+        { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Event streaming, real-time pipelines", color: "text-gray-400" }
+      ]
+    },
+    {
+      stage: "Processing & Transformation",
+      emoji: "⚡",
+      description: "Where data gets refined", 
+      tools: [
+        { name: "Apache Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing, MLlib", color: "text-orange-500" },
+        { name: "Python", icon: LiaPython, level: "Advanced", usage: "Pandas, NumPy, scikit-learn", color: "text-yellow-400" },
+        { name: "EMR EKS/EC2", icon: LiaAws, level: "Intermediate", usage: "processing frameworks, execution environments", color: "text-orange-400" },
+        { name: "dbt", icon: SiDbt, level: "Next Up", usage: "SQL transformations, data modeling", color: "text-orange-400" }
+      ]
+    },
+    {
+      stage: "Storage & Warehousing",
+      emoji: "🏗️", 
+      description: "Scalable data persistence",
+      tools: [
+        { name: "AWS S3", icon: LiaAws, level: "Advanced", usage: "Data lake, object storage", color: "text-orange-400" },
+        { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse, analytics", color: "text-blue-300" }
+      ]
+    },
+    {
+      stage: "Orchestration",
+      emoji: "🎼",
+      description: "Workflow automation & scheduling",
+      tools: [
+        { name: "Control-M", icon: (props) => <ControlMLogo {...props} color="#FF8C00" />, level: "Intermediate", usage: "Orchestration", color: "text-orange-400" },
+        { name: "AWS Step Functions", icon: LiaAws, level: "Intermediate", usage: "Serverless orchestration, scaling", color: "text-orange-400" },
+        { name: "Apache Airflow", icon: SiApacheairflow, level: "Learning", usage: "DAGs, workflow scheduling", color: "text-red-400" },      ]
+    },
+    {
+      stage: "Monitoring & DevOps",
+      emoji: "📊",
+      description: "Observability & deployment",
+      tools: [
+        { name: "Bitbucket", icon: SiBitbucket, level: "Advanced", usage: "Infrastructure as Code", color: "text-blue-500" },
+        { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control, collaboration", color: "text-orange-600" },
+        { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD, automated deployments", color: "text-red-500" },
+        { name: "Docker", icon: SiDocker, level: "Intermediate", usage: "Containerization, environments", color: "text-blue-500" }
+      ]
+    }
+  ];
+
+    const otherSkills = [
+      { name: "Python", icon: LiaPython, color: "text-blue-500", level: "Advanced" },
+      { name: "SQL", icon: SQLLogo, color: "text-indigo-500", level: "Advanced" },
+      { name: "SnowPark", icon: SiSnowflake, color: "text-sky-400", level: "Intermediate" },
+      {
+        name: "ML/DL",
+        icon: GiBrain,
+        color: "text-green-400",
+        level: "Advanced",
+        children: [
+          { name: "NumPy", icon: LiaPython, color: "text-orange-400" },
+          { name: "TensorFlow", icon: LiaPython, color: "text-orange-400" },
+          { name: "Matplotlib", icon: LiaPython, color: "text-blue-600" },
+          { name: "NLP", icon: LiaPython, color: "text-blue-600" },
+          { name: "Pandas", icon: LiaPython, color: "text-orange-400" },
+          { name: "Sckit-Learn", icon: LiaPython, color: "text-orange-400" },
+          { name: "PyTorch", icon: LiaPython, color: "text-red-500" },
+          { name: "OpenCV", icon: LiaPython, color: "text-red-500" }
+        ]
+      }
+    ];
+
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "Advanced": return "text-emerald-400 bg-emerald-400/10";
+      case "Intermediate": return "text-blue-400 bg-blue-400/10";
+      case "Learning": return "text-yellow-400 bg-yellow-400/10";
+      case "Next Up": return "text-gray-400 bg-gray-400/10";
+      default: return "text-gray-400 bg-gray-400/10";
+    }
+  };
+
+  // Get animated icon for each skill level
+  const getLevelIcon = (level: string) => {
+    switch (level) {
+      case "Advanced": return <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />;
+      case "Intermediate": return <Database className="w-3 h-3 mr-1 group-hover:animate-pulse" />;
+      case "Learning": return <Zap className="w-3 h-3 mr-1 group-hover:animate-bounce" />;
+      case "Next Up": return <TrendingUp className="w-3 h-3 mr-1 group-hover:animate-ping" />;
+      default: return null;
+    }
+  };
 
   const experiences = [
     {
-      title: "Senior Data Engineer",
-      company: "Tech Company",
-      period: "2022 - Present",
-      description: "Lead data infrastructure design and ML pipeline development"
-    },
-    {
       title: "Data Engineer",
-      company: "Analytics Firm",
-      period: "2020 - 2022",
-      description: "Built scalable ETL processes and real-time streaming systems"
+      company: "Tech Startup",
+      period: "2023 - Present",
+      description: "Building scalable data pipelines and ML infrastructure, processing 100M+ records daily"
     },
     {
-      title: "Software Developer",
-      company: "Startup",
-      period: "2019 - 2020",
-      description: "Full-stack development with focus on data-driven applications"
+      title: "Data Engineering Intern",
+      company: "Analytics Company",
+      period: "Summer 2023",
+      description: "Developed real-time streaming pipelines using Kafka and Spark, improved data quality by 40%"
     },
     {
-      title: "Junior Developer",
-      company: "Development Agency",
-      period: "2018 - 2019",
-      description: "Started programming journey building web applications"
+      title: "Software Engineering Intern", 
+      company: "Tech Corporation",
+      period: "Summer 2022",
+      description: "Built data visualization dashboards and automated ETL processes for business intelligence"
     }
   ];
 
   return (
     //<div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
     //<div className={`min-h-screen bg-portfolio-background text-portfolio-foreground transition-opacity duration-1000 ${ showIntro ? "opacity-0" : "opacity-100" }`} >
-    <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground">
+    <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground subtle-dots">
       {/* Intro overlay */}
       {showIntro && (
         <div
@@ -431,8 +563,6 @@ export default function Portfolio() {
             {/* Mobile menu button */}
             <div className="md:hidden">
               <button
-                variant="ghost"
-                size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-200"
                 data-testid="mobile-menu-button"
@@ -584,28 +714,31 @@ export default function Portfolio() {
               </div>
               
               
-              {/* Separator */}
-              <div className="hidden md:block">
-                <div className="w-full h-px bg-portfolio-border"></div>
-              </div>
-              
-              {/* Tech Stack */}
-              <div>
-                <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                  <Database className="text-portfolio-primary h-6 w-6" aria-hidden="true" />
-                  Tech Stack
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" data-testid="skills-container">
-                  {skills.slice(0, 10).map((skill, index) => (
-                    <span 
-                      key={index}
-                      className="flex items-center gap-2 px-3 py-2 bg-portfolio-primary/10 hover:bg-portfolio-primary/20 rounded-lg transition-colors group"
-                      data-testid={`skill-${skill.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
-                    >
-                      <div className="w-2 h-2 bg-portfolio-primary opacity-80 rounded-full group-hover:scale-125 transition-transform"></div>
-                      <span className="text-sm font-medium text-portfolio-foreground">{skill}</span>
-                    </span>
-                  ))}
+              {/* Interactive Stats */}
+              <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-blue-400 group-hover:scale-110 transition-all duration-300">
+                    2+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-blue-400 transition-colors">
+                    Years Experience
+                  </div>
+                </div>
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300">
+                    15+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-emerald-400 transition-colors">
+                    Projects Delivered
+                  </div>
+                </div>
+                <div className="text-center group cursor-pointer">
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-yellow-400 group-hover:scale-110 transition-all duration-300">
+                    12+
+                  </div>
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-yellow-400 transition-colors">
+                    Technologies
+                  </div>
                 </div>
               </div>
             </div>
@@ -618,31 +751,40 @@ export default function Portfolio() {
               Experience Journey
             </h3>
             
-            {/* Desktop Horizontal Timeline */}
-            <div className="hidden md:block relative">
-              {/* Timeline line */}
-              <div className="absolute top-6 left-0 right-0 h-0.5 bg-portfolio-primary/30" aria-hidden="true"></div>
+            {/* Enhanced Experience Journey - Interactive Timeline */}
+            <div className="hidden md:block relative max-w-5xl mx-auto">
+              {/* Animated Timeline line */}
+              <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-portfolio-primary to-transparent rounded-full" aria-hidden="true">
+                <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full animate-pulse"></div>
+              </div>
               
-              <div className="grid grid-cols-4 gap-4">
+              <div className="flex justify-between items-start">
                 {experiences.map((exp, index) => (
-                  <div key={index} className="text-center relative" data-testid={`experience-${index}`}>
-                    {/* Timeline dot */}
-                    <div className="w-12 h-12 mx-auto bg-portfolio-primary rounded-full flex items-center justify-center relative z-10 mb-4">
-                      <div className="w-5 h-5 bg-portfolio-secondary rounded-full"></div>
+                  <div key={index} className="group text-center relative flex-1 max-w-sm cursor-pointer transform transition-all duration-500 hover:scale-105" data-testid={`experience-${index}`}>
+                    {/* Enhanced Timeline dot with glow */}
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-portfolio-primary to-blue-600 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:shadow-portfolio-primary/40 transition-all duration-500">
+                      <div className="w-8 h-8 bg-portfolio-secondary rounded-full flex items-center justify-center">
+                        {/* Icon based on role */}
+                        {index === 0 && <Database className="w-4 h-4 text-portfolio-primary" />}
+                        {index === 1 && <BarChart3 className="w-4 h-4 text-portfolio-primary" />}
+                        {index === 2 && <Code className="w-4 h-4 text-portfolio-primary" />}
+                      </div>
+                      {/* Floating indicators */}
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping group-hover:animate-pulse"></div>
                     </div>
                     
-                    {/* Experience content */}
-                    <div className="space-y-2">
-                      <h4 className="text-lg font-semibold text-portfolio-foreground" data-testid={`experience-title-${index}`}>
+                    {/* Enhanced Experience content */}
+                    <div className="space-y-3 p-4 bg-portfolio-card/30 rounded-xl border border-portfolio-border/30 group-hover:border-portfolio-primary/50 group-hover:bg-portfolio-card/50 transition-all duration-500 group-hover:shadow-lg">
+                      <h4 className="text-lg font-bold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors" data-testid={`experience-title-${index}`}>
                         {exp.title}
                       </h4>
-                      <p className="text-portfolio-primary/80 font-medium text-sm" data-testid={`experience-company-${index}`}>
+                      <p className="text-portfolio-primary/90 font-semibold text-sm" data-testid={`experience-company-${index}`}>
                         {exp.company}
                       </p>
-                      <p className="text-portfolio-primary font-medium text-xs" data-testid={`experience-period-${index}`}>
+                      <p className="text-portfolio-primary font-medium text-xs bg-portfolio-primary/10 px-2 py-1 rounded-full inline-block" data-testid={`experience-period-${index}`}>
                         {exp.period}
                       </p>
-                      <p className="text-portfolio-muted-foreground text-xs leading-tight" data-testid={`experience-description-${index}`}>
+                      <p className="text-portfolio-muted-foreground text-sm leading-relaxed group-hover:text-portfolio-foreground transition-colors" data-testid={`experience-description-${index}`}>
                         {exp.description}
                       </p>
                     </div>
@@ -683,6 +825,226 @@ export default function Portfolio() {
               </ol>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Tech Stack Section - Compact Data Engineering Focus */}
+      <section id="tech-stack" className="py-20 px-4 bg-gradient-to-br from-portfolio-secondary to-portfolio-secondary/80 relative border-t-4 border-portfolio-primary/30">
+        {/* Section Header with Clear Distinction */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="bg-portfolio-primary px-6 py-2 rounded-full shadow-lg">
+            <span className="text-white font-bold text-sm tracking-wide">TECHNICAL EXPERTISE</span>
+          </div>
+        </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 fade-in">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <BarChart3 className="text-portfolio-primary h-8 w-8" />
+              <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
+            </div>
+            <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
+              <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure • <span className="text-emerald-400">Processing millions of records daily</span>
+            </p>
+          </div>
+          
+          {/* Compact Pipeline Categories */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {dataEngineeringPipeline.map((stage, stageIndex) => (
+              <div key={stageIndex} className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer">
+                {/* Stage Header */}
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl">{stage.emoji}</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-portfolio-foreground">{stage.stage}</h3>
+                    <p className="text-xs text-portfolio-muted-foreground">{stage.description}</p>
+                  </div>
+                </div>
+
+                {/* Compact Tools Grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  {stage.tools.map((tool, toolIndex) => (
+                    <div 
+                      key={toolIndex}
+                      className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-1 transform cursor-pointer"
+                      data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+                    >
+                      {/* Tech Icon and Name */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
+                          <tool.icon />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
+                            {tool.name}
+                          </h4>
+                        </div>
+                      </div>
+                      
+                      {/* Level Badge */}
+                      <div className="flex items-center justify-between">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
+                          {getLevelIcon(tool.level)}
+                          {tool.level}
+                        </span>
+                        
+                        {/* Mini Progress Bar */}
+                        <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
+                          <div 
+                            className={`h-1 rounded-full transition-all duration-500 ${
+                              tool.level === "Advanced" ? "w-full bg-emerald-400" :
+                              tool.level === "Intermediate" ? "w-3/4 bg-blue-400" :
+                              tool.level === "Learning" ? "w-1/2 bg-yellow-400" :
+                              "w-1/4 bg-gray-400"
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* -------------------- New Code Starts Here -------------------- */}
+            {/* Horizontal Miscellaneous Skills Card */}
+            <div className="mt-12 fade-in">
+              <div className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 cursor-pointer">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl">🛠️</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-portfolio-foreground">Other Skills & Tools</h3>
+                    <p className="text-xs text-portfolio-muted-foreground">
+                      Languages, frameworks, and tools complementing data engineering
+                    </p>
+                  </div>
+                </div>
+
+                {/* Horizontal Scrollable Tools Row */}
+                <div className="flex overflow-x-auto gap-4 py-2">
+                  {otherSkills.map((tool, index) => {
+                    const isML = tool.name === "ML/DL";
+
+                    if (isML) {
+                      return (
+                        <div
+                          key={index}
+                          className="min-w-[350px] flex-shrink-0 bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 cursor-pointer group hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 transition-all duration-300"
+                        >
+                          {/* Grid: 2 rows, 2 columns */}
+                          <div className="grid grid-rows-2 grid-cols-[auto_1fr] gap-2 items-start">
+                            {/* Top-left: ML icon + name */}
+                            <div className="flex items-center gap-2">
+                              <div className={`text-lg ${tool.color}`}>
+                                <tool.icon />
+                              </div>
+                              <h4 className="font-semibold text-sm text-portfolio-foreground truncate">
+                                {tool.name}
+                              </h4>
+                            </div>
+
+                            {/* Bottom-left: ML level */}
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
+                                {getLevelIcon(tool.level)}
+                                {tool.level}
+                              </span>
+                              <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
+                                <div
+                                  className={`h-1 rounded-full transition-all duration-500 ${
+                                    tool.level === "Advanced" ? "w-full bg-emerald-400" :
+                                    tool.level === "Intermediate" ? "w-3/4 bg-blue-400" :
+                                    tool.level === "Learning" ? "w-1/2 bg-yellow-400" :
+                                    "w-1/4 bg-gray-400"
+                                  }`}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Split children into balanced top and bottom rows */}
+                            {tool.children && tool.children.length > 0 && (() => {
+                              const mid = Math.ceil(tool.children.length / 2);
+                              const topChildren = tool.children.slice(0, mid);
+                              const bottomChildren = tool.children.slice(mid);
+
+                              return (
+                                <>
+                                  {/* Top row children */}
+                                  <div className="flex gap-2 col-start-2 row-start-1">
+                                    {topChildren.map((child, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-center gap-1 px-2 py-1 bg-portfolio-background/30 border border-portfolio-border/30 rounded-full text-xs hover:bg-portfolio-background/50 transition-all duration-300"
+                                      >
+                                        <div className={`text-[0.7rem] ${child.color}`}>
+                                          <child.icon />
+                                        </div>
+                                        <span className="truncate max-w-[60px]">{child.name}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  {/* Bottom row children */}
+                                  <div className="flex gap-2 col-start-2 row-start-2">
+                                    {bottomChildren.map((child, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-center gap-1 px-2 py-1 bg-portfolio-background/30 border border-portfolio-border/30 rounded-full text-xs hover:bg-portfolio-background/50 transition-all duration-300"
+                                      >
+                                        <div className={`text-[0.7rem] ${child.color}`}>
+                                          <child.icon />
+                                        </div>
+                                        <span className="truncate max-w-[60px]">{child.name}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Regular horizontal tool cards
+                    return (
+                      <div
+                        key={index}
+                        className="min-w-[120px] flex-shrink-0 group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className={`text-lg ${tool.color}`}>
+                            <tool.icon />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-sm text-portfolio-foreground truncate">
+                              {tool.name}
+                            </h4>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
+                            {getLevelIcon(tool.level)}
+                            {tool.level}
+                          </span>
+                          <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
+                            <div
+                              className={`h-1 rounded-full transition-all duration-500 ${
+                                tool.level === "Advanced" ? "w-full bg-emerald-400" :
+                                tool.level === "Intermediate" ? "w-3/4 bg-blue-400" :
+                                tool.level === "Learning" ? "w-1/2 bg-yellow-400" :
+                                "w-1/4 bg-gray-400"
+                              }`}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
         </div>
       </section>
 
