@@ -17,7 +17,14 @@ import {
   SiMongodb, 
   SiSnowflake, 
   SiJenkins, 
-  SiGit 
+  SiGit,
+  SiPostgresql,
+  SiRedis,
+  SiDocker,
+  SiTerraform,
+  SiGrafana,
+  SiDbt,
+  SiElasticsearch
 } from 'react-icons/si';
 import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
 import MLNetworkBackground from "@/components/mlnetworkbackground";
@@ -304,17 +311,68 @@ export default function Portfolio() {
     }
   ];
 
-  const techStack = [
-    { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL, data processing, ML workflows", color: "text-yellow-400" },
-    { name: "Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing on EMR/EKS", color: "text-orange-500" },
-    { name: "Airflow", icon: SiApacheairflow, level: "Learning", usage: "Workflow orchestration", color: "text-red-400" },
-    { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Streaming pipelines", color: "text-gray-400" },
-    { name: "AWS", icon: Cloud, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
-    { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration on EKS", color: "text-blue-400" },
-    { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL database", color: "text-green-500" },
-    { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse", color: "text-blue-300" },
-    { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" },
-    { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control", color: "text-orange-600" }
+  // Data Engineering Pipeline organized by stages
+  const dataEngineeringPipeline = [
+    {
+      stage: "Data Sources",
+      emoji: "🗄️",
+      description: "Where the data journey begins",
+      tools: [
+        { name: "PostgreSQL", icon: SiPostgresql, level: "Advanced", usage: "OLTP databases, transactional data", color: "text-blue-600" },
+        { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL documents, JSON data", color: "text-green-500" },
+        { name: "Elasticsearch", icon: SiElasticsearch, level: "Learning", usage: "Search engines, log aggregation", color: "text-yellow-500" }
+      ]
+    },
+    {
+      stage: "Ingestion & Streaming", 
+      emoji: "🌊",
+      description: "Real-time data flows",
+      tools: [
+        { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Event streaming, real-time pipelines", color: "text-gray-400" },
+        { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL scripts, data connectors", color: "text-yellow-400" }
+      ]
+    },
+    {
+      stage: "Processing & Transformation",
+      emoji: "⚡",
+      description: "Where data gets refined", 
+      tools: [
+        { name: "Apache Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing, MLlib", color: "text-orange-500" },
+        { name: "dbt", icon: SiDbt, level: "Learning", usage: "SQL transformations, data modeling", color: "text-orange-400" },
+        { name: "Python", icon: SiPython, level: "Advanced", usage: "Pandas, NumPy, scikit-learn", color: "text-yellow-400" }
+      ]
+    },
+    {
+      stage: "Storage & Warehousing",
+      emoji: "🏗️", 
+      description: "Scalable data persistence",
+      tools: [
+        { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse, analytics", color: "text-blue-300" },
+        { name: "AWS S3", icon: SiAmazon, level: "Intermediate", usage: "Data lake, object storage", color: "text-orange-400" },
+        { name: "Redis", icon: SiRedis, level: "Intermediate", usage: "Caching, session storage", color: "text-red-500" }
+      ]
+    },
+    {
+      stage: "Orchestration",
+      emoji: "🎼",
+      description: "Workflow automation & scheduling",
+      tools: [
+        { name: "Apache Airflow", icon: SiApacheairflow, level: "Learning", usage: "DAGs, workflow scheduling", color: "text-red-400" },
+        { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration, scaling", color: "text-blue-400" }
+      ]
+    },
+    {
+      stage: "Monitoring & DevOps",
+      emoji: "📊",
+      description: "Observability & deployment",
+      tools: [
+        { name: "Grafana", icon: SiGrafana, level: "Learning", usage: "Dashboards, data visualization", color: "text-orange-500" },
+        { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD, automated deployments", color: "text-red-500" },
+        { name: "Docker", icon: SiDocker, level: "Intermediate", usage: "Containerization, environments", color: "text-blue-500" },
+        { name: "Terraform", icon: SiTerraform, level: "Next Up", usage: "Infrastructure as Code", color: "text-purple-500" },
+        { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control, collaboration", color: "text-orange-600" }
+      ]
+    }
   ];
 
   const getLevelColor = (level: string) => {
@@ -327,30 +385,35 @@ export default function Portfolio() {
     }
   };
 
+  // Get animated icon for each skill level
+  const getLevelIcon = (level: string) => {
+    switch (level) {
+      case "Advanced": return <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />;
+      case "Intermediate": return <Database className="w-3 h-3 mr-1 group-hover:animate-pulse" />;
+      case "Learning": return <Zap className="w-3 h-3 mr-1 group-hover:animate-bounce" />;
+      case "Next Up": return <TrendingUp className="w-3 h-3 mr-1 group-hover:animate-ping" />;
+      default: return null;
+    }
+  };
+
   const experiences = [
     {
-      title: "Senior Data Engineer",
-      company: "Tech Company",
-      period: "2022 - Present",
-      description: "Lead data infrastructure design and ML pipeline development"
-    },
-    {
       title: "Data Engineer",
-      company: "Analytics Firm",
-      period: "2020 - 2022",
-      description: "Built scalable ETL processes and real-time streaming systems"
+      company: "Tech Startup",
+      period: "2023 - Present",
+      description: "Building scalable data pipelines and ML infrastructure, processing 100M+ records daily"
     },
     {
-      title: "Software Developer",
-      company: "Startup",
-      period: "2019 - 2020",
-      description: "Full-stack development with focus on data-driven applications"
+      title: "Data Engineering Intern",
+      company: "Analytics Company",
+      period: "Summer 2023",
+      description: "Developed real-time streaming pipelines using Kafka and Spark, improved data quality by 40%"
     },
     {
-      title: "Junior Developer",
-      company: "Development Agency",
-      period: "2018 - 2019",
-      description: "Started programming journey building web applications"
+      title: "Software Engineering Intern", 
+      company: "Tech Corporation",
+      period: "Summer 2022",
+      description: "Built data visualization dashboards and automated ETL processes for business intelligence"
     }
   ];
 
@@ -618,26 +681,26 @@ export default function Portfolio() {
               {/* Interactive Stats */}
               <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
                 <div className="text-center group cursor-pointer">
-                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-blue-400 transition-colors">
-                    5+
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-blue-400 group-hover:scale-110 transition-all duration-300">
+                    2+
                   </div>
-                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-blue-400 transition-colors">
                     Years Experience
                   </div>
                 </div>
                 <div className="text-center group cursor-pointer">
-                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-emerald-400 transition-colors">
-                    50+
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300">
+                    15+
                   </div>
-                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-emerald-400 transition-colors">
                     Projects Delivered
                   </div>
                 </div>
                 <div className="text-center group cursor-pointer">
-                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-yellow-400 transition-colors">
-                    10+
+                  <div className="text-2xl font-bold text-portfolio-primary group-hover:text-yellow-400 group-hover:scale-110 transition-all duration-300">
+                    12+
                   </div>
-                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                  <div className="text-sm text-portfolio-muted-foreground group-hover:text-yellow-400 transition-colors">
                     Technologies
                   </div>
                 </div>
@@ -720,73 +783,100 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Dedicated Tech Stack Section */}
+      {/* Data Engineering Pipeline Section */}
       <section id="tech-stack" className="py-20 px-4 bg-portfolio-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 fade-in">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 fade-in">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-portfolio-primary to-blue-400 bg-clip-text text-transparent">
-              Tech Stack & Skills
+              Data Engineering Pipeline
             </h2>
-            <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto">
-              Technologies I use to build scalable data solutions and intelligent systems
+            <p className="text-xl text-portfolio-muted-foreground max-w-3xl mx-auto">
+              <span className="font-medium text-portfolio-primary">From source to insights:</span> My end-to-end data pipeline expertise
             </p>
+            <div className="mt-4 text-sm text-portfolio-muted-foreground">
+              💡 <em>Hover over tools to see them come alive!</em>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" data-testid="skills-container">
-            {techStack.map((tech, index) => (
-              <div 
-                key={index}
-                className="group relative bg-portfolio-card border border-portfolio-border rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-2 cursor-pointer overflow-hidden"
-                data-testid={`tech-${tech.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+          {/* Pipeline Flow */}
+          <div className="space-y-12">
+            {dataEngineeringPipeline.map((stage, stageIndex) => (
+              <div key={stageIndex} className="fade-in">
+                {/* Stage Header */}
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-portfolio-card border border-portfolio-border rounded-full">
+                    <span className="text-3xl animate-pulse">{stage.emoji}</span>
+                    <div className="text-left">
+                      <h3 className="text-xl font-bold text-portfolio-foreground">{stage.stage}</h3>
+                      <p className="text-sm text-portfolio-muted-foreground">{stage.description}</p>
+                    </div>
+                  </div>
+                  {/* Flow Arrow (except for last stage) */}
+                  {stageIndex < dataEngineeringPipeline.length - 1 && (
+                    <div className="mt-6 flex justify-center">
+                      <div className="w-px h-8 bg-gradient-to-b from-portfolio-primary to-blue-400 animate-pulse"></div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Tools Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {stage.tools.map((tool, toolIndex) => (
+                    <div 
+                      key={toolIndex}
+                      className="group relative bg-portfolio-card border border-portfolio-border rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-2 cursor-pointer overflow-hidden"
+                      data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
               >
                 {/* Animated background on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-portfolio-primary/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
-                {/* Tech Icon and Name */}
-                <div className="relative z-10 flex items-center gap-3 mb-3">
-                  <div className={`text-2xl ${tech.color} group-hover:scale-125 group-hover:rotate-12 transition-all duration-300`}>
-                    <tech.icon />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
-                      {tech.name}
-                    </h4>
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 ${getLevelColor(tech.level)}`}>
-                      {tech.level === "Advanced" && <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />}
-                      {tech.level === "Learning" && <Zap className="w-3 h-3 mr-1 group-hover:animate-pulse" />}
-                      {tech.level}
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Usage Description - slides in on hover */}
-                <div className="relative z-10 overflow-hidden">
-                  <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 opacity-80 group-hover:opacity-100">
-                    {tech.usage}
-                  </p>
-                </div>
-                
-                {/* Animated Skill Level Progress Bar */}
-                <div className="relative z-10 mt-3 w-full bg-portfolio-muted/20 rounded-full h-2 overflow-hidden">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-700 group-hover:shadow-md relative ${
-                      tech.level === "Advanced" ? "w-5/6 bg-emerald-400" :
-                      tech.level === "Intermediate" ? "w-3/5 bg-blue-400" :
-                      tech.level === "Learning" ? "w-2/5 bg-yellow-400" :
-                      "w-1/5 bg-gray-400"
-                    }`}
-                  >
-                    {/* Animated shimmer effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-pulse"></div>
-                  </div>
-                </div>
-                
-                {/* Floating particles on hover */}
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-1 h-1 bg-portfolio-primary rounded-full animate-ping"></div>
-                </div>
-                <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping [animation-delay:0.2s]"></div>
+                      {/* Tech Icon and Name */}
+                      <div className="relative z-10 flex items-center gap-3 mb-3">
+                        <div className={`text-2xl ${tool.color} group-hover:scale-125 group-hover:rotate-12 transition-all duration-300`}>
+                          <tool.icon />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
+                            {tool.name}
+                          </h4>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-all duration-300 ${getLevelColor(tool.level)}`}>
+                            {getLevelIcon(tool.level)}
+                            {tool.level}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Usage Description - slides in on hover */}
+                      <div className="relative z-10 overflow-hidden">
+                        <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 opacity-80 group-hover:opacity-100">
+                          {tool.usage}
+                        </p>
+                      </div>
+                      
+                      {/* Animated Skill Level Progress Bar */}
+                      <div className="relative z-10 mt-3 w-full bg-portfolio-muted/20 rounded-full h-2 overflow-hidden">
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-700 group-hover:shadow-md relative ${
+                            tool.level === "Advanced" ? "w-5/6 bg-emerald-400" :
+                            tool.level === "Intermediate" ? "w-3/5 bg-blue-400" :
+                            tool.level === "Learning" ? "w-2/5 bg-yellow-400" :
+                            "w-1/5 bg-gray-400"
+                          }`}
+                        >
+                          {/* Animated shimmer effect */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-pulse"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Floating particles on hover */}
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-1 h-1 bg-portfolio-primary rounded-full animate-ping"></div>
+                      </div>
+                      <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping [animation-delay:0.2s]"></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
