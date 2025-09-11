@@ -12,7 +12,7 @@ import {
   SiApachespark, 
   SiApacheairflow, 
   SiApachekafka, 
-  SiAmazonaws, 
+  SiAmazon, 
   SiKubernetes, 
   SiMongodb, 
   SiSnowflake, 
@@ -309,7 +309,7 @@ export default function Portfolio() {
     { name: "Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing on EMR/EKS", color: "text-orange-500" },
     { name: "Airflow", icon: SiApacheairflow, level: "Learning", usage: "Workflow orchestration", color: "text-red-400" },
     { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Streaming pipelines", color: "text-gray-400" },
-    { name: "AWS", icon: SiAmazonaws, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
+    { name: "AWS", icon: SiAmazon, level: "Intermediate", usage: "Cloud infrastructure, S3, EMR, EKS, IAM", color: "text-orange-400" },
     { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration on EKS", color: "text-blue-400" },
     { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL database", color: "text-green-500" },
     { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse", color: "text-blue-300" },
@@ -620,22 +620,53 @@ export default function Portfolio() {
                 <div className="w-full h-px bg-portfolio-border"></div>
               </div>
               
-              {/* Tech Stack */}
+              {/* Interactive Tech Stack */}
               <div>
                 <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                  <Database className="text-portfolio-primary h-6 w-6" aria-hidden="true" />
-                  Tech Stack
+                  <Code className="text-portfolio-primary h-6 w-6" aria-hidden="true" />
+                  Tech Stack & Skills
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" data-testid="skills-container">
-                  {skills.slice(0, 10).map((skill, index) => (
-                    <span 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-testid="skills-container">
+                  {techStack.map((tech, index) => (
+                    <div 
                       key={index}
-                      className="flex items-center gap-2 px-3 py-2 bg-portfolio-primary/10 hover:bg-portfolio-primary/20 rounded-lg transition-colors group"
-                      data-testid={`skill-${skill.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+                      className="group relative bg-portfolio-background/40 border border-portfolio-border/50 rounded-xl p-4 hover:border-portfolio-primary/50 hover:bg-portfolio-background/60 transition-all duration-300 hover:shadow-lg hover:shadow-portfolio-primary/10 hover:-translate-y-1"
+                      data-testid={`tech-${tech.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
                     >
-                      <div className="w-2 h-2 bg-portfolio-primary opacity-80 rounded-full group-hover:scale-125 transition-transform"></div>
-                      <span className="text-sm font-medium text-portfolio-foreground">{skill}</span>
-                    </span>
+                      {/* Tech Icon and Name */}
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className={`text-2xl ${tech.color} group-hover:scale-110 transition-transform duration-300`}>
+                          <tech.icon />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors">
+                            {tech.name}
+                          </h4>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tech.level)}`}>
+                            {tech.level === "Advanced" && <Star className="w-3 h-3 mr-1" />}
+                            {tech.level === "Learning" && <Zap className="w-3 h-3 mr-1" />}
+                            {tech.level}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Usage Description */}
+                      <p className="text-sm text-portfolio-muted-foreground group-hover:text-portfolio-foreground transition-colors">
+                        {tech.usage}
+                      </p>
+                      
+                      {/* Skill Level Progress Bar */}
+                      <div className="mt-3 w-full bg-portfolio-muted/20 rounded-full h-1.5">
+                        <div 
+                          className={`h-1.5 rounded-full transition-all duration-500 group-hover:shadow-sm ${
+                            tech.level === "Advanced" ? "w-5/6 bg-emerald-400" :
+                            tech.level === "Intermediate" ? "w-3/5 bg-blue-400" :
+                            tech.level === "Learning" ? "w-2/5 bg-yellow-400" :
+                            "w-1/5 bg-gray-400"
+                          }`}
+                        ></div>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
