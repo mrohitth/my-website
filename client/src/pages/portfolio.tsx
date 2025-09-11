@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp } from 'lucide-react';
-import SubtleNetworkCursor from "@/components/SubtleNetworkCursor";
-import MLNetworkBackground from "@/components/MLNetworkBackground";
+import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
+import MLNetworkBackground from "@/components/mlnetworkbackground";
 
 export default function Portfolio() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -431,8 +431,6 @@ export default function Portfolio() {
             {/* Mobile menu button */}
             <div className="md:hidden">
               <button
-                variant="ghost"
-                size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-200"
                 data-testid="mobile-menu-button"
