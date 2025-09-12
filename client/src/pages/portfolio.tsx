@@ -394,7 +394,7 @@ export default function Portfolio() {
       { name: "SQL", icon: SQLLogo, color: "text-indigo-500", level: "Advanced" },
       { name: "SnowPark", icon: SiSnowflake, color: "text-sky-400", level: "Intermediate" },
       {
-        name: "ML/DL",
+        name: "ML/DL/CV",
         icon: GiBrain,
         color: "text-green-400",
         level: "Advanced",
@@ -432,26 +432,27 @@ export default function Portfolio() {
     }
   };
 
-  const experiences = [
-    {
-      title: "Data Engineer",
-      company: "Tech Startup",
-      period: "2023 - Present",
-      description: "Building scalable data pipelines and ML infrastructure, processing 100M+ records daily"
-    },
-    {
-      title: "Data Engineering Intern",
-      company: "Analytics Company",
-      period: "Summer 2023",
-      description: "Developed real-time streaming pipelines using Kafka and Spark, improved data quality by 40%"
-    },
-    {
-      title: "Software Engineering Intern", 
-      company: "Tech Corporation",
-      period: "Summer 2022",
-      description: "Built data visualization dashboards and automated ETL processes for business intelligence"
-    }
-  ];
+    const experiences = [
+      {
+        title: "Data Engineer",
+        company: "Capco (Client: Freddie Mac, Tysons, VA)",
+        period: "Mar 2023 – Present",
+        description: "Built scalable PySpark ETL pipelines on AWS EMR (EC2/EKS), processing 100+ S3 datasets and delivering clean data to MongoDB. Engineered high-volume Spark jobs processing 40M+ records in under 10 minutes. Developed Snowflake data products with complex SQL and productionalized them via Jenkins pipelines. Introduced Snowpark pipelines for improved maintainability."
+      },
+      {
+        title: "Lead AI Developer",
+        company: "Bosmos, Atlanta, GA",
+        period: "Sep 2023 – Present",
+        description: "Led development of an NLP chatbot, managing end-to-end ML pipelines. Focused on integrating predictive analytics workflows with structured data pipelines."
+      },
+      {
+        title: "Machine Learning Intern",
+        company: "Irys Technologies, San Antonio, TX",
+        period: "Jun 2022 – Sep 2022",
+        description: "Optimized preprocessing pipelines and model workflows, improving data readiness and reliability for downstream analytics."
+      }
+    ];
+
 
   return (
     //<div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
@@ -758,39 +759,56 @@ export default function Portfolio() {
                 <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full animate-pulse"></div>
               </div>
               
-              <div className="flex justify-between items-start">
-                {experiences.map((exp, index) => (
-                  <div key={index} className="group text-center relative flex-1 max-w-sm cursor-pointer transform transition-all duration-500 hover:scale-105" data-testid={`experience-${index}`}>
-                    {/* Enhanced Timeline dot with glow */}
-                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-portfolio-primary to-blue-600 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:shadow-portfolio-primary/40 transition-all duration-500">
-                      <div className="w-8 h-8 bg-portfolio-secondary rounded-full flex items-center justify-center">
-                        {/* Icon based on role */}
-                        {index === 0 && <Database className="w-4 h-4 text-portfolio-primary" />}
-                        {index === 1 && <BarChart3 className="w-4 h-4 text-portfolio-primary" />}
-                        {index === 2 && <Code className="w-4 h-4 text-portfolio-primary" />}
-                      </div>
-                      {/* Floating indicators */}
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping group-hover:animate-pulse"></div>
+            <div className="flex justify-between items-start gap-6">
+              {experiences.map((exp, index) => (
+                <div
+                  key={index}
+                  className="group text-center relative flex-1 min-w-[250px] max-w-[350px] cursor-pointer transform transition-all duration-500 hover:scale-105"
+                  data-testid={`experience-${index}`}
+                >
+                  {/* Enhanced Timeline dot with glow */}
+                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-portfolio-primary to-blue-600 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:shadow-portfolio-primary/40 transition-all duration-500">
+                    <div className="w-8 h-8 bg-portfolio-secondary rounded-full flex items-center justify-center">
+                      {/* Icon based on role */}
+                      {index === 0 && <Database className="w-4 h-4 text-portfolio-primary" />}
+                      {index === 1 && <BarChart3 className="w-4 h-4 text-portfolio-primary" />}
+                      {index === 2 && <Code className="w-4 h-4 text-portfolio-primary" />}
                     </div>
-                    
-                    {/* Enhanced Experience content */}
-                    <div className="space-y-3 p-4 bg-portfolio-card/30 rounded-xl border border-portfolio-border/30 group-hover:border-portfolio-primary/50 group-hover:bg-portfolio-card/50 transition-all duration-500 group-hover:shadow-lg">
-                      <h4 className="text-lg font-bold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors" data-testid={`experience-title-${index}`}>
-                        {exp.title}
-                      </h4>
-                      <p className="text-portfolio-primary/90 font-semibold text-sm" data-testid={`experience-company-${index}`}>
-                        {exp.company}
-                      </p>
-                      <p className="text-portfolio-primary font-medium text-xs bg-portfolio-primary/10 px-2 py-1 rounded-full inline-block" data-testid={`experience-period-${index}`}>
-                        {exp.period}
-                      </p>
-                      <p className="text-portfolio-muted-foreground text-sm leading-relaxed group-hover:text-portfolio-foreground transition-colors" data-testid={`experience-description-${index}`}>
-                        {exp.description}
-                      </p>
-                    </div>
+                    {/* Floating indicators */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping group-hover:animate-pulse"></div>
                   </div>
-                ))}
-              </div>
+
+                  {/* Enhanced Experience content */}
+                  <div className="flex flex-col justify-between space-y-3 p-5 bg-portfolio-card/30 rounded-xl border border-portfolio-border/30 group-hover:border-portfolio-primary/50 group-hover:bg-portfolio-card/50 transition-all duration-500 group-hover:shadow-lg min-h-[300px]">
+                    <h4
+                      className="text-lg font-bold text-portfolio-foreground group-hover:text-portfolio-primary transition-colors"
+                      data-testid={`experience-title-${index}`}
+                    >
+                      {exp.title}
+                    </h4>
+                    <p
+                      className="text-portfolio-primary/90 font-semibold text-sm"
+                      data-testid={`experience-company-${index}`}
+                    >
+                      {exp.company}
+                    </p>
+                    <p
+                      className="text-portfolio-primary font-medium text-xs bg-portfolio-primary/10 px-2 py-1 rounded-full inline-block"
+                      data-testid={`experience-period-${index}`}
+                    >
+                      {exp.period}
+                    </p>
+                    <p
+                      className="text-portfolio-muted-foreground text-sm leading-relaxed group-hover:text-portfolio-foreground transition-colors mt-2"
+                      data-testid={`experience-description-${index}`}
+                    >
+                      {exp.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             </div>
             
             {/* Mobile Vertical Timeline */}
@@ -832,8 +850,8 @@ export default function Portfolio() {
       <section id="tech-stack" className="py-20 px-4 bg-gradient-to-br from-portfolio-secondary to-portfolio-secondary/80 relative border-t-4 border-portfolio-primary/30">
         {/* Section Header with Clear Distinction */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="bg-portfolio-primary px-6 py-2 rounded-full shadow-lg">
-            <span className="text-white font-bold text-sm tracking-wide">TECHNICAL EXPERTISE</span>
+          <div className="bg-portfolio-primary px-6 py-2 rounded-full shadow-lg whitespace-nowrap">
+            <span className="text-white font-bold text-xs sm:text-sm tracking-wide">TECHNICAL EXPERTISE</span>
           </div>
         </div>
         <div className="max-w-6xl mx-auto">
@@ -846,7 +864,7 @@ export default function Portfolio() {
               <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure • <span className="text-emerald-400">Processing millions of records daily</span>
             </p>
           </div>
-          
+
           {/* Compact Pipeline Categories */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dataEngineeringPipeline.map((stage, stageIndex) => (
@@ -863,7 +881,7 @@ export default function Portfolio() {
                 {/* Compact Tools Grid */}
                 <div className="grid grid-cols-2 gap-3">
                   {stage.tools.map((tool, toolIndex) => (
-                    <div 
+                    <div
                       key={toolIndex}
                       className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-1 transform cursor-pointer"
                       data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
@@ -879,17 +897,17 @@ export default function Portfolio() {
                           </h4>
                         </div>
                       </div>
-                      
+
                       {/* Level Badge */}
                       <div className="flex items-center justify-between">
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
                           {getLevelIcon(tool.level)}
                           {tool.level}
                         </span>
-                        
+
                         {/* Mini Progress Bar */}
                         <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
-                          <div 
+                          <div
                             className={`h-1 rounded-full transition-all duration-500 ${
                               tool.level === "Advanced" ? "w-full bg-emerald-400" :
                               tool.level === "Intermediate" ? "w-3/4 bg-blue-400" :
@@ -921,9 +939,9 @@ export default function Portfolio() {
                 </div>
 
                 {/* Horizontal Scrollable Tools Row */}
-                <div className="flex overflow-x-auto gap-4 py-2">
+                <div className="flex overflow-x-auto gap-4 py-2 px-1">
                   {otherSkills.map((tool, index) => {
-                    const isML = tool.name === "ML/DL";
+                    const isML = tool.name === "ML/DL/CV";
 
                     if (isML) {
                       return (
