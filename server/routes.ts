@@ -11,10 +11,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { name, email, message } = req.body;
       
-      // For now, just log the contact form submission
-      console.log('Contact form submission:', { name, email, message });
-      
       // In a real app, you would send an email or save to database
+      // For development, we'll just acknowledge receipt
       res.status(200).json({ success: true, message: 'Message received successfully' });
     } catch (error) {
       console.error('Contact form error:', error);

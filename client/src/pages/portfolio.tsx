@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
-import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, User, Database, BarChart3, TrendingUp, Code, Zap, Star, Cloud } from 'lucide-react';
+import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
 import { 
   SiPython, 
   SiApachespark, 
@@ -48,15 +48,9 @@ export default function Portfolio() {
   "Data Engineer",
   "Python Ninja",
   "Cloud Explorer",
-  //"Data Storyteller",
   "Data Pipeline Architect",
   "SQL Sorcerer",
-  //"Algorithm Tinkerer",
   "Big Data Wrangler",
-  //"AI/ML Enthusiast",
-  //"Code Alchemist",
-  //"Tech Curious",
-  //"Insights Seeker",
   "Data Whisperer for Machines",
   "Neural Data Forger",
   "Machine Intelligence Artisan"
@@ -418,8 +412,6 @@ export default function Portfolio() {
   ];
 
   return (
-    //<div className="min-h-screen bg-portfolio-background text-portfolio-foreground">
-    //<div className={`min-h-screen bg-portfolio-background text-portfolio-foreground transition-opacity duration-1000 ${ showIntro ? "opacity-0" : "opacity-100" }`} >
     <div className="relative min-h-screen bg-portfolio-background text-portfolio-foreground subtle-dots">
       {/* Intro overlay */}
       {showIntro && (
@@ -469,7 +461,6 @@ export default function Portfolio() {
                   e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
                 }}
                 onClick={() => scrollToSection('hero')}
-                //className="text-xl font-bold text-portfolio-primary hover:text-portfolio-primary/80 transition-colors button-3d"
                 className="tilt-button font-bold text-portfolio-primary px-5 py-2.5 text-portfolio-foreground rounded-md hover:text-portfolio-primary hover:bg-portfolio-primary/10 transition-colors"
                 style={{ wordSpacing: '0.25rem' }}
                 data-testid="logo-button"
@@ -626,7 +617,6 @@ export default function Portfolio() {
                   className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
                 >
                   View My Work
-                  {/*<ExternalLink className="ml-2 h-4 w-4" />*/}
                 </Button>
                 <Button
                   onClick={() => scrollToSection('contact')}
@@ -660,9 +650,7 @@ export default function Portfolio() {
             {/* Profile Picture */}
             <div className="fade-in md:col-span-1">
               <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl bg-portfolio-muted flex items-center justify-center" data-testid="profile-picture">
-                <User size={80} className="text-portfolio-muted-foreground" />
-                {/* Replace with actual image: */}
-                {<img src={profilePic} alt="Your Name" className="w-full h-full object-cover rounded-2xl"/> }
+                <img src={profilePic} alt="Mathew Thomson" className="w-full h-full object-cover rounded-2xl"/>
               </div>
             </div>
             
@@ -1105,7 +1093,7 @@ export default function Portfolio() {
                     </svg>
                   </a>
                   <a 
-                    href="#" 
+                    href="https://twitter.com/mrohitth" 
                     className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
                     data-testid="link-twitter"
                   >
@@ -1114,7 +1102,7 @@ export default function Portfolio() {
                     </svg>
                   </a>
                   <a 
-                    href="#" 
+                    href="https://instagram.com/mrohitth" 
                     className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
                     data-testid="link-instagram"
                   >
