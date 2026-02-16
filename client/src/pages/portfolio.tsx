@@ -790,7 +790,7 @@ const experiences = [
                 <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full animate-pulse"></div>
               </div>
               
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start gap-8">
                 {experiences.map((exp, index) => (
                   <div key={index} className="group text-center relative flex-1 max-w-sm cursor-pointer transform transition-all duration-500 hover:scale-105" data-testid={`experience-${index}`}>
                     {/* Enhanced Timeline dot with glow */}
@@ -867,7 +867,7 @@ const experiences = [
                               key={logoIndex}
                               src={logo} 
                               alt={`${exp.company} logo ${logoIndex + 1}`}
-                              className={`object-contain ${exp.company.includes('Freddie Mac') ? (logoIndex === 0 ? 'w-20 h-20' : 'w-4 h-4') : 'w-4 h-4'} ${exp.company.includes('Freddie Mac') ? 'scale-175' : ''}`}
+                              className={`w-6 h-6 object-contain ${exp.company.includes('Freddie Mac') ? (logoIndex === 0 ? 'w-8 h-8' : 'w-4 h-4') : 'w-4 h-4'} ${exp.company.includes('Freddie Mac') ? 'scale-125' : ''}`}
                             />
                           ))}
                         </div>
@@ -875,7 +875,7 @@ const experiences = [
                     </div>
                     
                     {/* Experience content */}
-                    <div className="min-w-0 pb-4">
+                    <div className="min-w-0 pb-4 ml-4">
                       <div className="flex flex-col mb-2">
                         <h4 className="text-lg font-semibold text-portfolio-foreground" data-testid={`experience-mobile-title-${index}`}>
                           {exp.title}
