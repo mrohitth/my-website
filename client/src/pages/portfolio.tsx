@@ -1044,131 +1044,123 @@ const experiences = [
               </div>
             </div>
 
-            {/* ML Projects Tab */}
-            {activeTab === 'ml' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="ml-projects-container">
-                {projects.filter(project => !project.featured && 
-                  (project.category === "Machine Learning" || project.category === "Deep Learning"))
-                  .map((project) => {
-                    const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
-                    return (
-                      <Card key={project.title} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
-                        <img 
-                          src={project.image} 
-                          alt={project.title} 
-                          className="w-full h-48 object-cover"
-                          data-testid={`project-image-${projectSlug}`}
-                        />
-                        <div className="p-6">
-                          <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
-                            {project.title}
-                          </h3>
-                          <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
-                            {project.description}
-                          </p>
-                          <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
-                            {project.technologies.map((tech, techIndex) => (
-                              <span 
-                                key={techIndex}
-                                className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
-                                data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+            {/* Content Container */}
+            <div className="min-h-[400px]">
+              {/* ML Projects Tab */}
+              {activeTab === 'ml' && (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fadeIn" data-testid="ml-projects-container">
+                  {projects.filter(project => !project.featured && 
+                    (project.category === "Machine Learning" || project.category === "Deep Learning"))
+                    .map((project) => {
+                      const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
+                      return (
+                        <Card key={project.title} className="bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                          <img 
+                            src={project.image} 
+                            alt={project.title} 
+                            className="w-full h-48 object-cover"
+                            data-testid={`project-image-${projectSlug}`}
+                          />
+                          <div className="p-6">
+                            <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
+                              {project.title}
+                            </h3>
+                            <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
+                              {project.technologies.map((tech, techIndex) => (
+                                <span 
+                                  key={`${projectSlug}-${techIndex}`}
+                                  className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                                  data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex gap-3">
+                              <a 
+                                href={project.github} 
+                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                                data-testid={`project-github-${projectSlug}`}
                               >
-                                {tech}
-                              </span>
-                            ))}
+                                <Github className="mr-2 h-4 w-4" />
+                                View Project
+                              </a>
+                              <a 
+                                href={project.demo} 
+                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                                data-testid={`project-demo-${projectSlug}`}
+                              >
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Demo
+                              </a>
+                            </div>
                           </div>
-                          <div className="flex gap-3">
-                            <a 
-                              href={project.github} 
-                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                              data-testid={`project-github-${projectSlug}`}
-                            >
-                              <Github className="mr-2 h-4 w-4" />
-                              View Project
-                            </a>
-                            <a 
-                              href={project.demo} 
-                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                              data-testid={`project-demo-${projectSlug}`}
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Demo
-                            </a>
-                          </div>
-                        </div>
-                      </Card>
-                    );
-                  })}
-                {projects.filter(project => !project.featured && 
-                  (project.category === "Machine Learning" || project.category === "Deep Learning")).length === 0 && (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-portfolio-muted-foreground text-lg">No ML projects found</p>
-                  </div>
-                )}
-              </div>
-            )}
+                        </Card>
+                      );
+                    })}
+                </div>
+              )}
 
-            {/* Computer Vision Projects Tab */}
-            {activeTab === 'cv' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="cv-projects-container">
-                {projects.filter(project => !project.featured && project.category === "Computer Vision")
-                  .map((project) => {
-                    const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
-                    return (
-                      <Card key={project.title} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
-                        <img 
-                          src={project.image} 
-                          alt={project.title} 
-                          className="w-full h-48 object-cover"
-                          data-testid={`project-image-${projectSlug}`}
-                        />
-                        <div className="p-6">
-                          <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
-                            {project.title}
-                          </h3>
-                          <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
-                            {project.description}
-                          </p>
-                          <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
-                            {project.technologies.map((tech, techIndex) => (
-                              <span 
-                                key={techIndex}
-                                className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
-                                data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+              {/* Computer Vision Projects Tab */}
+              {activeTab === 'cv' && (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fadeIn" data-testid="cv-projects-container">
+                  {projects.filter(project => !project.featured && project.category === "Computer Vision")
+                    .map((project) => {
+                      const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
+                      return (
+                        <Card key={project.title} className="bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                          <img 
+                            src={project.image} 
+                            alt={project.title} 
+                            className="w-full h-48 object-cover"
+                            data-testid={`project-image-${projectSlug}`}
+                          />
+                          <div className="p-6">
+                            <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
+                              {project.title}
+                            </h3>
+                            <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
+                              {project.technologies.map((tech, techIndex) => (
+                                <span 
+                                  key={`${projectSlug}-${techIndex}`}
+                                  className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                                  data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex gap-3">
+                              <a 
+                                href={project.github} 
+                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                                data-testid={`project-github-${projectSlug}`}
                               >
-                                {tech}
-                              </span>
-                            ))}
+                                <Github className="mr-2 h-4 w-4" />
+                                View Project
+                              </a>
+                              <a 
+                                href={project.demo} 
+                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                                data-testid={`project-demo-${projectSlug}`}
+                              >
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Demo
+                              </a>
+                            </div>
                           </div>
-                          <div className="flex gap-3">
-                            <a 
-                              href={project.github} 
-                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                              data-testid={`project-github-${projectSlug}`}
-                            >
-                              <Github className="mr-2 h-4 w-4" />
-                              View Project
-                            </a>
-                            <a 
-                              href={project.demo} 
-                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                              data-testid={`project-demo-${projectSlug}`}
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Demo
-                            </a>
-                          </div>
-                        </div>
-                      </Card>
-                    );
-                  })}
-                {projects.filter(project => !project.featured && project.category === "Computer Vision").length === 0 && (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-portfolio-muted-foreground text-lg">No Computer Vision projects found</p>
-                  </div>
-                )}
-              </div>
-            )}
+                        </Card>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
