@@ -37,6 +37,7 @@ var vite_config_default = defineConfig({
     }
   },
   root: path.resolve(import.meta.dirname, "client"),
+  base: "/my-website/",
   build: {
     outDir: path.resolve(import.meta.dirname, "client", "dist-frontend"),
     emptyOutDir: true
