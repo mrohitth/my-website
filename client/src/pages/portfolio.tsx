@@ -1048,13 +1048,13 @@ const experiences = [
             <div className="min-h-[400px]">
               {/* ML Projects Tab */}
               {activeTab === 'ml' && (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fadeIn" data-testid="ml-projects-container">
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide animate-fadeIn" data-testid="ml-projects-container" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                   {projects.filter(project => !project.featured && 
                     (project.category === "Machine Learning" || project.category === "Deep Learning"))
                     .map((project) => {
                       const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
                       return (
-                        <Card key={project.title} className="bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                        <Card key={project.title} className="flex-shrink-0 w-80 bg-portfolio-card border-portfolio-border hover:shadow-xl hover:scale-105 hover:z-10 hover:-mx-2 transition-all duration-300 group relative" data-testid={`project-card-${projectSlug}`}>
                           <img 
                             src={project.image} 
                             alt={project.title} 
@@ -1065,9 +1065,14 @@ const experiences = [
                             <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
                               {project.title}
                             </h3>
-                            <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
-                              {project.description}
-                            </p>
+                            
+                            {/* Hidden description that appears on hover */}
+                            <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-60 mb-4">
+                              <p className="text-portfolio-muted-foreground" data-testid={`project-description-${projectSlug}`}>
+                                {project.description}
+                              </p>
+                            </div>
+                            
                             <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
                               {project.technologies.map((tech, techIndex) => (
                                 <span 
@@ -1106,12 +1111,12 @@ const experiences = [
 
               {/* Computer Vision Projects Tab */}
               {activeTab === 'cv' && (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fadeIn" data-testid="cv-projects-container">
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide animate-fadeIn" data-testid="cv-projects-container" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                   {projects.filter(project => !project.featured && project.category === "Computer Vision")
                     .map((project) => {
                       const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
                       return (
-                        <Card key={project.title} className="bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                        <Card key={project.title} className="flex-shrink-0 w-80 bg-portfolio-card border-portfolio-border hover:shadow-xl hover:scale-105 hover:z-10 hover:-mx-2 transition-all duration-300 group relative" data-testid={`project-card-${projectSlug}`}>
                           <img 
                             src={project.image} 
                             alt={project.title} 
@@ -1122,9 +1127,14 @@ const experiences = [
                             <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
                               {project.title}
                             </h3>
-                            <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
-                              {project.description}
-                            </p>
+                            
+                            {/* Hidden description that appears on hover */}
+                            <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-60 mb-4">
+                              <p className="text-portfolio-muted-foreground" data-testid={`project-description-${projectSlug}`}>
+                                {project.description}
+                              </p>
+                            </div>
+                            
                             <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
                               {project.technologies.map((tech, techIndex) => (
                                 <span 
