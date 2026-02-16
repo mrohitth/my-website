@@ -4,6 +4,15 @@ import express2 from "express";
 // server/routes.ts
 import { createServer } from "http";
 async function registerRoutes(app2) {
+  app2.post("/api/contact", async (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+      res.status(200).json({ success: true, message: "Message received successfully" });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
   const httpServer = createServer(app2);
   return httpServer;
 }
@@ -18,17 +27,8 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 var vite_config_default = defineConfig({
-  plugins: [
-    react(),
-    runtimeErrorOverlay(),
-    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [
-      await import("@replit/vite-plugin-cartographer").then(
-        (m) => m.cartographer()
-      )
-    ] : []
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -38,10 +38,12 @@ var vite_config_default = defineConfig({
   },
   root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(import.meta.dirname, "client", "dist-frontend"),
     emptyOutDir: true
   },
   server: {
+    host: "0.0.0.0",
+    port: 5173,
     fs: {
       strict: true,
       deny: ["**/.*"]
@@ -104,7 +106,7 @@ async function setupVite(app2, server) {
   });
 }
 function serveStatic(app2) {
-  const distPath = path2.resolve(import.meta.dirname, "public");
+  const distPath = path2.resolve(import.meta.dirname, "..", "client", "dist-frontend");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
@@ -146,11 +148,16 @@ app.use((req, res, next) => {
 });
 (async () => {
   const server = await registerRoutes(app);
-  app.use((err, _req, res, _next) => {
+  app.use((err, req, res, _next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
+    console.error(`Error ${status} on ${req.method} ${req.path}:`, {
+      message: err.message,
+      stack: err.stack,
+      url: req.url,
+      body: req.body
+    });
     res.status(status).json({ message });
-    throw err;
   });
   if (app.get("env") === "development") {
     await setupVite(app, server);
