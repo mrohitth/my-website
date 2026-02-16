@@ -68,8 +68,8 @@
   --portfolio-accent-foreground: hsl(0 0% 100%);
   --portfolio-destructive: hsl(0 84% 60%);
   --portfolio-destructive-foreground: hsl(0 0% 100%);
-  --portfolio-border: hsl(220 20% 20%);
-  --portfolio-input: hsl(220 20% 15%);
+  --portfolio-border: hsl(220 20% 30%);
+  --portfolio-input: hsl(220 25% 18%);
   --portfolio-ring: hsl(210 100% 60%);
 }
 
@@ -288,23 +288,49 @@ textarea {
 /* Enhanced contact form styling - override shadcn defaults */
 input.glow,
 textarea.glow {
-  border: 1px solid hsl(var(--portfolio-border)) !important;
-  box-shadow: 0 0 0 1px hsl(var(--portfolio-border));
+  border: 2px solid hsl(220, 20%, 35%) !important;
+  box-shadow: 
+    0 0 0 1px hsl(220, 20%, 35%),
+    inset 0 1px 0 hsl(220, 25%, 25%);
   outline: none;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  background-color: hsl(var(--portfolio-input)) !important;
-  color: hsl(var(--portfolio-foreground)) !important;
+  transition: all 0.3s ease;
+  background-color: hsl(220, 25%, 20%) !important;
+  color: hsl(0, 0%, 95%) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+}
+
+/* Enhanced focus states */
+input.glow:focus,
+textarea.glow:focus {
+  border-color: hsl(210, 100%, 60%) !important;
+  box-shadow: 
+    0 0 0 1px hsl(210, 100%, 60%),
+    0 0 20px hsl(210, 100%, 60% / 0.3),
+    inset 0 0 0 1px hsl(210, 100%, 60% / 0.1),
+    inset 0 1px 0 hsl(220, 25%, 25%) !important;
+  background-color: hsl(220, 25%, 20%) !important;
+  transform: translateY(-1px);
+}
+
+/* Hover states */
+input.glow:hover,
+textarea.glow:hover {
+  border-color: hsl(210, 100%, 60% / 0.6) !important;
+  box-shadow: 
+    0 0 0 1px hsl(210, 100%, 60% / 0.6),
+    inset 0 1px 0 hsl(220, 25%, 25%);
+}
+
+/* Placeholder styling */
+input.glow::placeholder,
+textarea.glow::placeholder {
+  color: hsl(0, 0%, 70%) !important;
+  opacity: 0.8;
+  font-style: italic;
 }
 
 /* Professional glow when focused */
-input.glow:focus,
-textarea.glow:focus {
-  outline: none !important;
-  box-shadow: 
-    0 0 0 2px hsl(var(--portfolio-primary) / 0.4),
-    0 0 15px hsl(var(--portfolio-primary) / 0.15) !important;
-  border-color: hsl(var(--portfolio-primary)) !important;
-}
 
 /* Fix autofill border issue */
 input.glow:-webkit-autofill,

@@ -255,53 +255,61 @@ export default function Portfolio() {
   };
 
   const projects = [
+    // Featured Data Engineering Projects
     {
-      title: "Real-time Analytics Dashboard",
-      description: "Interactive dashboard processing 10M+ daily events with real-time visualizations, custom metrics, and automated alerting.",
+      title: "CDC & Historical Warehouse Platform",
+      description: "Architected a log-based Change Data Capture (CDC) pipeline using Debezium and Apache Spark to synchronize MySQL events into an S3 Data Lake. Implemented SCD Type 2 logic to maintain 100% data auditability.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["React", "Python", "Apache Kafka", "PostgreSQL"],
-      github: "#",
-      demo: "#"
+      technologies: ["Debezium", "Apache Spark", "Docker Compose", "SCD Type 2", "MySQL", "S3"],
+      github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
+      demo: "#",
+      featured: true
     },
     {
-      title: "Data Pipeline Orchestrator",
-      description: "Scalable ETL pipeline handling multi-source data ingestion, transformation, and warehouse loading with monitoring.",
-      image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Apache Airflow", "Python", "Docker", "AWS"],
-      github: "#",
-      demo: "#"
+      title: "Data Observability Platform",
+      description: "Built a proactive data quality engine using FastAPI and Great Expectations to automate schema drift detection and profiling, preventing data downtime in production pipelines.",
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Great Expectations", "FastAPI", "Python", "Data Quality", "Data Profiling"],
+      github: "https://github.com/mrohitth/data-observability-platform",
+      demo: "#",
+      featured: true
     },
     {
-      title: "ML Model Deployment Platform",
-      description: "End-to-end MLOps platform for model training, versioning, deployment, and monitoring with A/B testing capabilities.",
+      title: "Batch Analytics Platform",
+      description: "Designed a cloud-native batch processing framework for large-scale datasets. Focused on efficient data egress through optimized partitioning and automated orchestration.",
       image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["FastAPI", "MLflow", "Kubernetes", "TensorFlow"],
-      github: "#",
-      demo: "#"
+      technologies: ["PySpark", "Apache Airflow", "AWS S3", "PostgreSQL", "ETL Frameworks"],
+      github: "https://github.com/mrohitth/batch-analytics-platform",
+      demo: "#",
+      featured: true
+    },
+    // Academic Research & ML Projects
+    {
+      title: "Plant Disease Detection",
+      description: "Computer vision system for early plant disease detection using deep learning and transfer learning.",
+      image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "TensorFlow", "OpenCV", "PyTorch"],
+      github: "https://github.com/mrohitth/plant-disease-detection",
+      demo: "#",
+      featured: false
     },
     {
       title: "Customer Segmentation Engine",
       description: "Advanced analytics system using clustering algorithms to segment customers and predict lifetime value.",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "scikit-learn", "Pandas", "Plotly"],
-      github: "#",
-      demo: "#"
+      github: "https://github.com/mrohitth/customer-segmentation",
+      demo: "#",
+      featured: false
     },
     {
       title: "Financial Risk Assessment API",
       description: "High-performance API serving ML models for real-time credit scoring and fraud detection with 99.9% uptime.",
       image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["FastAPI", "XGBoost", "Redis", "PostgreSQL"],
-      github: "#",
-      demo: "#"
-    },
-    {
-      title: "Data Quality Monitoring Suite",
-      description: "Comprehensive data quality framework with automated testing, lineage tracking, and anomaly detection.",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "Great Expectations", "dbt", "Grafana"],
-      github: "#",
-      demo: "#"
+      github: "https://github.com/mrohitth/financial-risk-api",
+      demo: "#",
+      featured: false
     }
   ];
 
@@ -888,54 +896,121 @@ export default function Portfolio() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <Card key={index} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${index}`}>
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-48 object-cover"
-                  data-testid={`project-image-${index}`}
-                />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${index}`}>
-                    {project.title}
-                  </h3>
-                  <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${index}`}>
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${index}`}>
-                    {project.technologies.map((tech, techIndex) => (
-                      <span 
-                        key={techIndex}
-                        className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
-                        data-testid={`project-tech-${index}-${tech.toLowerCase()}`}
+          {/* Featured Data Engineering Projects */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
+              ⭐ Featured Data Engineering Projects
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.filter(project => project.featured).map((project, index) => (
+                <Card key={index} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group relative" data-testid={`project-card-${index}`}>
+                  {project.featured && (
+                    <div className="absolute top-2 right-2 bg-portfolio-primary text-white text-xs px-2 py-1 rounded-full font-medium">
+                      Featured
+                    </div>
+                  )}
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-48 object-cover"
+                    data-testid={`project-image-${index}`}
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${index}`}>
+                      {project.title}
+                    </h3>
+                    <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${index}`}>
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${index}`}>
+                      {project.technologies.map((tech, techIndex) => (
+                        <span 
+                          key={techIndex}
+                          className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                          data-testid={`project-tech-${index}-${tech.toLowerCase()}`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-3">
+                      <a 
+                        href={project.github} 
+                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                        data-testid={`project-github-${index}`}
                       >
-                        {tech}
-                      </span>
-                    ))}
+                        <Github className="mr-2 h-4 w-4" />
+                        View Project
+                      </a>
+                      <a 
+                        href={project.demo} 
+                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                        data-testid={`project-demo-${index}`}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Demo
+                      </a>
+                    </div>
                   </div>
-                  <div className="flex gap-3">
-                    <a 
-                      href={project.github} 
-                      className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                      data-testid={`project-github-${index}`}
-                    >
-                      <Github className="mr-2 h-4 w-4" />
-                      GitHub
-                    </a>
-                    <a 
-                      href={project.demo} 
-                      className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                      data-testid={`project-demo-${index}`}
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Visit
-                    </a>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Academic Research & ML Projects */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
+              📚 Academic Research & ML Projects
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.filter(project => !project.featured).map((project, index) => (
+                <Card key={index} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${index}`}>
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-48 object-cover"
+                    data-testid={`project-image-${index}`}
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${index}`}>
+                      {project.title}
+                    </h3>
+                    <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${index}`}>
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${index}`}>
+                      {project.technologies.map((tech, techIndex) => (
+                        <span 
+                          key={techIndex}
+                          className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                          data-testid={`project-tech-${index}-${tech.toLowerCase()}`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-3">
+                      <a 
+                        href={project.github} 
+                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                        data-testid={`project-github-${index}`}
+                      >
+                        <Github className="mr-2 h-4 w-4" />
+                        View Project
+                      </a>
+                      <a 
+                        href={project.demo} 
+                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                        data-testid={`project-demo-${index}`}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Demo
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>
