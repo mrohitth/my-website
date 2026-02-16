@@ -39,6 +39,7 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
+  const [activeTab, setActiveTab] = useState('cv');
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentSection, setCurrentSection] = useState("home");
 
@@ -258,60 +259,123 @@ export default function Portfolio() {
     // Featured Data Engineering Projects
     {
       title: "CDC & Historical Warehouse Platform",
-      description: "Architected a log-based Change Data Capture (CDC) pipeline using Debezium and Apache Spark to synchronize MySQL events into an S3 Data Lake. Implemented SCD Type 2 logic to maintain 100% data auditability.",
+      description: "Built a timestamp-based Change Data Capture (CDC) pipeline extracting PostgreSQL database changes into JSON logs. Implemented SCD Type 2 logic with automated versioning to track complete data history and maintain 100% auditability for warehouse analytics.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Debezium", "Apache Spark", "Docker Compose", "SCD Type 2", "MySQL", "S3"],
+      technologies: ["Python", "PostgreSQL", "Docker", "SCD Type 2", "Bash Scripting", "JSON Logs"],
       github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
       demo: "#",
       featured: true
     },
     {
       title: "Data Observability Platform",
-      description: "Built a proactive data quality engine using FastAPI and Great Expectations to automate schema drift detection and profiling, preventing data downtime in production pipelines.",
+      description: "Developed a statistical data quality engine using Z-score anomaly detection to identify volume drops, stale data, and schema drift. Automated baseline generation with dynamic thresholds to prevent silent data failures in production pipelines.",
       image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Great Expectations", "FastAPI", "Python", "Data Quality", "Data Profiling"],
+      technologies: ["Python", "PostgreSQL", "Pandas", "Statistical Analysis", "YAML Config", "Docker"],
       github: "https://github.com/mrohitth/data-observability-platform",
       demo: "#",
       featured: true
     },
     {
       title: "Batch Analytics Platform",
-      description: "Designed a cloud-native batch processing framework for large-scale datasets. Focused on efficient data egress through optimized partitioning and automated orchestration.",
+      description: "Built a containerized ELT pipeline using Apache Airflow and dbt to process ecommerce event streams. Implemented idempotent data deduplication with automated quality monitoring, reducing duplicate events by 15% for accurate analytics.",
       image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["PySpark", "Apache Airflow", "AWS S3", "PostgreSQL", "ETL Frameworks"],
+      technologies: ["Apache Airflow", "dbt", "PostgreSQL", "MinIO", "Docker", "Python"],
       github: "https://github.com/mrohitth/batch-analytics-platform",
       demo: "#",
       featured: true
     },
     // Academic Research & ML Projects
     {
-      title: "Plant Disease Detection",
-      description: "Computer vision system for early plant disease detection using deep learning and transfer learning.",
-      image: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "TensorFlow", "OpenCV", "PyTorch"],
-      github: "https://github.com/mrohitth/plant-disease-detection",
+      title: "Brain Tumor Classification Using Machine Learning",
+      description: "Classified brain MRI scans into 4 tumor types using hand-engineered features (GLCM, HOG, PCA) with 96% accuracy. Benchmarked against deep learning models (ResNet50, DenseNet169), outperforming ResNet50 with classical ML approaches.",
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "scikit-learn", "OpenCV", "SVM", "Random Forest", "Feature Engineering", "Medical Imaging"],
+      github: "https://github.com/mrohitth/Brain-Tumor-Classification-Using-Machine-Learning",
       demo: "#",
-      featured: false
+      featured: false,
+      category: "Machine Learning"
     },
     {
-      title: "Customer Segmentation Engine",
-      description: "Advanced analytics system using clustering algorithms to segment customers and predict lifetime value.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "scikit-learn", "Pandas", "Plotly"],
-      github: "https://github.com/mrohitth/customer-segmentation",
+      title: "Mars Terrain Semantic Segmentation",
+      description: "Developed U-Net architecture for pixel-level classification of Mars rover imagery from AI4Mars dataset. Integrated depth data from planetary data systems to improve terrain segmentation accuracy for autonomous navigation.",
+      image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "PyTorch", "U-Net", "Jupyter Notebook", "Semantic Segmentation", "CNNs", "Deep Learning"],
+      github: "https://github.com/mrohitth/Semantic-Segmentation-using-U-Net",
       demo: "#",
-      featured: false
+      featured: false,
+      category: "Deep Learning"
     },
     {
-      title: "Financial Risk Assessment API",
-      description: "High-performance API serving ML models for real-time credit scoring and fraud detection with 99.9% uptime.",
-      image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["FastAPI", "XGBoost", "Redis", "PostgreSQL"],
-      github: "https://github.com/mrohitth/financial-risk-api",
+      title: "Neural Networks for Visual Recognition",
+      description: "Built classification models from scratch using pure Python and PyTorch for flowers, digits, and alphabets. Implemented feedforward networks, CNNs, and autoencoders with backpropagation for dimensionality reduction and feature learning.",
+      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "PyTorch", "NumPy", "Neural Networks", "CNNs", "Autoencoders", "Backpropagation"],
+      github: "https://github.com/mrohitth/Neural-Networks-for-Recognition",
       demo: "#",
-      featured: false
+      featured: false,
+      category: "Deep Learning"
+    },
+    {
+      title: "Augmented Reality with Planar Homographies",
+      description: "Implemented real-time video overlay on book covers using homography estimation and feature detection. Built AR pipeline with automatic corner detection, perspective transformation, and seamless video blending for moving camera scenarios.",
+      image: "https://images.unsplash.com/photo-1617802690658-1173a812650d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "OpenCV", "NumPy", "Homography Estimation", "Feature Matching", "Image Warping"],
+      github: "https://github.com/mrohitth/Augmented-Reality-with-Planar-Homographies",
+      demo: "#",
+      featured: false,
+      category: "Computer Vision"
+    },
+    {
+      title: "3D Reconstruction from Images",
+      description: "Developed structure-from-motion pipeline using 7-point and 8-point algorithms for epipolar geometry. Implemented RANSAC for outlier rejection and bundle adjustment for multi-view 3D point cloud optimization.",
+      image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "OpenCV", "NumPy", "RANSAC", "Bundle Adjustment", "Epipolar Geometry"],
+      github: "https://github.com/mrohitth/3D-Reconstruction",
+      demo: "#",
+      featured: false,
+      category: "Computer Vision"
+    },
+    {
+      title: "Lucas-Kanade Object Tracking",
+      description: "Built optical flow-based tracking system using Lucas-Kanade algorithm with iterative refinement. Implemented template warping and appearance adaptation to handle illumination changes and object deformation across video frames.",
+      image: "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "OpenCV", "Optical Flow", "Template Matching", "Image Gradients", "NumPy"],
+      github: "https://github.com/mrohitth/Lucas-Kanade-Tracking",
+      demo: "#",
+      featured: false,
+      category: "Computer Vision"
+    },
+    {
+      title: "Photometric Stereo for 3D Surface Reconstruction",
+      description: "Reconstructed 3D surface topography from multiple images captured under varying lighting conditions. Used photometric stereo to estimate surface normals and recover depth maps from intensity gradients.",
+      image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "NumPy", "Computer Vision", "Linear Algebra", "Surface Normals", "Depth Estimation"],
+      github: "https://github.com/mrohitth/Photometric-Stereo",
+      demo: "#",
+      featured: false,
+      category: "Computer Vision"
+    },
+    {
+      title: "Spatial Pyramid Matching for Scene Classification",
+      description: "Implemented classical scene recognition using Bag-of-Visual-Words with spatial pyramid pooling. Applied TF-IDF weighting and KNN classification to achieve hierarchical image representation for 8-category scene classification.",
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+      technologies: ["Python", "Jupyter Notebook", "SIFT Features", "Bag-of-Words", "TF-IDF", "KNN", "scikit-learn"],
+      github: "https://github.com/mrohitth/Spatial-Pyramid-Matching-for-Scene-Classification",
+      demo: "#",
+      featured: false,
+      category: "Computer Vision"
     }
   ];
+
+  // Debug logs for tab switching
+  console.log("Active Tab:", activeTab);
+  console.log("CV Projects Found:", projects.filter(p => 
+    !p.featured && p.category === "Computer Vision"
+  ).length);
+  console.log("ML Projects Found:", projects.filter(p => 
+    !p.featured && (p.category === "Machine Learning" || p.category === "Deep Learning")
+  ).length);
+  console.log("All Projects Categories:", projects.map(p => ({title: p.title, category: p.category})));
 
   // Data Engineering Pipeline organized by stages
   const dataEngineeringPipeline = [
@@ -396,24 +460,18 @@ export default function Portfolio() {
     }
   };
 
-  const experiences = [
+const experiences = [
     {
       title: "Data Engineer",
-      company: "Tech Startup",
-      period: "2023 - Present",
-      description: "Building scalable data pipelines and ML infrastructure, processing 100M+ records daily"
+      company: "Capco (Client: Freddie Mac)",
+      period: "Apr 2024 - Present",
+      description: "Optimizing AWS EMR and Snowflake pipelines for 40M+ records per batch, reducing SQL runtimes by 75%. Engineered SCD Type-2 models for 22+ years of historical financial data."
     },
     {
-      title: "Data Engineering Intern",
-      company: "Analytics Company",
-      period: "Summer 2023",
-      description: "Developed real-time streaming pipelines using Kafka and Spark, improved data quality by 40%"
-    },
-    {
-      title: "Software Engineering Intern", 
-      company: "Tech Corporation",
-      period: "Summer 2022",
-      description: "Built data visualization dashboards and automated ETL processes for business intelligence"
+      title: "Lead AI Developer",
+      company: "Bosmos",
+      period: "Sep 2023 - Mar 2024",
+      description: "Led a 5-member team to deploy a production-grade NLP chatbot platform using TensorFlow. Optimized inference architectures to ensure low-latency performance for real-time users."
     }
   ];
 
@@ -666,7 +724,7 @@ export default function Portfolio() {
                 <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
                 <div className="space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose text-left">
                   <p data-testid="about-paragraph-1">
-                    Data runs my world. I turn raw numbers into insights, build pipelines that don’t break, and make analytics platforms that teams can actually trust. With AI and ML in my toolkit, I make data workflows smarter and future-ready. I’m always learning, always experimenting, and always focused on results that count.
+                    I architect high-throughput data infrastructure that bridges the gap between raw Big Data and production-ready ML. Specializing in cloud-native processing on AWS EMR (EC2/EKS) and Snowflake, I focus on building resilient, metadata-driven pipelines that handle billions of records while optimizing for both compute performance and enterprise-level cost-efficiency.
                   </p>
                 </div>
               </div>
@@ -676,7 +734,7 @@ export default function Portfolio() {
               <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
                 <div className="text-center group cursor-pointer">
                   <div className="text-2xl font-bold text-portfolio-primary group-hover:text-blue-400 group-hover:scale-110 transition-all duration-300">
-                    2+
+                    3+
                   </div>
                   <div className="text-sm text-portfolio-muted-foreground group-hover:text-blue-400 transition-colors">
                     Years Experience
@@ -684,7 +742,7 @@ export default function Portfolio() {
                 </div>
                 <div className="text-center group cursor-pointer">
                   <div className="text-2xl font-bold text-portfolio-primary group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300">
-                    15+
+                    13+
                   </div>
                   <div className="text-sm text-portfolio-muted-foreground group-hover:text-emerald-400 transition-colors">
                     Projects Delivered
@@ -692,10 +750,10 @@ export default function Portfolio() {
                 </div>
                 <div className="text-center group cursor-pointer">
                   <div className="text-2xl font-bold text-portfolio-primary group-hover:text-yellow-400 group-hover:scale-110 transition-all duration-300">
-                    12+
+                    15+
                   </div>
                   <div className="text-sm text-portfolio-muted-foreground group-hover:text-yellow-400 transition-colors">
-                    Technologies
+                    Technologies Mastered
                   </div>
                 </div>
               </div>
@@ -811,9 +869,6 @@ export default function Portfolio() {
             <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
               <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure • <span className="text-emerald-400">Processing millions of records daily</span>
             </p>
-            <div className="mt-2 text-sm text-portfolio-muted-foreground">
-              💡 <em>Hover cards for interactive animations!</em>
-            </div>
           </div>
           
           {/* Compact Pipeline Categories */}
@@ -960,55 +1015,160 @@ export default function Portfolio() {
             <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
               📚 Academic Research & ML Projects
             </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.filter(project => !project.featured).map((project, index) => (
-                <Card key={index} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${index}`}>
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-48 object-cover"
-                    data-testid={`project-image-${index}`}
-                  />
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${index}`}>
-                      {project.title}
-                    </h3>
-                    <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${index}`}>
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${index}`}>
-                      {project.technologies.map((tech, techIndex) => (
-                        <span 
-                          key={techIndex}
-                          className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
-                          data-testid={`project-tech-${index}-${tech.toLowerCase()}`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex gap-3">
-                      <a 
-                        href={project.github} 
-                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                        data-testid={`project-github-${index}`}
-                      >
-                        <Github className="mr-2 h-4 w-4" />
-                        View Project
-                      </a>
-                      <a 
-                        href={project.demo} 
-                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                        data-testid={`project-demo-${index}`}
-                      >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Demo
-                      </a>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+            
+            {/* Tabs for Academic Projects */}
+            <div className="mb-6 border-b border-portfolio-border/30">
+              <div className="flex space-x-8">
+                <button 
+                  className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 ${
+                    activeTab === 'ml' 
+                      ? 'border-portfolio-primary text-portfolio-foreground' 
+                      : 'border-transparent text-portfolio-muted-foreground'
+                  }`}
+                  onClick={() => setActiveTab('ml')}
+                  data-testid="tab-ml"
+                >
+                  Deep Learning & Machine Learning Projects
+                </button>
+                <button 
+                  className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 ${
+                    activeTab === 'cv' 
+                      ? 'border-portfolio-primary text-portfolio-foreground' 
+                      : 'border-transparent text-portfolio-muted-foreground'
+                  }`}
+                  onClick={() => setActiveTab('cv')}
+                  data-testid="tab-cv"
+                >
+                  Computer Vision Projects
+                </button>
+              </div>
             </div>
+
+            {/* ML Projects Tab */}
+            {activeTab === 'ml' && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="ml-projects-container">
+                {projects.filter(project => !project.featured && 
+                  (project.category === "Machine Learning" || project.category === "Deep Learning"))
+                  .map((project) => {
+                    const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
+                    return (
+                      <Card key={project.title} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                        <img 
+                          src={project.image} 
+                          alt={project.title} 
+                          className="w-full h-48 object-cover"
+                          data-testid={`project-image-${projectSlug}`}
+                        />
+                        <div className="p-6">
+                          <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
+                            {project.title}
+                          </h3>
+                          <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
+                            {project.description}
+                          </p>
+                          <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
+                            {project.technologies.map((tech, techIndex) => (
+                              <span 
+                                key={techIndex}
+                                className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                                data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex gap-3">
+                            <a 
+                              href={project.github} 
+                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                              data-testid={`project-github-${projectSlug}`}
+                            >
+                              <Github className="mr-2 h-4 w-4" />
+                              View Project
+                            </a>
+                            <a 
+                              href={project.demo} 
+                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                              data-testid={`project-demo-${projectSlug}`}
+                            >
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              Demo
+                            </a>
+                          </div>
+                        </div>
+                      </Card>
+                    );
+                  })}
+                {projects.filter(project => !project.featured && 
+                  (project.category === "Machine Learning" || project.category === "Deep Learning")).length === 0 && (
+                  <div className="col-span-full text-center py-12">
+                    <p className="text-portfolio-muted-foreground text-lg">No ML projects found</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Computer Vision Projects Tab */}
+            {activeTab === 'cv' && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="cv-projects-container">
+                {projects.filter(project => !project.featured && project.category === "Computer Vision")
+                  .map((project) => {
+                    const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
+                    return (
+                      <Card key={project.title} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group" data-testid={`project-card-${projectSlug}`}>
+                        <img 
+                          src={project.image} 
+                          alt={project.title} 
+                          className="w-full h-48 object-cover"
+                          data-testid={`project-image-${projectSlug}`}
+                        />
+                        <div className="p-6">
+                          <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${projectSlug}`}>
+                            {project.title}
+                          </h3>
+                          <p className="text-portfolio-muted-foreground mb-4" data-testid={`project-description-${projectSlug}`}>
+                            {project.description}
+                          </p>
+                          <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${projectSlug}`}>
+                            {project.technologies.map((tech, techIndex) => (
+                              <span 
+                                key={techIndex}
+                                className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                                data-testid={`project-tech-${projectSlug}-${tech.toLowerCase().replace(/\s+/g, '-')}`}
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex gap-3">
+                            <a 
+                              href={project.github} 
+                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                              data-testid={`project-github-${projectSlug}`}
+                            >
+                              <Github className="mr-2 h-4 w-4" />
+                              View Project
+                            </a>
+                            <a 
+                              href={project.demo} 
+                              className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                              data-testid={`project-demo-${projectSlug}`}
+                            >
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              Demo
+                            </a>
+                          </div>
+                        </div>
+                      </Card>
+                    );
+                  })}
+                {projects.filter(project => !project.featured && project.category === "Computer Vision").length === 0 && (
+                  <div className="col-span-full text-center py-12">
+                    <p className="text-portfolio-muted-foreground text-lg">No Computer Vision projects found</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
