@@ -5,8 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import profilePic from '@/assets/profile3.jpg';
+import heroProfilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
+// Import company logos
+import bosmosLogo from '@/assets/logos/bosmos-logo.png';
+import capcoLogo from '@/assets/logos/capco_logo.png';
+import freddieMacLogo from '@/assets/logos/fm.png';
+import cmuLogo from '@/assets/logos/cmu_logo.png';
+import drcLogo from '@/assets/logos/drc.png';
 import { 
   SiPython, 
   SiApachespark, 
@@ -465,13 +472,22 @@ const experiences = [
       title: "Data Engineer",
       company: "Capco (Client: Freddie Mac)",
       period: "Apr 2024 - Present",
-      description: "Optimizing AWS EMR and Snowflake pipelines for 40M+ records per batch, reducing SQL runtimes by 75%. Engineered SCD Type-2 models for 22+ years of historical financial data."
+      description: "Optimizing AWS EMR and Snowflake pipelines for 40M+ records per batch, reducing SQL runtimes by 75%. Engineered SCD Type-2 models for 22+ years of historical financial data.",
+      logos: [freddieMacLogo]
     },
     {
       title: "Lead AI Developer",
       company: "Bosmos",
       period: "Sep 2023 - Mar 2024",
-      description: "Led a 5-member team to deploy a production-grade NLP chatbot platform using TensorFlow. Optimized inference architectures to ensure low-latency performance for real-time users."
+      description: "Led a 5-member team to deploy a production-grade NLP chatbot platform using TensorFlow. Optimized inference architectures to ensure low-latency performance for real-time users.",
+      logos: [bosmosLogo]
+    },
+    {
+      title: "Research Assistant",
+      company: "Design Research Collective",
+      period: "Dec 2021 - May 2023",
+      description: "MS Research at Carnegie Mellon (4.0 GPA) focused on ML/CV and Computational Fluid Dynamics (CFD). Transitioned from Mechanical Engineering background to high-scale Data Infrastructure and Machine Learning.",
+      logos: [drcLogo]
     }
   ];
 
@@ -661,7 +677,7 @@ const experiences = [
             <div className="fade-in mb-6 md:mb-12 flex justify-center relative">
               {/* Profile image */}
               <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
-                <img src={profilePic} alt="Mathew Thomson" className="w-full h-full object-cover" />
+                <img src={heroProfilePic} alt="Mathew Thomson" className="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -778,13 +794,26 @@ const experiences = [
                 {experiences.map((exp, index) => (
                   <div key={index} className="group text-center relative flex-1 max-w-sm cursor-pointer transform transition-all duration-500 hover:scale-105" data-testid={`experience-${index}`}>
                     {/* Enhanced Timeline dot with glow */}
-                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-portfolio-primary to-blue-600 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:shadow-portfolio-primary/40 transition-all duration-500">
-                      <div className="w-8 h-8 bg-portfolio-secondary rounded-full flex items-center justify-center">
-                        {/* Icon based on role */}
-                        {index === 0 && <Database className="w-4 h-4 text-portfolio-primary" />}
-                        {index === 1 && <BarChart3 className="w-4 h-4 text-portfolio-primary" />}
-                        {index === 2 && <Code className="w-4 h-4 text-portfolio-primary" />}
-                      </div>
+                    <div className="w-24 h-24 mx-auto backdrop-blur-sm bg-white/10 rounded-full flex items-center justify-center relative z-10 mb-6 shadow-lg group-hover:shadow-2xl group-hover:backdrop-blur-md transition-all duration-500">
+                      {/* Company Logos */}
+                      {exp.logos.length === 1 ? (
+                        <img 
+                          src={exp.logos[0]} 
+                          alt={`${exp.company} logo`}
+                          className={`w-16 h-16 object-contain ${exp.company === 'Bosmos' || exp.company.includes('Freddie Mac') ? 'scale-125' : ''}`}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1">
+                          {exp.logos.map((logo, logoIndex) => (
+                            <img 
+                              key={logoIndex}
+                              src={logo} 
+                              alt={`${exp.company} logo ${logoIndex + 1}`}
+                              className={`object-contain ${exp.company.includes('Freddie Mac') ? (logoIndex === 0 ? 'w-10 h-10' : 'w-6 h-6') : 'w-6 h-6'} ${exp.company.includes('Freddie Mac') ? 'scale-150' : ''}`}
+                            />
+                          ))}
+                        </div>
+                      )}
                       {/* Floating indicators */}
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping group-hover:animate-pulse"></div>
                     </div>
@@ -821,10 +850,28 @@ const experiences = [
             <div className="md:hidden">
               <ol className="space-y-6">
                 {experiences.map((exp, index) => (
-                  <li key={index} className={`relative pl-10 ${index !== experiences.length - 1 ? 'after:absolute after:left-4 after:top-8 after:bottom-0 after:w-px after:bg-portfolio-primary/30' : ''}`} data-testid={`experience-mobile-${index}`}>
+                  <li key={index} className={`relative pl-20 ${index !== experiences.length - 1 ? 'after:absolute after:left-8 after:top-16 after:bottom-0 after:w-px after:bg-portfolio-primary/30' : ''}`} data-testid={`experience-mobile-${index}`}>
                     {/* Timeline dot */}
-                    <div className="absolute left-0 w-8 h-8 bg-portfolio-primary rounded-full flex items-center justify-center">
-                      <div className="w-3 h-3 bg-portfolio-secondary rounded-full"></div>
+                    <div className="absolute left-0 w-16 h-16 backdrop-blur-sm bg-white/10 rounded-full flex items-center justify-center">
+                      {/* Company Logos */}
+                      {exp.logos.length === 1 ? (
+                        <img 
+                          src={exp.logos[0]} 
+                          alt={`${exp.company} logo`}
+                          className={`w-12 h-12 object-contain ${exp.company === 'Bosmos' || exp.company.includes('Freddie Mac') ? 'scale-125' : ''}`}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1">
+                          {exp.logos.map((logo, logoIndex) => (
+                            <img 
+                              key={logoIndex}
+                              src={logo} 
+                              alt={`${exp.company} logo ${logoIndex + 1}`}
+                              className={`object-contain ${exp.company.includes('Freddie Mac') ? (logoIndex === 0 ? 'w-20 h-20' : 'w-4 h-4') : 'w-4 h-4'} ${exp.company.includes('Freddie Mac') ? 'scale-175' : ''}`}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                     
                     {/* Experience content */}
