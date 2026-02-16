@@ -11,7 +11,6 @@ import {
   SiPython, 
   SiApachespark, 
   SiApacheairflow, 
-  SiApachekafka, 
   SiAmazon, 
   SiKubernetes, 
   SiMongodb, 
@@ -24,7 +23,8 @@ import {
   SiTerraform,
   SiGrafana,
   SiDbt,
-  SiElasticsearch
+  SiElasticsearch,
+  SiInformatica
 } from 'react-icons/si';
 import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
 import MLNetworkBackground from "@/components/mlnetworkbackground";
@@ -318,61 +318,63 @@ export default function Portfolio() {
     {
       stage: "Data Sources",
       emoji: "🗄️",
-      description: "Where the data journey begins",
+      description: "Operational and analytical data systems",
       tools: [
-        { name: "PostgreSQL", icon: SiPostgresql, level: "Advanced", usage: "OLTP databases, transactional data", color: "text-blue-600" },
-        { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "NoSQL documents, JSON data", color: "text-green-500" },
-        { name: "Elasticsearch", icon: SiElasticsearch, level: "Learning", usage: "Search engines, log aggregation", color: "text-yellow-500" }
+        { name: "PostgreSQL", icon: SiPostgresql, level: "Advanced", usage: "Relational modeling, OLTP systems", color: "text-blue-600" },
+        { name: "AWS S3", icon: SiAmazon, level: "Advanced", usage: "Object storage & data lake", color: "text-orange-400" },
+        { name: "CSV/JSON", level: "Advanced", usage: "Flat file & semi-structured data ingestion", color: "text-gray-600" },
+        { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "Document-based storage", color: "text-green-500" }
       ]
     },
     {
-      stage: "Ingestion & Streaming", 
-      emoji: "🌊",
-      description: "Real-time data flows",
+      stage: "Data Ingestion",
+      emoji: "📥",
+      description: "Batch ingestion & data integration",
       tools: [
-        { name: "Kafka", icon: SiApachekafka, level: "Next Up", usage: "Event streaming, real-time pipelines", color: "text-gray-400" },
-        { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL scripts, data connectors", color: "text-yellow-400" }
+        { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL development, connectors", color: "text-yellow-400" },
+        { name: "AWS S3", icon: SiAmazon, level: "Advanced", usage: "Data lake storage & ingestion", color: "text-orange-400" },
+        { name: "Informatica IICS", icon: SiInformatica, level: "Intermediate", usage: "Enterprise data ingestion", color: "text-blue-600" },
+        { name: "Snowpipe", level: "Intermediate", usage: "Snowflake data loading", color: "text-blue-300" }
       ]
     },
     {
       stage: "Processing & Transformation",
       emoji: "⚡",
-      description: "Where data gets refined", 
+      description: "Distributed data processing & modeling",
       tools: [
-        { name: "Apache Spark", icon: SiApachespark, level: "Advanced", usage: "Big data processing, MLlib", color: "text-orange-500" },
-        { name: "dbt", icon: SiDbt, level: "Learning", usage: "SQL transformations, data modeling", color: "text-orange-400" },
-        { name: "Python", icon: SiPython, level: "Advanced", usage: "Pandas, NumPy, scikit-learn", color: "text-yellow-400" }
+        { name: "Apache Spark", icon: SiApachespark, level: "Advanced", usage: "Distributed batch processing", color: "text-orange-500" },
+        { name: "SQL", level: "Advanced", usage: "Complex joins, CTEs, window functions", color: "text-blue-600" },
+        { name: "AWS EMR (EC2/EKS)", icon: SiAmazon, level: "Intermediate", usage: "Managed Spark clusters", color: "text-orange-400" },
+        { name: "dbt", icon: SiDbt, level: "Intermediate", usage: "SQL-based transformations & modeling", color: "text-orange-400" }
       ]
     },
     {
       stage: "Storage & Warehousing",
-      emoji: "🏗️", 
-      description: "Scalable data persistence",
+      emoji: "🏗️",
+      description: "Scalable cloud data platforms",
       tools: [
-        { name: "Snowflake", icon: SiSnowflake, level: "Intermediate", usage: "Cloud data warehouse, analytics", color: "text-blue-300" },
-        { name: "AWS S3", icon: SiAmazon, level: "Intermediate", usage: "Data lake, object storage", color: "text-orange-400" },
-        { name: "Redis", icon: SiRedis, level: "Intermediate", usage: "Caching, session storage", color: "text-red-500" }
+        { name: "Snowflake", icon: SiSnowflake, level: "Advanced", usage: "Cloud data warehouse & analytics", color: "text-blue-300" },
+        { name: "Data Modeling", level: "Advanced", usage: "Star schema, fact/dimension design", color: "text-purple-500" },
+        { name: "AWS S3", icon: SiAmazon, level: "Intermediate", usage: "Data lake storage", color: "text-orange-400" }
       ]
     },
     {
       stage: "Orchestration",
       emoji: "🎼",
-      description: "Workflow automation & scheduling",
+      description: "Workflow automation & reliability",
       tools: [
-        { name: "Apache Airflow", icon: SiApacheairflow, level: "Learning", usage: "DAGs, workflow scheduling", color: "text-red-400" },
-        { name: "Kubernetes", icon: SiKubernetes, level: "Intermediate", usage: "Container orchestration, scaling", color: "text-blue-400" }
+        { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling", color: "text-blue-600" },
+        { name: "Apache Airflow", icon: SiApacheairflow, level: "Intermediate", usage: "DAG-based orchestration", color: "text-red-400" },
+        { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" }
       ]
     },
     {
-      stage: "Monitoring & DevOps",
+      stage: "Observability & DevOps",
       emoji: "📊",
-      description: "Observability & deployment",
+      description: "Data reliability & deployment",
       tools: [
-        { name: "Grafana", icon: SiGrafana, level: "Learning", usage: "Dashboards, data visualization", color: "text-orange-500" },
-        { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD, automated deployments", color: "text-red-500" },
-        { name: "Docker", icon: SiDocker, level: "Intermediate", usage: "Containerization, environments", color: "text-blue-500" },
-        { name: "Terraform", icon: SiTerraform, level: "Next Up", usage: "Infrastructure as Code", color: "text-purple-500" },
-        { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control, collaboration", color: "text-orange-600" }
+        { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control & collaboration", color: "text-orange-600" },
+        { name: "Docker", icon: SiDocker, level: "Intermediate", usage: "Containerized environments", color: "text-blue-500" }
       ]
     }
   ];
@@ -381,8 +383,6 @@ export default function Portfolio() {
     switch (level) {
       case "Advanced": return "text-emerald-400 bg-emerald-400/10";
       case "Intermediate": return "text-blue-400 bg-blue-400/10";
-      case "Learning": return "text-yellow-400 bg-yellow-400/10";
-      case "Next Up": return "text-gray-400 bg-gray-400/10";
       default: return "text-gray-400 bg-gray-400/10";
     }
   };
@@ -392,8 +392,6 @@ export default function Portfolio() {
     switch (level) {
       case "Advanced": return <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />;
       case "Intermediate": return <Database className="w-3 h-3 mr-1 group-hover:animate-pulse" />;
-      case "Learning": return <Zap className="w-3 h-3 mr-1 group-hover:animate-bounce" />;
-      case "Next Up": return <TrendingUp className="w-3 h-3 mr-1 group-hover:animate-ping" />;
       default: return null;
     }
   };
@@ -842,7 +840,7 @@ export default function Portfolio() {
                       {/* Tech Icon and Name */}
                       <div className="flex items-center gap-2 mb-2">
                         <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
-                          <tool.icon />
+                          {tool.icon && <tool.icon />}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
