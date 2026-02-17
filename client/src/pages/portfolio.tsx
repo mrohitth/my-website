@@ -266,29 +266,26 @@ export default function Portfolio() {
     // Featured Data Engineering Projects
     {
       title: "CDC & Historical Warehouse Platform",
-      description: "Built a timestamp-based Change Data Capture (CDC) pipeline extracting PostgreSQL database changes into JSON logs. Implemented SCD Type 2 logic with automated versioning to track complete data history and maintain 100% auditability for warehouse analytics.",
+      description: "Engineered a metadata-driven CDC pipeline extracting PostgreSQL changes into append-only JSON logs with deterministic replay. Implemented SCD Type-2 versioning and idempotent batch execution to maintain complete historical lineage and auditability for analytics and ML feature generation.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "PostgreSQL", "Docker", "SCD Type 2", "Bash Scripting", "JSON Logs"],
       github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
-      demo: "#",
       featured: true
     },
     {
       title: "Data Observability Platform",
-      description: "Developed a statistical data quality engine using Z-score anomaly detection to identify volume drops, stale data, and schema drift. Automated baseline generation with dynamic thresholds to prevent silent data failures in production pipelines.",
+      description: "Designed a statistical data observability framework using rolling-window baselining and Z-score anomaly detection to identify freshness gaps, schema drift, and volume anomalies. Automated threshold learning to prevent silent data failures in distributed batch pipelines.",
       image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "PostgreSQL", "Pandas", "Statistical Analysis", "YAML Config", "Docker"],
       github: "https://github.com/mrohitth/data-observability-platform",
-      demo: "#",
       featured: true
     },
     {
       title: "Batch Analytics Platform",
-      description: "Built a containerized ELT pipeline using Apache Airflow and dbt to process ecommerce event streams. Implemented idempotent data deduplication with automated quality monitoring, reducing duplicate events by 15% for accurate analytics.",
+      description: "Built a containerized ELT platform orchestrated with Airflow and dbt to process large-scale event data. Implemented idempotent transformations, partition-aware modeling, and automated quality validation to simulate production-grade analytics workloads.",
       image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Apache Airflow", "dbt", "PostgreSQL", "MinIO", "Docker", "Python"],
       github: "https://github.com/mrohitth/batch-analytics-platform",
-      demo: "#",
       featured: true
     },
     // Academic Research & ML Projects
@@ -298,7 +295,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "scikit-learn", "OpenCV", "SVM", "Random Forest", "Feature Engineering", "Medical Imaging"],
       github: "https://github.com/mrohitth/Brain-Tumor-Classification-Using-Machine-Learning",
-      demo: "#",
       featured: false,
       category: "Machine Learning"
     },
@@ -308,7 +304,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "PyTorch", "U-Net", "Jupyter Notebook", "Semantic Segmentation", "CNNs", "Deep Learning"],
       github: "https://github.com/mrohitth/Semantic-Segmentation-using-U-Net",
-      demo: "#",
       featured: false,
       category: "Deep Learning"
     },
@@ -318,7 +313,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "PyTorch", "NumPy", "Neural Networks", "CNNs", "Autoencoders", "Backpropagation"],
       github: "https://github.com/mrohitth/Neural-Networks-for-Recognition",
-      demo: "#",
       featured: false,
       category: "Deep Learning"
     },
@@ -328,7 +322,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1617802690658-1173a812650d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "OpenCV", "NumPy", "Homography Estimation", "Feature Matching", "Image Warping"],
       github: "https://github.com/mrohitth/Augmented-Reality-with-Planar-Homographies",
-      demo: "#",
       featured: false,
       category: "Computer Vision"
     },
@@ -338,7 +331,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "OpenCV", "NumPy", "RANSAC", "Bundle Adjustment", "Epipolar Geometry"],
       github: "https://github.com/mrohitth/3D-Reconstruction",
-      demo: "#",
       featured: false,
       category: "Computer Vision"
     },
@@ -348,7 +340,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "OpenCV", "Optical Flow", "Template Matching", "Image Gradients", "NumPy"],
       github: "https://github.com/mrohitth/Lucas-Kanade-Tracking",
-      demo: "#",
       featured: false,
       category: "Computer Vision"
     },
@@ -358,7 +349,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "NumPy", "Computer Vision", "Linear Algebra", "Surface Normals", "Depth Estimation"],
       github: "https://github.com/mrohitth/Photometric-Stereo",
-      demo: "#",
       featured: false,
       category: "Computer Vision"
     },
@@ -368,7 +358,6 @@ export default function Portfolio() {
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
       technologies: ["Python", "Jupyter Notebook", "SIFT Features", "Bag-of-Words", "TF-IDF", "KNN", "scikit-learn"],
       github: "https://github.com/mrohitth/Spatial-Pyramid-Matching-for-Scene-Classification",
-      demo: "#",
       featured: false,
       category: "Computer Vision"
     }
@@ -472,21 +461,21 @@ const experiences = [
       title: "Data Engineer",
       company: "Capco (Client: Freddie Mac)",
       period: "Apr 2024 - Present",
-      description: "Optimizing AWS EMR and Snowflake pipelines for 40M+ records per batch, reducing SQL runtimes by 75%. Engineered SCD Type-2 models for 22+ years of historical financial data.",
+      description: "Architecting distributed ETL pipelines on AWS EMR (EC2/EKS) and Snowflake processing 40M+ records per batch. Reduced Spark/SQL runtimes by 75% through partitioning and shuffle optimization. Engineered SCD Type-2 historical models spanning 22+ years to support analytics and ML-driven reporting workloads.",
       logos: [freddieMacLogo]
     },
     {
       title: "Lead AI Developer",
       company: "Bosmos",
       period: "Sep 2023 - Mar 2024",
-      description: "Led a 5-member team to deploy a production-grade NLP chatbot platform using TensorFlow. Optimized inference architectures to ensure low-latency performance for real-time users.",
+      description: "Led a 5-engineer team to design and deploy a production-grade NLP platform using TensorFlow. Built scalable inference services and optimized model serving pipelines to achieve low-latency real-time prediction at scale.",
       logos: [bosmosLogo]
     },
     {
       title: "Research Assistant",
       company: "Design Research Collective",
       period: "Dec 2021 - May 2023",
-      description: "MS Research at Carnegie Mellon (4.0 GPA) focused on ML/CV and Computational Fluid Dynamics (CFD). Transitioned from Mechanical Engineering background to high-scale Data Infrastructure and Machine Learning.",
+      description: "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation.",
       logos: [drcLogo]
     }
   ];
@@ -1042,14 +1031,6 @@ const experiences = [
                         <Github className="mr-2 h-4 w-4" />
                         View Project
                       </a>
-                      <a 
-                        href={project.demo} 
-                        className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                        data-testid={`project-demo-${index}`}
-                      >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Demo
-                      </a>
                     </div>
                   </div>
                 </Card>
@@ -1140,15 +1121,7 @@ const experiences = [
                                 <Github className="mr-2 h-4 w-4" />
                                 View Project
                               </a>
-                              <a 
-                                href={project.demo} 
-                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                                data-testid={`project-demo-${projectSlug}`}
-                              >
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                Demo
-                              </a>
-                            </div>
+                                                          </div>
                           </div>
                         </Card>
                       );
@@ -1202,15 +1175,7 @@ const experiences = [
                                 <Github className="mr-2 h-4 w-4" />
                                 View Project
                               </a>
-                              <a 
-                                href={project.demo} 
-                                className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
-                                data-testid={`project-demo-${projectSlug}`}
-                              >
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                Demo
-                              </a>
-                            </div>
+                                                          </div>
                           </div>
                         </Card>
                       );
