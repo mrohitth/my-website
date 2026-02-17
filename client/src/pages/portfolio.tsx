@@ -689,7 +689,7 @@ const experiences = [
                 <span className="typing-animation">{displayedText}</span>
               </div>
               <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-xl mx-auto">
-                Data Engineer with ML expertise - building scalable pipelines and intelligent systems for smarter decisions
+                Architecting resilient, cost-optimized data platforms for large-scale financial and ML workloads.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                 <Button
@@ -740,7 +740,7 @@ const experiences = [
                 <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
                 <div className="space-y-4 text-base md:text-lg text-portfolio-muted-foreground max-w-prose text-left">
                   <p data-testid="about-paragraph-1">
-                    I architect high-throughput data infrastructure that bridges the gap between raw Big Data and production-ready ML. Specializing in cloud-native processing on AWS EMR (EC2/EKS) and Snowflake, I focus on building resilient, metadata-driven pipelines that handle billions of records while optimizing for both compute performance and enterprise-level cost-efficiency.
+                    I design and optimize distributed data pipelines on AWS EMR and Snowflake, focusing on performance tuning, cost efficiency, and production reliability. Specializing in cloud-native processing on AWS EMR (EC2/EKS) and Snowflake, I focus on building resilient, metadata-driven pipelines that handle tens of millions of records while optimizing for both compute performance and enterprise-level cost-efficiency.
                   </p>
                 </div>
               </div>
@@ -992,7 +992,7 @@ const experiences = [
               <h2 className="text-4xl font-bold" data-testid="projects-title">My Projects</h2>
             </div>
             <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto" data-testid="projects-description">
-              Data-driven solutions that transform business operations and unlock insights from complex datasets.
+              Production-style distributed data platforms simulating enterprise-scale workloads (50M+ records).
             </p>
           </div>
           
