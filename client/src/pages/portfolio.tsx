@@ -364,14 +364,14 @@ export default function Portfolio() {
   ];
 
   // Debug logs for tab switching
-  console.log("Active Tab:", activeTab);
-  console.log("CV Projects Found:", projects.filter(p => 
-    !p.featured && p.category === "Computer Vision"
-  ).length);
-  console.log("ML Projects Found:", projects.filter(p => 
-    !p.featured && (p.category === "Machine Learning" || p.category === "Deep Learning")
-  ).length);
-  console.log("All Projects Categories:", projects.map(p => ({title: p.title, category: p.category})));
+  // console.log("Active Tab:", activeTab);
+  // console.log("CV Projects Found:", projects.filter(p => 
+  //   !p.featured && p.category === "Computer Vision"
+  // ).length);
+  // console.log("ML Projects Found:", projects.filter(p => 
+  //   !p.featured && (p.category === "Machine Learning" || p.category === "Deep Learning")
+  // ).length);
+  // console.log("All Projects Categories:", projects.map(p => ({title: p.title, category: p.category})));
 
   // Data Engineering Pipeline organized by stages
   const dataEngineeringPipeline = [
