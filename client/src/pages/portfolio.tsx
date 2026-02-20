@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import profilePic from '@/assets/profile3.jpg';
+import profilePic from '@/assets/profile4.jpg';
 import heroProfilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
