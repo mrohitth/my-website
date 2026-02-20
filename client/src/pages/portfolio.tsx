@@ -46,7 +46,7 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
-  const [activeTab, setActiveTab] = useState('cv');
+  const [activeTab, setActiveTab] = useState('ml');
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentSection, setCurrentSection] = useState("home");
 
