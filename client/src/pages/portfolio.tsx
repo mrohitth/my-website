@@ -940,6 +940,52 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Digital Products Section */}
+      <section id="products" className="py-20 px-4 bg-portfolio-background relative">
+        <div className="absolute inset-0 opacity-10">
+          <div className="honeycomb-pattern"></div>
+        </div>
+        <div className="max-w-6xl mx-auto relative">
+          <div className="text-center mb-16 fade-in">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Star className="text-portfolio-primary h-8 w-8" />
+              <h2 className="text-4xl font-bold">Digital Products</h2>
+            </div>
+            <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto">
+              Practical guides and tools for real-world problems.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6 bg-portfolio-secondary/50 border-portfolio-border hover:border-portfolio-primary/30 transition-all fade-in">
+              <h3 className="text-xl font-bold text-portfolio-primary mb-2">Cat Litter Box Rescue Guide</h3>
+              <p className="text-portfolio-muted-foreground mb-4">
+                A step-by-step diagnosis and fix for cat owners who have tried everything. 
+                Includes companion 7-day checklist.
+              </p>
+              <a 
+                href="https://mrohitth.lemonsqueezy.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-portfolio-primary hover:underline inline-flex items-center gap-1"
+              >
+                Learn more <ExternalLink className="h-3 w-3" />
+              </a>
+            </Card>
+          </div>
+          <div className="text-center mt-10">
+            <a 
+              href="https://mrohitth.lemonsqueezy.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-portfolio-primary text-portfolio-primary-foreground rounded-lg hover:opacity-90 transition-all"
+            >
+              Browse All Products
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="py-20 px-4 bg-portfolio-secondary relative">
         {show && (
