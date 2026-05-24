@@ -115,7 +115,15 @@ export function ProjectsSection() {
             )}
             {activeTab === "cv" && (
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container">
-                <div className="bg-red-500 text-white px-4 py-2 rounded">CV TAB WORKING - {cvProjects.length} projects</div>
+                {cvProjects.map((project) => {
+                  const slug = project.title.toLowerCase().replace(/\s+/g, "-");
+                  console.log('Rendering CV card:', slug);
+                  return (
+                    <div data-testid={`cv-card-${slug}`} className="bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0">
+                      DEBUG: {slug}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
