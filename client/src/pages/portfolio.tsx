@@ -9,7 +9,8 @@ import profilePic from '@/assets/profile4.jpg';
 import heroProfilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, Database, BarChart3, TrendingUp, Code, Zap, Star, Activity, GitBranch, FlaskConical } from 'lucide-react';
-import DataPlatformSandbox from '@/components/simulations/DataPlatformSandbox';
+import { lazy, Suspense } from 'react';
+const DataPlatformSandbox = lazy(() => import('@/components/simulations/DataPlatformSandbox'));
 // Import company logos
 import bosmosLogo from '@/assets/logos/bosmos-logo.png';
 import capcoLogo from '@/assets/logos/capco_logo.png';
@@ -35,8 +36,8 @@ import {
   SiElasticsearch,
   SiInformatica
 } from 'react-icons/si';
-import SubtleNetworkCursor from "@/components/subtlenetworkcursor";
-import MLNetworkBackground from "@/components/mlnetworkbackground";
+const SubtleNetworkCursor = lazy(() => import("@/components/subtlenetworkcursor"));
+const MLNetworkBackground = lazy(() => import("@/components/mlnetworkbackground"));
 
 // ============================================================================
 // SANDBOX WRAPPER — Collapsed by default, animated expand/collapse
@@ -115,7 +116,16 @@ function SandboxWrapper() {
             className="overflow-hidden"
           >
             <div className="border-t border-portfolio-border/50 px-6 py-6">
-              <DataPlatformSandbox />
+              <Suspense fallback={
+                <div className="flex items-center justify-center h-64 text-muted-foreground">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm">Loading Data Platform Sandbox...</span>
+                  </div>
+                </div>
+              }>
+                <DataPlatformSandbox />
+              </Suspense>
             </div>
           </motion.div>
         )}
@@ -587,7 +597,9 @@ const experiences = [
       >
 
       {/* Render your custom cursor here */}
-      <SubtleNetworkCursor />
+      <Suspense fallback={null}>
+        <SubtleNetworkCursor />
+      </Suspense>
 
 
       {/* Navigation */}
@@ -726,7 +738,9 @@ const experiences = [
         <section id="hero" className="hero-gradient min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
           {/* ML Network Animated Background */}
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <MLNetworkBackground />
+            <Suspense fallback={null}>
+              <MLNetworkBackground />
+            </Suspense>
           </div>
 
           {/* Subtle Flow Animation Background */}
