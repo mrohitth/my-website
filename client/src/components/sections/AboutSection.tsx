@@ -97,7 +97,9 @@ export function TechStackSection() {
         <div className="text-center mb-12 fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
             <BarChart3 className="text-portfolio-primary h-8 w-8" />
-            <h2 className="text-4xl font-bold text-portfolio-foreground">Skills by Competency Domain</h2>
+            <h2 className="text-4xl font-bold text-portfolio-foreground">
+              Data Engineering Stack
+            </h2>
           </div>
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
             Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span> —

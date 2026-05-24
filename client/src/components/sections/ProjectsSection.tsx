@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 import { Card } from "@/components/ui/card";
 import { Github, ChevronDown, ChevronUp, Scale, Layers } from "lucide-react";
@@ -57,8 +58,8 @@ export function ProjectsSection() {
 
         {/* Featured Projects */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground">
-            Featured Data Engineering Projects
+          <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
+            ⭐ Featured Data Engineering Projects
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map((project, index) => (
@@ -69,8 +70,8 @@ export function ProjectsSection() {
 
         {/* Academic Research & ML Projects */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground">
-            Academic Research &amp; ML Projects
+          <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
+            📚 Academic Research &amp; ML Projects
           </h3>
           <div className="mb-6 border-b border-portfolio-border/30">
             <div className="flex space-x-8">
