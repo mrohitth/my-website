@@ -117,10 +117,11 @@ export function ProjectsSection() {
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container">
                 {cvProjects.map((project) => {
                   const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                  console.log('Rendering CV card:', slug);
                   return (
-                    <div data-testid={`cv-card-${slug}`} className="bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0">
-                      DEBUG: {slug}
+                    <div data-testid={`cv-card-${slug}`} className="rounded-lg border bg-card text-card-foreground shadow-sm flex-shrink-0 w-80 p-6">
+                      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                      <img src={project.image} alt={project.title} className="w-full h-48 object-cover mb-3" />
+                      <p className="text-sm text-muted-foreground">{project.impact}</p>
                     </div>
                   );
                 })}
