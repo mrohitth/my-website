@@ -51,7 +51,7 @@ export function SandboxSection() {
               <div className="text-left">
                 <p className="text-base font-bold text-portfolio-foreground flex items-center gap-2">
                   <span className="text-xl">🔬</span>
-                  Interactive Data Engineering Simulation Lab
+                  Production Data Engineering — Live Sandboxes
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   {!isOpen ? (
@@ -107,6 +107,58 @@ export function SandboxSection() {
                 className="overflow-hidden"
               >
                 <div className="border-t border-portfolio-border/50 px-6 py-6">
+                  {/* Framing header */}
+                  <div className="mb-6 pb-6 border-b border-portfolio-border/30">
+                    <h3 className="text-2xl font-bold text-portfolio-foreground mb-2">
+                      Production Patterns, Interactive
+                    </h3>
+                    <p className="text-portfolio-muted-foreground text-sm max-w-2xl">
+                      These aren&apos;t toy demos. Each sandbox models a real data engineering
+                      problem I&apos;ve worked on in production — built so you can see the
+                      architecture, tweak the parameters, and understand the trade-offs.
+                    </p>
+                  </div>
+
+                  {/* Tab callout cards */}
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    {/* CDC Pipeline callout */}
+                    <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-cyan-400 font-semibold text-sm">CDC Pipeline</span>
+                      </div>
+                      <p className="text-xs text-portfolio-muted-foreground leading-relaxed">
+                        Models the change data capture patterns I used to reconstruct 22+
+                        years of financial history at Freddie Mac. Tune throughput, observe
+                        latency behavior, and trigger failure scenarios.
+                      </p>
+                    </div>
+
+                    {/* Batch Analytics callout */}
+                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-emerald-400 font-semibold text-sm">Batch Analytics</span>
+                      </div>
+                      <p className="text-xs text-portfolio-muted-foreground leading-relaxed">
+                        Based on the Airflow + dbt ELT framework I built for 50M+ record
+                        synthetic datasets, mirroring enterprise batch orchestration patterns.
+                        Adjust batch size and watch SLA impact in real time.
+                      </p>
+                    </div>
+
+                    {/* Data Observability callout */}
+                    <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-amber-400 font-semibold text-sm">Data Observability</span>
+                      </div>
+                      <p className="text-xs text-portfolio-muted-foreground leading-relaxed">
+                        The observability layer every production pipeline needs but most
+                        portfolios ignore. Configure detection thresholds and simulate the
+                        anomalies that actually break data pipelines: schema drift,
+                        freshness gaps, distribution shifts.
+                      </p>
+                    </div>
+                  </div>
+
                   <Suspense
                     fallback={
                       <div className="flex items-center justify-center h-64 text-muted-foreground">

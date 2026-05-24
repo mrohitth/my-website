@@ -125,7 +125,7 @@ export function HeroSection() {
             <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
               <img
                 src={heroProfilePic}
-                alt="Mathew Rohit Thomson, Senior Data Engineer specializing in real-time streaming pipelines and data lakehouse architecture"
+                alt="Mathew Rohit Thomson, Data Engineer specializing in production Spark and Snowflake pipelines on AWS EMR"
                 width={2750}
                 height={2580}
                 className="w-full h-full object-cover"
@@ -151,10 +151,17 @@ export function HeroSection() {
 
             {/* SCALE-METRIC TAGLINE — outcome-first */}
             <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Building real-time streaming pipelines on Kafka &amp; Flink, designing
-              multi-petabyte lakehouses on Snowflake, and reducing cloud spend by
-              <span className="text-portfolio-primary font-semibold"> 40–70% </span>
-              through intelligent partitioning and query optimization.
+              Data Engineer — Pipelines, Scale, and Systems That Actually Ship.
+            </p>
+
+            {/* SUBHEADLINE */}
+            <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-6 max-w-2xl mx-auto leading-relaxed">
+              I build production batch and streaming pipelines on AWS EMR and Snowflake — currently processing 40M+ records per batch for a Fortune 500 financial services client.
+            </p>
+
+            {/* ONE-LINE BIO */}
+            <p className="text-sm md:text-base text-portfolio-muted-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed">
+              CMU grad. 2.5+ years in production DE at regulated financial scale. Open to mid-level DE roles at companies building data infrastructure that matters.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -162,7 +169,7 @@ export function HeroSection() {
                 onClick={() => scrollToSection("projects")}
                 className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
               >
-                View My Work
+                View Projects
               </Button>
               <Button
                 onClick={() => scrollToSection("contact")}

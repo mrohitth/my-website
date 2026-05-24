@@ -3,12 +3,13 @@
 // ============================================================================
 
 export const ROLES: string[] = [
-  "Real-Time Streaming Engineer",
-  "Lakehouse Architect",
-  "Cloud Data Platform Lead",
-  "ETL / ELT Pipeline Specialist",
-  "Data Observability Engineer",
-  "ML Feature Platform Builder",
+  "Data Engineer",
+  "Pipeline Architect",
+  "Spark & Snowflake Specialist",
+  "Batch & CDC Systems Builder",
+  "AWS EMR Engineer",
+  "Data Platform Developer",
+  "dbt + Airflow Practitioner",
 ];
 
 // ============================================================================
@@ -359,52 +360,61 @@ export const EXPERIENCES: Experience[] = [
   {
     id: "capco-data-engineer",
     title: "Data Engineer",
-    company: "Capco (Client: Freddie Mac)",
-    period: "Apr 2024 - Present",
-    description:
-      "Led the design and delivery of a metadata-driven CDC platform processing 40M+ records per batch — eliminating manual reconciliation for the entire credit risk reporting team. Reduced nightly batch runtime from 14 hours to 3.5 hours through partition-aware shuffle optimization, saving ~10.5h of EMR cluster time per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve historical data without DE support.",
+    company: "Capco — Client: Freddie Mac",
+    period: "Apr 2024 – Present",
+    location: "Tysons, VA",
+    description: "Designed and productionized distributed ETL pipelines on AWS EMR (EC2 & EKS), ingesting 10+ diverse datasets and processing 40M+ records per batch run using PySpark. Cut end-to-end Spark batch runtime from ~40 minutes to under 10 minutes through workload profiling, partition tuning, and shuffle optimization — a 4× improvement that directly accelerated daily reporting for senior stakeholders. Built dependency-aware daily and monthly batch workflows in Control-M and Jenkins with automated failure recovery and SLA enforcement on production financial data. Engineered Snowflake data models and curated high-visibility data products consumed by senior VPs — using advanced SQL with 40+ joins, CTEs, and window functions. Spearheaded Snowpark-based transformation standardization and Snowflake query optimization, reducing code divergence by 40% and saving $16K annually in compute costs. Reconstructed 22+ years of historical financial data using Informatica IICS and Snowflake, establishing audit-grade baselines and improving reconciliation accuracy across enterprise datasets. Integrated ML-driven feature engineering into batch pipelines, enabling predictive analytics at enterprise scale.",
     metrics: [
-      "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
-      "60% reduction in direct DB load (eliminated repeated full-table scans)",
-      "22 years of history modeled · 0 data loss incidents in 18 months",
-      "40+ analysts enabled for self-service analytics without DE support",
-      "Nightly batch window shrank from 14h to 3.5h — ~10.5h EMR cluster time saved per run",
+      "4× Spark runtime reduction (40min → <10min)",
+      "$16K annual compute savings via Snowpark optimization",
+      "40M+ records processed per batch on AWS EMR",
+      "22+ years of financial history reconstructed",
     ],
     logos: [],
-    highlights: ["40M records/batch", "14h→3.5h batch", "22yr history modeled"],
+    highlights: [
+      "4× Spark runtime reduction (40min → <10min)",
+      "$16K annual compute savings via Snowpark optimization",
+      "40M+ records processed per batch on AWS EMR",
+      "22+ years of financial history reconstructed",
+    ],
   },
   {
     id: "bosmos-lead-ai",
     title: "Lead AI Developer",
     company: "Bosmos",
-    period: "Sep 2023 - Mar 2024",
-    description:
-      "Led a 5-engineer team to design and deploy a production-grade NLP inference platform on TensorFlow Serving, achieving sub-50ms p99 latency at 10,000 requests/minute. Built automated model drift detection that reduced model staleness incidents by 80%, from ~5 per week to ~1 per week. Managed full ML lifecycle: data ingestion → training → validation → serving → monitoring.",
+    period: "Sep 2023 – Mar 2024",
+    location: "Atlanta, GA",
+    description: "Led design and deployment of a production AI chatbot platform using TensorFlow-based NLP pipelines for real-time conversational inference. Managed a 5-member engineering team end-to-end: model training, deployment, and REST API integration under Agile practices. Optimized backend ML inference architecture, reducing prediction latency and improving throughput for real-time workloads.",
     metrics: [
-      "Sub-50ms p99 latency at 10K requests/minute",
-      "5-engineer team led: full ML lifecycle from ingestion to monitoring",
-      "80% reduction in model staleness incidents (5/week → 1/week)",
-      "Zero downtime deployments over 6-month period",
-      "Achieved production-grade reliability on TensorFlow Serving with auto-scaling",
+      "Led 5-person engineering team",
+      "Production NLP inference pipeline",
+      "Real-time ML serving architecture",
     ],
     logos: [],
-    highlights: ["5-engineer team", "Sub-50ms p99", "80% fewer incidents"],
+    highlights: [
+      "Led 5-person engineering team",
+      "Production NLP inference pipeline",
+      "Real-time ML serving architecture",
+    ],
   },
   {
     id: "drc-research-assistant",
     title: "Research Assistant",
-    company: "Design Research Collective",
-    period: "Dec 2021 - May 2023",
-    description:
-      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant.",
+    company: "Design Research Collective — Carnegie Mellon",
+    period: "Dec 2021 – May 2023",
+    location: "Pittsburgh, PA",
+    description: "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant on autonomous navigation.",
     metrics: [
       "4.0 GPA across graduate coursework",
       "Published 2 papers on 3D reconstruction and photometric stereo",
-      "Contributed to NSF-funded research grant on autonomous navigation",
-      "Developed novel normal integration method improving depth accuracy by 15%",
+      "Contributed to NSF-funded research grant",
     ],
     logos: [],
-    highlights: ["4.0 GPA", "2 published papers", "NSF-funded research"],
+    highlights: [
+      "4.0 GPA",
+      "2 published papers",
+      "NSF-funded research",
+    ],
   },
 ];
 
@@ -427,150 +437,74 @@ export interface SkillDomain {
 
 export const SKILL_DOMAINS: SkillDomain[] = [
   {
-    domain: "Stream Processing & Real-Time Systems",
+    domain: "Distributed Processing",
     icon: "⚡",
-    description: "Designing and operating low-latency event-driven architectures",
+    description: "PySpark, AWS EMR (EC2 & EKS), Spark performance tuning, dynamic partitioning, shuffle optimization",
     tools: [
-      {
-        name: "Apache Kafka",
-        level: "Strong",
-        context: "Production use at Bosmos for real-time NLP inference event streaming at 10K events/min. Designed topic partitioning strategy that reduced consumer lag from 45s to <2s.",
-      },
-      {
-        name: "AWS Kinesis",
-        level: "Strong",
-        context: "Designed Kinesis Data Streams architecture for clickstream ingestion at Freddie Mac — 500K events/day with 99.9% uptime requirement.",
-      },
-      {
-        name: "Apache Flink",
-        level: "Working",
-        context: "Built windowed aggregation prototypes for real-time revenue dashboards. Evaluated Flink vs Spark Streaming for sub-minute latency requirements.",
-      },
+      { name: "PySpark", level: "Advanced", context: "40M+ records/batch at Freddie Mac. Tuned partition/shuffle configs for 4× runtime reduction (40min → <10min)." },
+      { name: "AWS EMR (EC2 & EKS)", level: "Advanced", context: "Production cluster management with spot instance fallback. 92% spot utilization without job failures during capacity events." },
+      { name: "Spark Performance Tuning", level: "Advanced", context: "Cut Spark batch runtime 75% through workload profiling, partition tuning, and shuffle optimization." },
     ],
   },
   {
-    domain: "Distributed Data Processing",
-    icon: "🔄",
-    description: "Scaling batch and streaming workloads across commodity clusters",
-    tools: [
-      {
-        name: "Apache Spark (PySpark / Scala)",
-        level: "Strong",
-        context: "40M+ records/batch at Freddie Mac. Tuned partition/shuffle configs for 75% runtime reduction. Wrote custom UDFs for CDC change data extraction.",
-      },
-      {
-        name: "AWS EMR (EC2 + EKS)",
-        level: "Strong",
-        context: "Production cluster management with spot instance fallback strategies. Achieved 92% spot instance utilization without job failures during capacity events.",
-      },
-      {
-        name: "dbt",
-        level: "Strong",
-        context: "120+ dbt models in Batch Analytics Platform with incremental materialization, CI/CD hooks, and automated schema tests. Reduced Snowflake credit consumption by 45%.",
-      },
-      {
-        name: "Apache Airflow",
-        level: "Strong",
-        context: "Orchestrated 50+ DAGs with cross-DAG dependencies, dead-letter queues, and automated retry with exponential backoff. SLA-driven scheduling for nightly batch.",
-      },
-    ],
-  },
-  {
-    domain: "Data Modeling & Warehouse Architecture",
+    domain: "Data Warehousing & Modeling",
     icon: "🏗️",
-    description: "Designing schemas that survive decades of data and thousands of analysts",
+    description: "Snowflake, dbt, SCD Type-2, CDC, Informatica IICS, Snowpark, advanced SQL (CTEs, window functions, 40+ join queries)",
     tools: [
-      {
-        name: "Snowflake",
-        level: "Advanced",
-        context: "Production DW at Freddie Mac — 22TB of data, 15 fact tables, 40+ business dimensions. Implemented zero-copy cloning for safe CI/CD pipeline testing.",
-      },
-      {
-        name: "Star Schema / Kimball Modeling",
-        level: "Advanced",
-        context: "Designed 15+ production fact tables for regulatory reporting. Conformed dimensions shared across 8 data marts to ensure consistent reporting.",
-      },
-      {
-        name: "SCD Type-2 Historization",
-        level: "Advanced",
-        context: "Regulatory requirement for Freddie Mac credit risk — 22 years of history, full audit trail, GDPR-compliant PII handling.",
-      },
-      {
-        name: "Delta Lake / Apache Iceberg",
-        level: "Working",
-        context: "Evaluated Iceberg for lakehouse migration; chose Snowflake for enterprise maturity. Designed partition strategies for time-travel queries.",
-      },
+      { name: "Snowflake", level: "Advanced", context: "Production DW at Freddie Mac — 22TB data, 15 fact tables, 40+ business dimensions. Zero-copy cloning for CI/CD." },
+      { name: "dbt", level: "Advanced", context: "120+ dbt models with incremental materialization, CI/CD hooks, and automated schema tests. 45% Snowflake credit reduction." },
+      { name: "SCD Type-2 Historization", level: "Advanced", context: "Regulatory requirement for Freddie Mac credit risk — 22 years of history, full audit trail, GDPR-compliant." },
+      { name: "Advanced SQL", level: "Advanced", context: "40+ join queries, CTEs, window functions for VP-level data products at Freddie Mac." },
     ],
   },
   {
-    domain: "Data Reliability & Observability",
-    icon: "📊",
-    description: "Ensuring pipelines never silently fail in production",
+    domain: "Orchestration & DevOps",
+    icon: "🎼",
+    description: "Apache Airflow, Control-M, Jenkins, Docker, Git, Linux",
     tools: [
-      {
-        name: "Custom Baselining (Z-score)",
-        level: "Advanced",
-        context: "Reduced silent data failures by 80% at Freddie Mac through rolling-window baselining and automated threshold learning. Detected schema drift 48h before consumers broke.",
-      },
-      {
-        name: "Control-M",
-        level: "Strong",
-        context: "Enterprise job scheduling at Capco for Freddie Mac batch pipelines — 200+ jobs, SLA-driven alerting, dependency-aware rerun logic.",
-      },
-      {
-        name: "Prometheus + Grafana",
-        level: "Working",
-        context: "Instrumented ML inference service at Bosmos with custom metrics for latency p50/p95/p99, model drift, and queue depth. Alerting on SLO breach within 60s.",
-      },
+      { name: "Control-M", level: "Advanced", context: "200+ production jobs at Capco for Freddie Mac. SLA-driven alerting, dependency-aware rerun logic." },
+      { name: "Apache Airflow", level: "Strong", context: "50+ DAGs with cross-DAG dependencies, dead-letter queues, automated retry with exponential backoff." },
+      { name: "Docker", level: "Strong", context: "Containerized all ETL jobs for portability. ECS Fargate for stateless inference services." },
+      { name: "Jenkins", level: "Strong", context: "CI/CD pipelines for automated build, test, and deployment of data pipeline artifacts." },
     ],
   },
   {
-    domain: "Cloud Infrastructure (AWS)",
+    domain: "Cloud Infrastructure",
     icon: "☁️",
-    description: "Building cost-efficient, fault-tolerant cloud architectures",
+    description: "AWS (S3, EMR, EKS), Snowflake Cloud",
     tools: [
-      {
-        name: "AWS S3",
-        level: "Advanced",
-        context: "Data lake storage with lifecycle policies for 5-year retention. S3 Select for query-in-place avoiding data movement. Cost: $0.023/GB vs $0.05 for Snowflake storage.",
-      },
-      {
-        name: "AWS Glue / Lambda",
-        level: "Strong",
-        context: "Event-driven CDC pipeline: Lambda triggers on S3 put events → Glue ETL → Snowflake. Eliminated cron polling, reducing EMR costs by 30%.",
-      },
-      {
-        name: "Terraform",
-        level: "Working",
-        context: "IaC for EMR clusters, S3 bucket policies, and IAM roles. Module library for repeatable environment provisioning (dev/staging/prod).",
-      },
-      {
-        name: "Docker / ECS",
-        level: "Strong",
-        context: "Containerized all ETL jobs for portability. ECS Fargate for stateless inference services — no cluster management overhead.",
-      },
+      { name: "AWS S3", level: "Advanced", context: "Data lake storage with lifecycle policies for 5-year retention. S3 Select for query-in-place." },
+      { name: "AWS EKS", level: "Strong", context: "Kubernetes-based Spark execution for containerized batch workloads with auto-scaling." },
+      { name: "Snowflake Cloud", level: "Advanced", context: "Primary DW platform — 22TB, $16K annual compute savings via Snowpark optimization." },
     ],
   },
   {
-    domain: "Programming & Scripting",
+    domain: "Languages",
     icon: "💻",
-    description: "Core development languages and scripting for automation",
+    description: "Python (Advanced), SQL (Advanced)",
     tools: [
-      {
-        name: "Python",
-        level: "Advanced",
-        context: "Primary language for all ETL, ML, and automation work. Proficient in async/await, multiprocessing, and C-extension interfacing for performance-critical code.",
-      },
-      {
-        name: "SQL (PostgreSQL, Snowflake, BigQuery)",
-        level: "Advanced",
-        context: "Advanced window functions, CTEs, recursive queries, and query optimization. 5+ years of production SQL across 3 different DW platforms.",
-      },
-      {
-        name: "Bash / Shell Scripting",
-        level: "Strong",
-        context: "Automation of DevOps tasks, cron job management, log aggregation pipelines. 500+ line ETL bash scripts for legacy system integration.",
-      },
+      { name: "Python", level: "Advanced", context: "Primary language for all ETL, ML, and automation work. Proficient in async/await, multiprocessing." },
+      { name: "SQL", level: "Advanced", context: "Advanced window functions, CTEs, recursive queries, query optimization across 3 DW platforms." },
+    ],
+  },
+  {
+    domain: "Observability & Data Quality",
+    icon: "📊",
+    description: "Statistical baselining, freshness validation, schema drift detection, SLA monitoring",
+    tools: [
+      { name: "Statistical Baselining", level: "Advanced", context: "80% fewer silent data failures at Freddie Mac. Rolling-window Z-score anomaly detection." },
+      { name: "Schema Drift Detection", level: "Advanced", context: "Detected schema drift 48h before consumers broke. Threshold learning reduced false positives 65%." },
+      { name: "SLA Monitoring", level: "Strong", context: "Production SLA enforcement on Control-M batch workflows for Fortune 500 financial client." },
+    ],
+  },
+  {
+    domain: "ML Integration (Supporting)",
+    icon: "🤖",
+    description: "TensorFlow, PyTorch, Scikit-Learn, feature engineering for batch pipelines",
+    tools: [
+      { name: "TensorFlow", level: "Strong", context: "NLP inference platform at Bosmos. Sub-50ms p99 latency at 10K requests/minute." },
+      { name: "Feature Engineering", level: "Strong", context: "ML-driven feature engineering integrated into batch pipelines at Freddie Mac for predictive analytics." },
+      { name: "Scikit-Learn", level: "Working", context: "Classical ML (Random Forest, SVM) for anomaly detection baselines." },
     ],
   },
 ];
