@@ -103,18 +103,26 @@ export function ProjectsSection() {
           <div className="min-h-[400px]">
             {activeTab === "ml" && (
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container">
-                {mlProjects.map((project) => {
-                  const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                  return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
-                })}
+                {mlProjects.length === 0 ? (
+                  <p className="text-portfolio-muted-foreground text-sm">No ML projects found.</p>
+                ) : (
+                  mlProjects.map((project) => {
+                    const slug = project.title.toLowerCase().replace(/\s+/g, "-");
+                    return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
+                  })
+                )}
               </div>
             )}
             {activeTab === "cv" && (
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container">
-                {cvProjects.map((project) => {
-                  const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                  return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
-                })}
+                {cvProjects.length === 0 ? (
+                  <p className="text-portfolio-muted-foreground text-sm">No Computer Vision projects found.</p>
+                ) : (
+                  cvProjects.map((project) => {
+                    const slug = project.title.toLowerCase().replace(/\s+/g, "-");
+                    return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
+                  })
+                )}
               </div>
             )}
           </div>
@@ -149,6 +157,14 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
         src={project.image}
         alt={project.title}
         className="w-full h-48 object-cover"
+        loading="lazy"
+        onError={(e) => {
+          const target = e.currentTarget as HTMLImageElement;
+          if (!target.dataset.fallbackUsed) {
+            target.dataset.fallbackUsed = "true";
+            target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400";
+          }
+        }}
         data-testid={`project-image-${slug}`}
       />
 

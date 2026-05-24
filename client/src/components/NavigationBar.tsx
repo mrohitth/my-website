@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, memo } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -69,6 +69,7 @@ function NavLink({
     </button>
   )
 }
+const MemoizedNavLink = memo(NavLink)
 
 export function NavigationBar() {
   const [activeSection, setActiveSection] = useState("hero")
@@ -78,14 +79,23 @@ export function NavigationBar() {
 
   // Show/hide navbar based on scroll position
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const threshold = window.innerHeight * 0.05
-      setIsVisible(scrollY <= threshold)
-      setIsScrolled(scrollY > 20)
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const threshold = window.innerHeight * 0.05
+          setIsVisible(scrollY <= threshold)
+          setIsScrolled(scrollY > 20)
+          ticking = false
+        })
+        ticking = true
+      }
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
   // IntersectionObserver for active section tracking
@@ -140,7 +150,7 @@ export function NavigationBar() {
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-1">
               {NAV_ITEMS.map((item) => (
-                <NavLink
+                <MemoizedNavLink
                   key={item.id}
                   _id={item.id}
                   label={item.label}
