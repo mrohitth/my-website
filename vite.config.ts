@@ -25,11 +25,7 @@ export default defineConfig({
             if (id.includes("react")) return "vendor-react";
             if (id.includes("framer-motion")) return "vendor-framer";
             if (id.includes("gsap")) return "vendor-gsap";
-            if (id.includes("recharts")) return "vendor-charts";
             if (id.includes("@radix-ui")) return "vendor-radix";
-          }
-          if (id.includes("DataPlatformSandbox") || id.includes("sandbox") && id.includes("simulations")) {
-            return "vendor-sandbox";
           }
         },
       },
