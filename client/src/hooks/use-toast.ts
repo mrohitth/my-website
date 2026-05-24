@@ -8,7 +8,7 @@ import type {
 const TOAST_LIMIT = 1
 
 /**
- * Toast removal is intentionally delayed — toasts are dismissed via user
+ * Toast removal is intentionally delayed - toasts are dismissed via user
  * interaction (onOpenChange) rather than timeout. The long delay ensures
  * dismissed toasts aren't prematurely removed from the DOM during transitions.
  * Value: 1,000,000ms ≈ 16.7 minutes.

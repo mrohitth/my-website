@@ -10,7 +10,7 @@ import {
 } from "@/data/portfolio";
 
 const STATS = [
-  { value: "2.5+", label: "Years Experience" },
+  { value: "3+", label: "Years Experience" },
   { value: "40M+", label: "Records/Batch" },
   { value: "4×", label: "Spark Runtime Cut" },
 ];
@@ -54,21 +54,14 @@ export function AboutSection() {
             <div>
               <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                I&apos;m a Data Engineer with 2+ years of production experience building
-                and optimizing large-scale batch and CDC pipelines on AWS EMR and
-                Snowflake — currently at Capco, embedded with Freddie Mac&apos;s data
-                engineering team in Northern Virginia.
-              </p>
-              <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                My day-to-day is real production DE: PySpark workload tuning,
-                Snowflake data modeling, Control-M orchestration, and building
-                pipelines that non-negotiably cannot fail on a regulated financial
-                dataset.
-              </p>
-              <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                Before that I led the engineering team at an AI startup in Atlanta,
-                which taught me how to ship ML systems under pressure.
-              </p>
+              Data Engineer with 2+ years building and optimizing large-scale batch and CDC pipelines on AWS EMR and Snowflake. Currently at Capco, embedded with Freddie Mac's data engineering team in Northern Virginia.
+            </p>
+            <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
+              Day-to-day is real production DE: PySpark workload tuning, Snowflake data modeling, Control-M orchestration, and building pipelines that cannot fail on regulated financial data.
+            </p>
+            <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
+              Before this, I led the engineering team at an AI startup in Atlanta that shipped ML systems under pressure.
+            </p>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
                 I hold an MS from Carnegie Mellon (Mechanical Engineering with
                 ML/CV research focus, 4.0 GPA) and a BE from VIT India.
@@ -112,8 +105,7 @@ export function TechStackSection() {
             <h2 className="text-4xl font-bold text-portfolio-foreground">Skills by Competency Domain</h2>
           </div>
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-            Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span> —
-            not just a self-assessed level.
+            Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span>.
           </p>
         </div>
 

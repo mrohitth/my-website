@@ -1,15 +1,13 @@
 // ============================================================================
-// ROLES — Typing animation role strings (technically precise)
+// ROLES - Typing animation role strings (technically precise)
 // ============================================================================
 
 export const ROLES: string[] = [
   "Data Engineer",
-  "Pipeline Architect",
-  "Spark & Snowflake Specialist",
-  "Batch & CDC Systems Builder",
-  "AWS EMR Engineer",
-  "Data Platform Developer",
-  "dbt + Airflow Practitioner",
+  "Spark & Snowflake Developer",
+  "Pipeline Builder",
+  "AWS EMR Specialist",
+  "Batch Systems Engineer",
 ];
 
 // ============================================================================
@@ -69,12 +67,12 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "40M records/batch · 75% runtime reduction (14h → 3.5h) · 0 data loss incidents in 18 months · 60% DB load reduction",
+    impact: "40M records per batch, 75% runtime reduction (14h down to 3.5h), zero data loss incidents in 18 months, cut DB load by 60%",
     architecture:
-      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabled replay across 3 downstream systems without re-running source queries. Used SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for Freddie Mac audits. Append-only design meant consumers never blocked the source DB.",
-    scale: "40M records per batch · 22 years of history · 3 consumer systems · 18 months production uptime",
-    costImpact: "Reduced direct DB load by 60%, eliminating repeated full-table scans from downstream consumers. Nightly batch window shrank from 14h to 3.5h, freeing EMR cluster hours.",
-    highlight: "40M records/batch · 14h → 3.5h batch (75% faster) · 0 data loss",
+      "Used append-only JSON logs instead of direct CDC so consumers could replay without hitting the source DB. SCD Type-2 was required for regulatory audit trails at Freddie Mac. Having the log decouple producers from consumers meant 3 downstream systems could replay independently without contention.",
+    scale: "40M records per batch, 22 years of history, 3 consumer systems, 18 months in production",
+    costImpact: "Cut nightly batch window from 14 hours to 3.5 hours, eliminating repeated full-table scans for downstream consumers. DB load dropped by 60%.",
+    highlight: "40M records per batch, 14h down to 3.5h, zero data loss",
     tags: ["batch", "infrastructure"],
   },
   {
@@ -95,12 +93,12 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/data-observability-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "Detected schema drift 48h before下游 consumers broke · 80% fewer silent data failures · threshold learning reduced false positives by 65%",
+    impact: "Caught schema drift 48 hours before downstream consumers broke, 80% fewer silent failures, threshold learning cut false positives by 65%",
     architecture:
-      "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours — the baseline adapts to diurnal patterns automatically. Z-score over IQR because the data distributions were skewed by weekend drops; IQR would have required manual season adjustment. Threshold learning automates what would otherwise be a 2-person-hour weekly task.",
-    scale: "Monitors 50+ pipeline streams · detects anomalies within 15-min of ingestion · handles schema evolution across 12 source systems",
-    costImpact: "Prevented 3 production incidents in 6 months, each estimated at 4-8 hours of engineer time. Silent failures caught before downstream reporting was affected.",
-    highlight: "80% fewer silent failures · 48h advance warning on schema drift · 65% fewer false positive alerts",
+      "Rolling-window baselining adapts to diurnal patterns so quiet hours do not trigger false alerts. Z-score works better than IQR on skewed distributions caused by weekend drops. Threshold learning automates what used to be a manual 2-hour weekly task per pipeline.",
+    scale: "Monitors 50+ pipeline streams, detects anomalies within 15 minutes of ingestion, handles schema evolution across 12 source systems",
+    costImpact: "Prevented 3 production incidents in 6 months. Silent failures were the highest-severity incidents we had, so catching them in 15 minutes vs 48 hours made a real difference.",
+    highlight: "80% fewer silent failures, caught schema drift 48h ahead, 65% fewer false positive alerts",
     tags: ["observability", "batch"],
   },
   {
@@ -121,12 +119,12 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/batch-analytics-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "Simulates production-grade 50M+ record workloads · idempotent runs eliminate duplicate records · partition pruning cut query cost by 45%",
+    impact: "Handles 50M+ records per run with idempotent transformations that eliminate duplicates, partition pruning cut Snowflake query costs by 45%",
     architecture:
-      "Chose dbt over raw SQL transformations because it provides lineage tracking, test coverage, and CI/CD integration out of the box — transforming SQL without dbt means you're reinventing change management. Partition-aware modeling means queries only scan relevant partitions rather than full table scans, cutting Snowflake credit usage significantly. Idempotent execution model means rerunning a DAG never produces duplicate records regardless of failure point.",
-    scale: "50M+ records per run · 120+ dbt models · 8 data marts · automated quality gates on every run",
-    costImpact: "Partition pruning reduced Snowflake query credit consumption by 45% compared to full-table scans. Idempotent design eliminates wasted rerun credits.",
-    highlight: "50M+ records/run · 45% query cost reduction via partition pruning · 0 duplicate records in 12 months",
+      "dbt gives you lineage tracking, test coverage, and CI/CD integration that you would otherwise spend months building on top of raw SQL. Partition-aware modeling means queries only hit the partitions they need, which cuts Snowflake credit usage significantly. The idempotent execution model means a rerun never creates duplicate records regardless of where it fails.",
+    scale: "50M+ records per run, 120+ dbt models, 8 data marts, automated quality gates on every run",
+    costImpact: "Partition pruning reduced Snowflake query credits by 45% compared to full-table scans. Idempotent design means no wasted rerun credits.",
+    highlight: "50M+ records per run, 45% query cost reduction via partition pruning, zero duplicate records in 12 months",
     tags: ["batch", "lakehouse"],
   },
   {
@@ -149,11 +147,11 @@ export const PROJECTS: Project[] = [
       "https://github.com/mrohitth/Brain-Tumor-Classification-Using-Machine-Learning",
     featured: false,
     category: "Machine Learning",
-    impact: "96% accuracy on 4-class classification · outperformed ResNet50 by 4% on held-out test set · inference in 230ms on CPU",
+    impact: "96% accuracy on 4-class brain tumor classification, outperformed ResNet50 by 4% on held-out test set, runs inference in 230ms on CPU",
     architecture:
-      "Chose GLCM+HOG+PCA feature engineering over transfer learning from ResNet50 because the training set was small (412 samples) and CNNs overfit badly in this regime. Random Forest over SVM for final classification because it handles multi-class natively and provides probability estimates without calibration. Benchmarked against DenseNet169 to confirm classical ML ceiling — DenseNet achieved 91%, confirming the classical ML result was near-optimal for this data size.",
-    scale: "412 labeled MRI scans · 4 tumor classes · 230ms inference (CPU)",
-    highlight: "96% accuracy · outperformed ResNet50 by 4% · 230ms CPU inference",
+      "Small dataset (412 samples) means CNNs overfit badly. GLCM plus HOG plus PCA captures texture and shape features that transfer learning cannot learn from limited data. Random Forest handles multi-class natively and gives probability estimates without calibration. Benchmarked against DenseNet169 to confirm the classical ML ceiling, DenseNet hit 91%, classical ML at 96% is near-optimal for this data size.",
+    scale: "412 labeled MRI scans, 4 tumor classes, 230ms inference on CPU",
+    highlight: "96% accuracy, outperformed ResNet50 by 4%, 230ms CPU inference",
     tags: ["ml"],
   },
   {
@@ -175,11 +173,11 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Semantic-Segmentation-using-U-Net",
     featured: false,
     category: "Deep Learning",
-    impact: "Pixel-level terrain classification for autonomous rover navigation · IoU score of 0.84 on held-out Mars terrain test set",
+    impact: "Pixel-level terrain classification for autonomous rover navigation, IoU score of 0.84 on held-out Mars terrain",
     architecture:
-      "Chose U-Net over FCN and DeepLabV3 because U-Net's skip connections preserve spatial detail critical for terrain boundary detection — FCNs lose fine edge information in the downsampling path. Depth data integration improved IoU by 0.12 over RGB-only models, specifically for rocky terrain classes that are ambiguous in 2D imagery alone.",
-    scale: "AI4Mars dataset (200K+ labeled pixels) · 5 terrain classes · IoU 0.84",
-    highlight: "IoU 0.84 on 5-class terrain segmentation · 12% improvement from depth data integration",
+      "U-Net skip connections preserve spatial detail that gets lost in the downsampling path of FCNs, which matters for terrain boundary detection. Adding depth data improved IoU by 0.12 over RGB-only models because rocky terrain is ambiguous in 2D imagery but clear with depth cues.",
+    scale: "AI4Mars dataset (200K+ labeled pixels), 5 terrain classes, IoU 0.84",
+    highlight: "IoU 0.84 on 5-class terrain segmentation, 12% improvement from depth data",
     tags: ["ml"],
   },
   {
@@ -202,11 +200,11 @@ export const PROJECTS: Project[] = [
       "https://github.com/mrohitth/Neural-Networks-for-Recognition",
     featured: false,
     category: "Deep Learning",
-    impact: "94% test accuracy on flowers (102 categories) · 98.7% on MNIST digits · built from scratch in pure NumPy + PyTorch",
+    impact: "94% test accuracy on flowers (102 categories), 98.7% on MNIST digits, built from scratch in pure NumPy and PyTorch",
     architecture:
-      "Built from scratch in pure NumPy first to internalize backprop mechanics before using PyTorch autograd — this revealed exactly where gradient flow breaks and why batch normalization matters. Autoencoder for dimensionality reduction reduced 784-dim MNIST to 32-dim latent space while preserving 97% of variance, useful for downstream retrieval tasks.",
-    scale: "102 flower categories · MNIST + custom digit datasets · 32-dim autoencoder latent space",
-    highlight: "94% accuracy (flowers) · 98.7% (MNIST) · built from scratch, no PyTorch nn layer shortcuts",
+      "Built from scratch in pure NumPy first to understand backprop mechanics before relying on PyTorch autograd. This revealed exactly where gradient flow breaks and why batch normalization matters. Autoencoder reduced MNIST from 784 dims to 32 dims while keeping 97% of variance, useful for fast retrieval tasks.",
+    scale: "102 flower categories, MNIST and custom digit datasets, 32-dim autoencoder latent space",
+    highlight: "94% accuracy (flowers), 98.7% (MNIST), built from scratch, no PyTorch nn layer shortcuts",
     tags: ["ml"],
   },
   {
@@ -228,11 +226,11 @@ export const PROJECTS: Project[] = [
       "https://github.com/mrohitth/Augmented-Reality-with-Planar-Homographies",
     featured: false,
     category: "Computer Vision",
-    impact: "Real-time overlay at 30fps on moving camera · corner detection accuracy: 94% · sub-5ms homography estimation",
+    impact: "Real-time overlay at 30fps on moving camera, 94% corner detection accuracy, sub-5ms homography estimation per frame",
     architecture:
-      "Used SIFT over ORB for initial feature detection because book covers have repetitive text patterns — ORB fails on these due to binary descriptor sensitivity. 8-point algorithm over 7-point for fundamental matrix estimation because the additional constraint improves robustness on low-texture book covers where RANSAC iterations converge to wrong solutions.",
-    scale: "30fps real-time · 94% corner detection accuracy · sub-5ms per-frame homography",
-    highlight: "30fps real-time AR · 94% corner accuracy · sub-5ms homography estimation",
+      "Book covers have repetitive text patterns that trip up ORB due to binary descriptor sensitivity, so SIFT was used for initial detection. 8-point algorithm gives better robustness on low-texture book covers where RANSAC converges to wrong solutions with the 7-point algorithm.",
+    scale: "30fps real-time, 94% corner detection accuracy, sub-5ms per-frame homography",
+    highlight: "30fps real-time AR, 94% corner accuracy, sub-5ms homography estimation",
     tags: ["ml"],
   },
   {
@@ -253,11 +251,11 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/3D-Reconstruction",
     featured: false,
     category: "Computer Vision",
-    impact: "3D point cloud from 12-image sequence in 4.2s · mean reprojection error: 0.8 pixels · dense reconstruction with 50K+ points",
+    impact: "3D point cloud from 12-image sequence in 4.2 seconds, mean reprojection error 0.8 pixels, dense reconstruction with 50K+ points",
     architecture:
-      "7-point algorithm handles the minimal case for the essential matrix — used when you know the camera intrinsics exactly. 8-point algorithm used for the fundamental matrix when intrinsics are uncertain (which applies to most consumer cameras with imperfect calibration). RANSAC with 2000 iterations balances accuracy vs runtime for scenes with 40%+ outliers.",
-    scale: "12-image sequences · 50K+ dense points · 4.2s reconstruction · 0.8px reprojection error",
-    highlight: "50K+ dense 3D points · 0.8px reprojection error · 4.2s from 12 images",
+      "7-point algorithm is for the minimal case with known camera intrinsics. 8-point algorithm handles fundamental matrix when intrinsics are uncertain, which covers most consumer cameras with imperfect calibration. RANSAC with 2000 iterations balances accuracy versus runtime for scenes with 40%+ outliers.",
+    scale: "12-image sequences, 50K+ dense points, 4.2s reconstruction, 0.8px reprojection error",
+    highlight: "50K+ dense 3D points, 0.8px reprojection error, 4.2s from 12 images",
     tags: ["ml"],
   },
   {
@@ -278,11 +276,11 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Lucas-Kanade-Tracking",
     featured: false,
     category: "Computer Vision",
-    impact: "Tracks objects across 300+ frame sequences · robust to 40% illumination variation · 25fps tracking on 720p video",
+    impact: "Tracks objects across 300+ frame sequences, handles 40% illumination variation, runs at 25fps on 720p video",
     architecture:
-      "Iterative refinement (forward-additive Lucas-Kanade) converges in 3-5 iterations vs 10-15 for classical Lucas-Kanade, cutting computation by 60%. Template warping handles non-rigid deformation — important for tracking people where rigid models fail after the first occlusion. Appearance adaptation prevents drift when illumination changes gradually over a sequence, which pure template matching cannot handle.",
-    scale: "300+ frame sequences · 40% illumination robustness · 25fps on 720p",
-    highlight: "25fps tracking · 300+ frame sequences · robust to 40% illumination variation",
+      "Forward-additive Lucas-Kanade with iterative refinement converges in 3-5 iterations versus 10-15 for the classical approach, cutting computation by 60%. Template warping handles non-rigid deformation, which matters when tracking people after occlusions where rigid models fail. Appearance adaptation prevents drift when illumination changes gradually, which pure template matching cannot handle.",
+    scale: "300+ frame sequences, 40% illumination robustness, 25fps on 720p",
+    highlight: "25fps tracking, 300+ frame sequences, robust to 40% illumination variation",
     tags: ["ml"],
   },
   {
@@ -303,11 +301,11 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Photometric-Stereo",
     featured: false,
     category: "Computer Vision",
-    impact: "Reconstructed surface normals from 9 lighting conditions · depth accuracy: 0.05mm on test objects · works on non-Lambertian surfaces",
+    impact: "Surface normals from 9 lighting conditions, 0.05mm depth accuracy on test objects, works on non-Lambertian surfaces",
     architecture:
-      "Chose 9-light configuration over 3-light minimum because albedo estimation errors compound with fewer lights — 9 gives robust normals even on slightly non-Lambertian surfaces. Regularized SVD for normal estimation prevents noise amplification on low-SNR images. Depth integration via Poisson solver rather than linear blending because it respects surface boundary conditions better.",
-    scale: "9 lighting conditions · 0.05mm depth accuracy · non-Lambertian surface support",
-    highlight: "0.05mm depth accuracy · 9-light photometric setup · non-Lambertian surface handling",
+      "9-light configuration over 3-light minimum because albedo estimation errors compound with fewer lights, 9 gives robust normals even on slightly non-Lambertian surfaces. Regularized SVD for normal estimation prevents noise amplification on low-SNR images. Depth integration via Poisson solver respects surface boundary conditions better than linear blending.",
+    scale: "9 lighting conditions, 0.05mm depth accuracy, non-Lambertian surface support",
+    highlight: "0.05mm depth accuracy, 9-light photometric setup, handles non-Lambertian surfaces",
     tags: ["ml"],
   },
   {
@@ -330,17 +328,17 @@ export const PROJECTS: Project[] = [
       "https://github.com/mrohitth/Spatial-Pyramid-Matching-for-Scene-Classification",
     featured: false,
     category: "Computer Vision",
-    impact: "78.3% accuracy on 8-category scene classification · spatial pyramid improved over flat BoVW by 11%",
+    impact: "78.3% accuracy on 8-category scene classification, spatial pyramid improved flat BoVW by 11%",
     architecture:
-      "Spatial pyramid (3 levels: 1×1, 2×2, 4×4) captures location information that flat BoVW destroys. TF-IDF weighting over raw frequency reduces the impact of common visual words (sky, grass) that appear across many categories. KNN with cosine distance outperformed Euclidean on high-dimensional BoVW histograms — cosine measures angular similarity which is more appropriate for normalized histogram comparison.",
-    scale: "8 scene categories · 78.3% accuracy · 11% improvement from spatial pyramid",
-    highlight: "78.3% on 8-class scene recognition · 11% gain from spatial pyramid over flat BoVW",
+      "Spatial pyramid with 3 levels (1x1, 2x2, 4x4) captures location information that flat BoVW destroys. TF-IDF weighting reduces the impact of common visual words like sky and grass that appear across many categories. KNN with cosine distance outperformed Euclidean on high-dimensional BoVW histograms because cosine measures angular similarity which is more appropriate for normalized histogram comparison.",
+    scale: "8 scene categories, 78.3% accuracy, 11% improvement from spatial pyramid over flat BoVW",
+    highlight: "78.3% on 8-class scene recognition, 11% gain from spatial pyramid over flat BoVW",
     tags: ["ml"],
   },
 ];
 
 // ============================================================================
-// EXPERIENCE TYPES & DATA — outcome-first framing
+// EXPERIENCE TYPES & DATA - outcome-first framing
 // ============================================================================
 
 export interface Experience {
@@ -352,7 +350,7 @@ export interface Experience {
   description: string;
   // Outcome-first bullets
   metrics: string[];
-  logos: string[]; // import() URLs — resolved at render site
+  logos: string[]; // import() URLs - resolved at render site
   highlights: string[];
 }
 
@@ -360,54 +358,57 @@ export const EXPERIENCES: Experience[] = [
   {
     id: "capco-data-engineer",
     title: "Data Engineer",
-    company: "Capco — Client: Freddie Mac",
-    period: "Apr 2024 – Present",
+    company: "Capco (embedded at Freddie Mac)",
+    period: "Apr 2024 to May 2026",
     location: "Tysons, VA",
-    description: "Designed and productionized distributed ETL pipelines on AWS EMR (EC2 & EKS), ingesting 10+ diverse datasets and processing 40M+ records per batch run using PySpark. Cut end-to-end Spark batch runtime from ~40 minutes to under 10 minutes through workload profiling, partition tuning, and shuffle optimization — a 4× improvement that directly accelerated daily reporting for senior stakeholders. Built dependency-aware daily and monthly batch workflows in Control-M and Jenkins with automated failure recovery and SLA enforcement on production financial data. Engineered Snowflake data models and curated high-visibility data products consumed by senior VPs — using advanced SQL with 40+ joins, CTEs, and window functions. Spearheaded Snowpark-based transformation standardization and Snowflake query optimization, reducing code divergence by 40% and saving $16K annually in compute costs. Reconstructed 22+ years of historical financial data using Informatica IICS and Snowflake, establishing audit-grade baselines and improving reconciliation accuracy across enterprise datasets. Integrated ML-driven feature engineering into batch pipelines, enabling predictive analytics at enterprise scale.",
+    description:
+      "Designed and productionized distributed ETL pipelines on AWS EMR (EC2 & EKS), ingesting 10+ diverse datasets and processing 40M+ records per batch using PySpark. Optimized Spark workloads, reducing end-to-end batch runtimes from ~40 min to sub 10 min, accelerating daily reporting for senior stakeholders. Built dependency-aware daily and monthly batch workflows via Control-M and Jenkins, enforcing SLAs and automated failure recovery. Engineered Snowflake data models and curated high-visibility data products for senior VPs and enterprise consumers using advanced SQL (40+ joins, CTEs, window functions). Spearheaded Snowpark-based transformation standardization and Snowflake query optimization, reducing code divergence by 40% and saving $16K annually. Reconstructed 22+ years of historical data with Informatica IICS and Snowflake, establishing consistent baselines and improving reconciliation accuracy.",
     metrics: [
-      "4× Spark runtime reduction (40min → <10min)",
+      "40M+ records per batch on AWS EMR",
+      "4x Spark runtime reduction (40min down to sub-10min)",
       "$16K annual compute savings via Snowpark optimization",
-      "40M+ records processed per batch on AWS EMR",
-      "22+ years of financial history reconstructed",
+      "22+ years of financial history reconstructed for audit compliance",
     ],
     logos: [],
     highlights: [
-      "4× Spark runtime reduction (40min → <10min)",
-      "$16K annual compute savings via Snowpark optimization",
-      "40M+ records processed per batch on AWS EMR",
-      "22+ years of financial history reconstructed",
+      "40M+ records per batch",
+      "4x runtime reduction",
+      "$16K annual savings",
+      "22+ years of audit history",
     ],
   },
   {
     id: "bosmos-lead-ai",
     title: "Lead AI Developer",
     company: "Bosmos",
-    period: "Sep 2023 – Mar 2024",
+    period: "Sep 2023 to Mar 2024",
     location: "Atlanta, GA",
-    description: "Led design and deployment of a production AI chatbot platform using TensorFlow-based NLP pipelines for real-time conversational inference. Managed a 5-member engineering team end-to-end: model training, deployment, and REST API integration under Agile practices. Optimized backend ML inference architecture, reducing prediction latency and improving throughput for real-time workloads.",
+    description:
+      "Led design and deployment of a production AI writing platform using TensorFlow-based NLP pipelines for real-time conversational inference. Managed a 5-member engineering team, delivering end-to-end ML model training, deployment, and API integration under Agile practices. Optimized backend architectures for ML inference, reducing latency and improving throughput for real-time prediction workloads.",
     metrics: [
-      "Led 5-person engineering team",
-      "Production NLP inference pipeline",
+      "Led a 5-person engineering team",
+      "Production NLP inference platform",
       "Real-time ML serving architecture",
     ],
     logos: [],
     highlights: [
-      "Led 5-person engineering team",
-      "Production NLP inference pipeline",
-      "Real-time ML serving architecture",
+      "Led 5-person team",
+      "Production NLP platform",
+      "Real-time inference",
     ],
   },
   {
     id: "drc-research-assistant",
     title: "Research Assistant",
-    company: "Design Research Collective — Carnegie Mellon",
-    period: "Dec 2021 – May 2023",
+    company: "Design Research Collective, Carnegie Mellon",
+    period: "Dec 2021 to May 2023",
     location: "Pittsburgh, PA",
-    description: "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant on autonomous navigation.",
+    description:
+      "ML and computer vision research at CMU (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis. Published work on photometric stereo and structure-from-motion. Contributed to an NSF-funded grant on autonomous navigation.",
     metrics: [
-      "4.0 GPA across graduate coursework",
+      "4.0 GPA in graduate coursework",
       "Published 2 papers on 3D reconstruction and photometric stereo",
-      "Contributed to NSF-funded research grant",
+      "NSF-funded research contribution",
     ],
     logos: [],
     highlights: [
@@ -419,7 +420,7 @@ export const EXPERIENCES: Experience[] = [
 ];
 
 // ============================================================================
-// SKILLS — organized by competency domain
+// SKILLS - organized by competency domain
 // ============================================================================
 
 export interface SkillTool {
@@ -436,29 +437,29 @@ export interface SkillDomain {
 }
 
 export const SKILL_DOMAINS: SkillDomain[] = [
-  {
+    {
     domain: "Distributed Processing",
     icon: "⚡",
-    description: "PySpark, AWS EMR (EC2 & EKS), Spark performance tuning, dynamic partitioning, shuffle optimization",
+    description: "PySpark, AWS EMR (EC2 and EKS), Spark performance tuning, dynamic partitioning, shuffle optimization",
     tools: [
-      { name: "PySpark", level: "Advanced", context: "40M+ records/batch at Freddie Mac. Tuned partition/shuffle configs for 4× runtime reduction (40min → <10min)." },
-      { name: "AWS EMR (EC2 & EKS)", level: "Advanced", context: "Production cluster management with spot instance fallback. 92% spot utilization without job failures during capacity events." },
-      { name: "Spark Performance Tuning", level: "Advanced", context: "Cut Spark batch runtime 75% through workload profiling, partition tuning, and shuffle optimization." },
+      { name: "PySpark", level: "Advanced", context: "40M+ records per batch at Freddie Mac. Tuned partition and shuffle configs to cut runtime from 40min to under 10min." },
+      { name: "AWS EMR (EC2 and EKS)", level: "Advanced", context: "Production cluster management with spot instance fallback. 92% spot utilization without job failures during capacity events." },
+      { name: "Spark Performance Tuning", level: "Advanced", context: "Cut batch runtime 75% through workload profiling, partition tuning, and shuffle optimization." },
     ],
   },
   {
-    domain: "Data Warehousing & Modeling",
+    domain: "Data Warehousing and Modeling",
     icon: "🏗️",
-    description: "Snowflake, dbt, SCD Type-2, CDC, Informatica IICS, Snowpark, advanced SQL (CTEs, window functions, 40+ join queries)",
+    description: "Snowflake, dbt, SCD Type-2, CDC, Informatica IICS, Snowpark, advanced SQL with window functions and CTEs",
     tools: [
-      { name: "Snowflake", level: "Advanced", context: "Production DW at Freddie Mac — 22TB data, 15 fact tables, 40+ business dimensions. Zero-copy cloning for CI/CD." },
-      { name: "dbt", level: "Advanced", context: "120+ dbt models with incremental materialization, CI/CD hooks, and automated schema tests. 45% Snowflake credit reduction." },
-      { name: "SCD Type-2 Historization", level: "Advanced", context: "Regulatory requirement for Freddie Mac credit risk — 22 years of history, full audit trail, GDPR-compliant." },
-      { name: "Advanced SQL", level: "Advanced", context: "40+ join queries, CTEs, window functions for VP-level data products at Freddie Mac." },
+      { name: "Snowflake", level: "Advanced", context: "Production DW at Freddie Mac, 22TB data, 15 fact tables, 40+ business dimensions. Zero-copy cloning for CI/CD." },
+      { name: "dbt", level: "Advanced", context: "120+ dbt models with incremental materialization, CI/CD hooks, and automated schema tests. Cut Snowflake credits by 45%." },
+      { name: "SCD Type-2 Historization", level: "Advanced", context: "Regulatory requirement for Freddie Mac credit risk, 22 years of history, full audit trail, GDPR-compliant." },
+      { name: "Advanced SQL", level: "Advanced", context: "Complex queries with window functions, CTEs, 40+ join queries for VP-level data products at Freddie Mac." },
     ],
   },
   {
-    domain: "Orchestration & DevOps",
+    domain: "Orchestration and DevOps",
     icon: "🎼",
     description: "Apache Airflow, Control-M, Jenkins, Docker, Git, Linux",
     tools: [
@@ -475,7 +476,7 @@ export const SKILL_DOMAINS: SkillDomain[] = [
     tools: [
       { name: "AWS S3", level: "Advanced", context: "Data lake storage with lifecycle policies for 5-year retention. S3 Select for query-in-place." },
       { name: "AWS EKS", level: "Strong", context: "Kubernetes-based Spark execution for containerized batch workloads with auto-scaling." },
-      { name: "Snowflake Cloud", level: "Advanced", context: "Primary DW platform — 22TB, $16K annual compute savings via Snowpark optimization." },
+      { name: "Snowflake Cloud", level: "Advanced", context: "Primary DW platform, 22TB, $16K annual compute savings via Snowpark optimization." },
     ],
   },
   {
@@ -488,12 +489,12 @@ export const SKILL_DOMAINS: SkillDomain[] = [
     ],
   },
   {
-    domain: "Observability & Data Quality",
+    domain: "Observability and Data Quality",
     icon: "📊",
     description: "Statistical baselining, freshness validation, schema drift detection, SLA monitoring",
     tools: [
       { name: "Statistical Baselining", level: "Advanced", context: "80% fewer silent data failures at Freddie Mac. Rolling-window Z-score anomaly detection." },
-      { name: "Schema Drift Detection", level: "Advanced", context: "Detected schema drift 48h before consumers broke. Threshold learning reduced false positives 65%." },
+      { name: "Schema Drift Detection", level: "Advanced", context: "Caught schema drift 48 hours before consumers broke. Threshold learning cut false positives by 65%." },
       { name: "SLA Monitoring", level: "Strong", context: "Production SLA enforcement on Control-M batch workflows for Fortune 500 financial client." },
     ],
   },
@@ -502,7 +503,7 @@ export const SKILL_DOMAINS: SkillDomain[] = [
     icon: "🤖",
     description: "TensorFlow, PyTorch, Scikit-Learn, feature engineering for batch pipelines",
     tools: [
-      { name: "TensorFlow", level: "Strong", context: "NLP inference platform at Bosmos. Sub-50ms p99 latency at 10K requests/minute." },
+      { name: "TensorFlow", level: "Strong", context: "NLP inference platform at Bosmos. Sub-50ms p99 latency at 10K requests per minute." },
       { name: "Feature Engineering", level: "Strong", context: "ML-driven feature engineering integrated into batch pipelines at Freddie Mac for predictive analytics." },
       { name: "Scikit-Learn", level: "Working", context: "Classical ML (Random Forest, SVM) for anomaly detection baselines." },
     ],
@@ -510,7 +511,7 @@ export const SKILL_DOMAINS: SkillDomain[] = [
 ];
 
 // ============================================================================
-// PIPELINE STAGES — (retained for backward compat, prefer SKILL_DOMAINS)
+// PIPELINE STAGES - (retained for backward compat, prefer SKILL_DOMAINS)
 // ============================================================================
 
 export interface PipelineTool {

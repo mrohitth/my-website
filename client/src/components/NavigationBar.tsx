@@ -149,7 +149,7 @@ export function NavigationBar() {
                 />
               ))}
               <a
-                href="/resume.pdf"
+                href="/Resume_-_Mathew_Thomson.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-4"
@@ -198,7 +198,7 @@ export function NavigationBar() {
                       </button>
                     ))}
                     <a
-                      href="/resume.pdf"
+                      href="/Resume_-_Mathew_Thomson.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-2"

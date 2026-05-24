@@ -350,7 +350,7 @@ function CDCpipelineSimulator() {
           <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">Production Scenario</span>
         </div>
         <p className="text-sm text-slate-200 leading-relaxed">
-          <span className="font-semibold text-yellow-300">Source:</span> PostgreSQL 14 — 40M records, 3,500 TPS peak. Downstream: Snowflake DW (6am batch), Kafka fraud detection (100K events/min), Spark HDFS for ML features.{" "}
+          <span className="font-semibold text-yellow-300">Source:</span> PostgreSQL 14 - 40M records, 3,500 TPS peak. Downstream: Snowflake DW (6am batch), Kafka fraud detection (100K events/min), Spark HDFS for ML features.{" "}
           <span className="font-semibold text-yellow-300">SLA:</span> &lt;15min from commit to Snowflake availability.{" "}
           <span className="font-semibold text-red-400">Failure cost:</span> Delayed risk reports = manual reconciliation + regulatory filing amendment per incident.
         </p>
@@ -363,7 +363,7 @@ function CDCpipelineSimulator() {
           <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Why CDC instead of batch?</span>
         </div>
         <p className="text-xs text-slate-300 leading-relaxed">
-          Batch requires a maintenance window that blocks writes — unacceptable for active mortgage processing. A 30-minute batch delay means risk models run on stale data, potentially mis-selling a $2.5M commercial loan. CDC captures every commit as it happens and keeps a CDC log as the single source of truth for 22-year historical reconstruction. Batch cannot do that.
+          Batch requires a maintenance window that blocks writes - unacceptable for active mortgage processing. A 30-minute batch delay means risk models run on stale data, potentially mis-selling a $2.5M commercial loan. CDC captures every commit as it happens and keeps a CDC log as the single source of truth for 22-year historical reconstruction. Batch cannot do that.
         </p>
       </div>
 
@@ -443,14 +443,14 @@ function CDCpipelineSimulator() {
             className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-2 text-left hover:bg-orange-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-orange-400">Idempotency Breach</p>
-            <p className="text-xs text-slate-400">Duplicate key error on replay — set-based CTE uses ON CONFLICT DO NOTHING to absorb duplicates without failing.</p>
+            <p className="text-xs text-slate-400">Duplicate key error on replay - set-based CTE uses ON CONFLICT DO NOTHING to absorb duplicates without failing.</p>
           </button>
           <button
             onClick={() => { setPipelineMode("setbased"); }}
             className="rounded-lg border border-blue-500/30 bg-blue-500/10 p-2 text-left hover:bg-blue-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-blue-400">Offset Drift Recovery</p>
-            <p className="text-xs text-slate-400">Consumer restart reconnects from last committed offset — no data loss, no duplicate processing. Log-based CDC guarantee.</p>
+            <p className="text-xs text-slate-400">Consumer restart reconnects from last committed offset - no data loss, no duplicate processing. Log-based CDC guarantee.</p>
           </button>
         </div>
         <p className="mt-2 text-xs text-slate-500">
@@ -568,14 +568,14 @@ function CDCpipelineSimulator() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Batches Processed"
-          value={cdcEvaluated ? metrics.totalBatches : "—"}
+          value={cdcEvaluated ? metrics.totalBatches : "-"}
           icon={<Layers className="h-4 w-4" />}
           color={CHART_COLORS.primary}
           highlight={cdcEvaluated}
         />
         <MetricCard
           label="Current IOPS"
-          value={cdcEvaluated ? metrics.totalIOPS.toLocaleString() : "—"}
+          value={cdcEvaluated ? metrics.totalIOPS.toLocaleString() : "-"}
           unit={cdcEvaluated ? "ops" : undefined}
           trend={cdcEvaluated && metrics.totalIOPS > 1000 ? "up" : cdcEvaluated ? "stable" : undefined}
           icon={<Activity className="h-4 w-4" />}
@@ -584,7 +584,7 @@ function CDCpipelineSimulator() {
         />
         <MetricCard
           label="Peak IOPS"
-          value={cdcEvaluated ? metrics.peakIOPS.toLocaleString() : "—"}
+          value={cdcEvaluated ? metrics.peakIOPS.toLocaleString() : "-"}
           unit={cdcEvaluated ? "ops" : undefined}
           trend={cdcEvaluated && metrics.peakIOPS > 1000 ? "up" : cdcEvaluated ? "stable" : undefined}
           icon={<TrendingUp className="h-4 w-4" />}
@@ -690,8 +690,8 @@ function CDCpipelineSimulator() {
 // ============================================================================
 
 const DAG_STAGES = [
-  { id: "stg_events", label: "stg_events", description: "Polls source DB for new CDC events since last run (last_updated > max_checkpoint). Fails if no events found past SLA window — correct behavior, not a bug.", icon: Box },
-  { id: "dim_users", label: "dim_users", description: "dbt incremental upsert: hash payload to skip unchanged rows. Skips — doesn't re-process. Fails if FK to dim_users is NULL for new users.", icon: Layers },
+  { id: "stg_events", label: "stg_events", description: "Polls source DB for new CDC events since last run (last_updated > max_checkpoint). Fails if no events found past SLA window - correct behavior, not a bug.", icon: Box },
+  { id: "dim_users", label: "dim_users", description: "dbt incremental upsert: hash payload to skip unchanged rows. Skips - doesn't re-process. Fails if FK to dim_users is NULL for new users.", icon: Layers },
   { id: "fact_orders", label: "fact_orders", description: "dbt incremental + SCD Type-2 for order status changes. FK dependency on dim_users. Fails: foreign key violation → DAG aborts.", icon: GitBranch },
   { id: "dbt_tests", label: "run_dbt_tests", description: "dbt test suite: uniqueness, not-null, referential integrity. strict=abort DAG; silent=absorb bad data silently.", icon: FlaskConical },
 ];
@@ -699,9 +699,9 @@ const DAG_STAGES = [
 const QUALITY_SCENARIOS = [
   { id: "clean", label: "Clean Dataset", description: "Normal data without anomalies" },
   { id: "duplicate_flood", label: "Duplicate Event Flood", description: "Events are duplicated upstream" },
-  { id: "late_arrival", label: "Late-Arriving Events", description: "Records from 6h ago appearing now — SCD Type-2 audit trail risk" },
-  { id: "schema_drift", label: "Schema Drift (New Column)", description: "Unannounced column added upstream — CDC parser fails silently" },
-  { id: "null_flood", label: "NULL Distribution Shift", description: "Critical field NULL rate jumps from 0.1% to 14% — downstream ML model bias risk" },
+  { id: "late_arrival", label: "Late-Arriving Events", description: "Records from 6h ago appearing now - SCD Type-2 audit trail risk" },
+  { id: "schema_drift", label: "Schema Drift (New Column)", description: "Unannounced column added upstream - CDC parser fails silently" },
+  { id: "null_flood", label: "NULL Distribution Shift", description: "Critical field NULL rate jumps from 0.1% to 14% - downstream ML model bias risk" },
 ];
 
 function BatchAnalyticsSimulator() {
@@ -754,10 +754,10 @@ function BatchAnalyticsSimulator() {
           if (isLast) {
             if (qualityGate === "strict" && scenario !== "clean") {
               const scenarioLabels: Record<string, string> = {
-                duplicate_flood: `duplicate_events test failed — found ${corruptedRows - baseRows} extra rows`,
-                late_arrival: `late-arriving events detected — max(event_ts) regressed 6h behind checkpoint`,
-                schema_drift: `unannounced column detected upstream — CDC JSON parser compatibility broken`,
-                null_flood: `NULL rate on critical field jumped from 0.1% to 14.3% — ML model bias risk`,
+                duplicate_flood: `duplicate_events test failed - found ${corruptedRows - baseRows} extra rows`,
+                late_arrival: `late-arriving events detected - max(event_ts) regressed 6h behind checkpoint`,
+                schema_drift: `unannounced column detected upstream - CDC JSON parser compatibility broken`,
+                null_flood: `NULL rate on critical field jumped from 0.1% to 14.3% - ML model bias risk`,
               };
               setDagState((prev) => ({
                 ...prev,
@@ -767,17 +767,17 @@ function BatchAnalyticsSimulator() {
                 ...prev,
                 {
                   type: "error",
-                  message: `[dbt] ERROR: ${scenarioLabels[scenario] ?? scenario} — trigger rule "all_success" aborted pipeline.`,
+                  message: `[dbt] ERROR: ${scenarioLabels[scenario] ?? scenario} - trigger rule "all_success" aborted pipeline.`,
                   ts: Date.now(),
                 },
               ]);
               setBatchRows(corruptedRows);
             } else if (qualityGate === "silent") {
               const silentLabels: Record<string, string> = {
-                duplicate_flood: `${corruptedRows - baseRows} duplicate rows absorbed silently — downstream metrics will be corrupted`,
-                late_arrival: `late events absorbed silently — SCD Type-2 audit trail may be corrupted by overwriting historical records`,
-                schema_drift: `schema incompatibility absorbed — pipeline continues with partial column set; downstream NULL rates will increase`,
-                null_flood: `${corruptedRows} rows with NULL on critical field written to Snowflake — ML model predictions will be biased`,
+                duplicate_flood: `${corruptedRows - baseRows} duplicate rows absorbed silently - downstream metrics will be corrupted`,
+                late_arrival: `late events absorbed silently - SCD Type-2 audit trail may be corrupted by overwriting historical records`,
+                schema_drift: `schema incompatibility absorbed - pipeline continues with partial column set; downstream NULL rates will increase`,
+                null_flood: `${corruptedRows} rows with NULL on critical field written to Snowflake - ML model predictions will be biased`,
               };
               setDagState((prev) => ({
                 ...prev,
@@ -893,7 +893,7 @@ function BatchAnalyticsSimulator() {
         </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {[
-            { stage: "stg_events", tool: "Airflow Sensor", dep: "None (root)", fail: "No events reach staging. DAG fails at 5:45am — correct behavior. Silent retry past 6am = stale Snowflake data.", color: "blue" },
+            { stage: "stg_events", tool: "Airflow Sensor", dep: "None (root)", fail: "No events reach staging. DAG fails at 5:45am - correct behavior. Silent retry past 6am = stale Snowflake data.", color: "blue" },
             { stage: "dim_users", tool: "dbt incremental", dep: "stg_events", fail: "New users show as 'Unknown User' in BI. Business impact delayed 8-12h (BI team emails DE).", color: "cyan" },
             { stage: "fact_orders", tool: "dbt + SCD Type-2", dep: "dim_users (FK)", fail: "FK violation → dbt aborts. Revenue dashboard shows $0 at 8am. CFO calls on-call at 7:15am.", color: "emerald" },
             { stage: "dbt_tests", tool: "dbt test suite", dep: "fact_orders", fail: "strict: DAG aborts, morning report uses yesterday's data. silent: bad data flows to Snowflake undetected.", color: "green" },
@@ -914,13 +914,13 @@ function BatchAnalyticsSimulator() {
       <div className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-4">
         <div className="mb-2 flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 text-orange-400" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">If DAG Misses 6am Window — 3 Business Impacts</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">If DAG Misses 6am Window - 3 Business Impacts</span>
         </div>
         <div className="space-y-2">
           {[
-            ["7:00am — Risk Report", "Stale risk data → $2.5M loan approved with wrong rate. Manual reconciliation + regulatory filing amendment."],
-            ["8:00am — CFO Revenue", "Looker shows $4.2M vs $8.7M actual. CFO calls on-call at 7:15am. 20min war-room."],
-            ["4:00pm — ML Features", "Feature refresh skipped. Model accuracy degrades 0.3% on $900B portfolio — measurable over weeks."],
+            ["7:00am - Risk Report", "Stale risk data → $2.5M loan approved with wrong rate. Manual reconciliation + regulatory filing amendment."],
+            ["8:00am - CFO Revenue", "Looker shows $4.2M vs $8.7M actual. CFO calls on-call at 7:15am. 20min war-room."],
+            ["4:00pm - ML Features", "Feature refresh skipped. Model accuracy degrades 0.3% on $900B portfolio - measurable over weeks."],
           ].map(([time, impact]) => (
             <div key={time} className="flex items-start gap-2">
               <span className="text-xs font-semibold text-orange-400 shrink-0 w-36">{time}</span>
@@ -1127,7 +1127,7 @@ function BatchAnalyticsSimulator() {
       <div className="grid grid-cols-1 gap-3">
         <MetricCard
           label="Fact Table Row Count"
-          value={batchEvaluated && batchRows > 0 ? batchRows.toLocaleString() : "—"}
+          value={batchEvaluated && batchRows > 0 ? batchRows.toLocaleString() : "-"}
           icon={<Database className="h-4 w-4" />}
           highlight={batchEvaluated}
           color={CHART_COLORS.secondary}
@@ -1136,7 +1136,7 @@ function BatchAnalyticsSimulator() {
 
       {/* DAG Visualization */}
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/30 p-4">
-        <p className="mb-4 text-sm font-semibold text-slate-200">Pipeline DAG — dbt + Airflow Orchestration</p>
+        <p className="mb-4 text-sm font-semibold text-slate-200">Pipeline DAG - dbt + Airflow Orchestration</p>
         <div className="relative flex items-center justify-between gap-2">
           {DAG_STAGES.map((stage, idx) => {
             const state = dagState[stage.id];
@@ -1413,7 +1413,7 @@ function DataObservabilitySimulator() {
         </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {[
-            { name: "Late-Arriving Events", severity: "P2", method: "Track max(event_ts) — if it regresses below checkpoint by >1h, flag late-arrival.", impact: "SCD Type-2 audit trail corrupted — historical records overwritten with late corrections. Compliance risk." },
+            { name: "Late-Arriving Events", severity: "P2", method: "Track max(event_ts) - if it regresses below checkpoint by >1h, flag late-arrival.", impact: "SCD Type-2 audit trail corrupted - historical records overwritten with late corrections. Compliance risk." },
             { name: "Schema Drift", severity: "P1", method: "Compare incoming schema vs known-good manifest (Glue Schema Registry). Any field count/type mismatch = fire.", impact: "CDC JSON parser fails silently, pipeline stalls. Morning risk report uses yesterday's data. Regulatory filing required." },
             { name: "Distribution Shift", severity: "P1", method: "7-day rolling NULL% on critical fields. Two-proportion Z-test vs historical baseline (p &lt; 0.001 = alert).", impact: "ML model predictions become systematically biased for customers with NULL on risk fields. Affects $900B portfolio decisions." },
             { name: "Volume Anomaly", severity: "P2", method: "Rolling-window Z-score vs 30-day baseline, per hour-of-day bucket. >3σ = fire.", impact: "Possible upstream system issue or data loss event. Detecting fast reduces blast radius." },
@@ -1435,9 +1435,9 @@ function DataObservabilitySimulator() {
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/20 p-4">
         <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Alert Severity Reference</div>
         <div className="flex gap-4 text-xs font-mono">
-          <span className="text-red-400">P1 — Page immediately (24/7)</span>
-          <span className="text-yellow-400">P2 — Page within 30 min (business hours)</span>
-          <span className="text-slate-500">P3 — Next business day</span>
+          <span className="text-red-400">P1 - Page immediately (24/7)</span>
+          <span className="text-yellow-400">P2 - Page within 30 min (business hours)</span>
+          <span className="text-slate-500">P3 - Next business day</span>
         </div>
       </div>
 
@@ -1550,13 +1550,13 @@ function DataObservabilitySimulator() {
               <>
                 <p className="text-sm font-bold text-red-400">⚠ ALERT STORM ACTIVE</p>
                 <p className="text-xs text-slate-400">
-                  {alerts.length} false-positive alerts — 3AM trough below static threshold
+                  {alerts.length} false-positive alerts - 3AM trough below static threshold
                 </p>
               </>
             ) : alerts.length > 0 && detectionMode === "seasonal" ? (
               <>
                 <p className="text-sm font-bold text-green-400">✓ Anomaly Evaluated Against Historical Bucket</p>
-                <p className="text-xs text-slate-400">Zero false alarms — 3AM evaluated against seasonal baseline</p>
+                <p className="text-xs text-slate-400">Zero false alarms - 3AM evaluated against seasonal baseline</p>
               </>
             ) : (
               <>
@@ -1586,14 +1586,14 @@ function DataObservabilitySimulator() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Alerts Triggered"
-          value={obsEvaluated ? alerts.length : "—"}
+          value={obsEvaluated ? alerts.length : "-"}
           icon={<Bell className="h-4 w-4" />}
           color={!isIdle && alerts.length > 5 ? CHART_COLORS.danger : !isIdle && alerts.length > 0 ? CHART_COLORS.warning : CHART_COLORS.success}
           highlight={!isIdle && alerts.length > 0}
         />
         <MetricCard
           label="Alert Rate"
-          value={obsEvaluated ? `${alertRate}/24` : "—"}
+          value={obsEvaluated ? `${alertRate}/24` : "-"}
           unit={obsEvaluated ? "hours" : undefined}
           icon={<Activity className="h-4 w-4" />}
           color={CHART_COLORS.secondary}
@@ -1608,7 +1608,7 @@ function DataObservabilitySimulator() {
 
       {/* Volume Chart */}
       <div className="rounded-xl border border-slate-700/50 bg-slate-800/30 p-4">
-        <p className="mb-3 text-sm font-semibold text-slate-200">24-Hour Data Volume — Baseline vs Actual</p>
+        <p className="mb-3 text-sm font-semibold text-slate-200">24-Hour Data Volume - Baseline vs Actual</p>
         <ResponsiveContainer width="100%" height={220}>
           <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 5 }}>
             <defs>
@@ -1722,7 +1722,7 @@ function DataObservabilitySimulator() {
           {alerts.length === 0 && (
             <div className="flex items-center gap-2 py-4 text-center text-slate-500">
               <EyeOff className="h-4 w-4" />
-              <span>No alerts — system is healthy. Drop a data file to evaluate.</span>
+              <span>No alerts - system is healthy. Drop a data file to evaluate.</span>
             </div>
           )}
         </div>
@@ -1739,7 +1739,7 @@ function DataObservabilitySimulator() {
           >
             <div className="flex items-center gap-2">
               <Webhook className="h-4 w-4 text-cyan-400" />
-              <p className="text-sm font-semibold text-slate-200">AlertDispatcher — Outbound Webhook Payload</p>
+              <p className="text-sm font-semibold text-slate-200">AlertDispatcher - Outbound Webhook Payload</p>
             </div>
             <pre className="overflow-x-auto text-xs text-green-400">
 {`{
@@ -1765,7 +1765,7 @@ function DataObservabilitySimulator() {
 }
 
 // ============================================================================
-// MAIN COMPONENT — DataPlatformSandbox
+// MAIN COMPONENT - DataPlatformSandbox
 // ============================================================================
 
 const TABS = [
@@ -1834,7 +1834,7 @@ export default function DataPlatformSandbox() {
           className="mx-auto mt-3 max-w-2xl text-sm text-slate-400"
         >
           Explore the mechanics of our three production-optimized data platforms. Inject events, toggle execution
-          strategies, and observe real-time metrics and anomaly detection — all simulated in your browser.
+          strategies, and observe real-time metrics and anomaly detection - all simulated in your browser.
         </motion.p>
       </div>
 
@@ -2086,7 +2086,7 @@ function SchemaDesignerSimulator() {
           <div className="mb-3 flex items-center justify-between">
             <h4 className="font-mono text-sm font-bold text-white">
               {selected.name}
-              <span className="ml-2 text-xs text-slate-400">— {selected.columns.length} columns</span>
+              <span className="ml-2 text-xs text-slate-400">- {selected.columns.length} columns</span>
             </h4>
             <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} className="text-xs text-purple-400 hover:text-purple-300">
               Generate DDL →

@@ -245,8 +245,8 @@
     width: 100%;
   }
 
-  /* Honeycomb pattern for testing */
-  .honeycomb-pattern {
+/* Honeycomb pattern */
+.honeycomb-pattern {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -255,22 +255,6 @@
     repeating-linear-gradient(-30deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px),
     repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px);
   background-size: 40px 70px;
-}
-
-
-  /* Subtle pulse animation for contact section */
-  .pulse-bg {
-    background: radial-gradient(circle at 20% 20%, hsl(210 100% 60% / 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, hsl(210 100% 60% / 0.03) 0%, transparent 50%);
-    height: 100%;
-    width: 100%;
-    animation: pulse-subtle 8s ease-in-out infinite;
-  }
-  
-  @keyframes pulse-subtle {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
-  }
 }
 
 /* Custom scrollbar */
@@ -395,117 +379,6 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;  /* prevents flash */
 }
 
-/* for glowing ring animation around focused input */
-@keyframes glowPulseSlow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.05); }
-}
-
-.animate-glow-slow {
-  animation: glowPulseSlow 6s ease-in-out infinite;
-}
-
-/* Landing Page animation */
-/* A quick sweeping line across the screen */
-@keyframes pipelineSweep {
-  0% { transform: translateX(-100%); opacity: 0.7; }
-  100% { transform: translateX(100%); opacity: 0; }
-}
-.pipeline-intro {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, cyan, magenta);
-  animation: pipelineSweep 0.4s ease-out forwards;
-  z-index: 50;
-  pointer-events: none;
-}
-
-
-/* Data stream animation */
-@keyframes dataFlow {
-  0% { transform: translateY(-100%); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translateY(100%); opacity: 0; }
-}
-
-.data-stream {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(to bottom, cyan, magenta, yellow);
-  animation: dataFlow 1s ease-in-out infinite;
-  z-index: 50;
-  pointer-events: none;
-}
-
-/* 3D button effect */
-.button-3d {
-  transition: transform 0.3s, box-shadow 0.3s;
-  transform-style: preserve-3d;
-}
-
-.button-3d:hover {
-  transform: translateY(-4px) scale(1.05) rotateX(10deg) rotateY(10deg);
-  box-shadow: 0 5px 8px rgba(0,0,0,0.2);
-}
-
-
-/* Tilt effect on buttons */
-.tilt-button {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  perspective: 1500px; /* gives the 3D depth */
-}
-
-.tilt-button:hover {
-  /* Optional: shadow on hover */
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-/* Glowing button with text scale */
-.btn-jump {
-  box-shadow: inset 0 0 0 rgba(0,0,0,0);
-  transition: box-shadow 0.3s, transform 0.3s, font-size 0.3s;
-
-}
-.btn-jump:hover {
-  transform: translateY(-5px);
-  font-size: 0.92rem; /* subtle font growth */
-}
-
-/* Subtle background patterns */
-.subtle-dots::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: radial-gradient(circle at 1px 1px, hsl(var(--portfolio-primary) / 0.08) 1px, transparent 0);
-  background-size: 25px 25px;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.subtle-grid::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(hsl(var(--portfolio-border) / 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--portfolio-border) / 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
 /* Hide scrollbar utility */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -513,4 +386,4 @@ input:-webkit-autofill:focus {
 }
 .scrollbar-hide::-webkit-scrollbar { 
   display: none;  /* Safari and Chrome */
-}
+}}

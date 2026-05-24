@@ -4,11 +4,11 @@
  * to make tuning values centrally visible and avoid magic numbers.
  */
 
-/** CDC Pipeline configuration — realistic PostgreSQL source parameters. */
+/** CDC Pipeline configuration - realistic PostgreSQL source parameters. */
 export const CDC_CONFIG = {
   /** Target IOPS for a production PostgreSQL 14 database under write load. */
   targetIOPS: 30_000,
-  /** Steady-state CDC replication latency — Pg logical decoding overhead. */
+  /** Steady-state CDC replication latency - Pg logical decoding overhead. */
   realtimeLatencyMs: 180,
   /** Cold-start / backfill catch-up latency for a 40M row table. */
   catchupLatencyMs: 42_400,
@@ -16,7 +16,7 @@ export const CDC_CONFIG = {
   staticThreshold: 3_000,
 } as const
 
-/** Batch processing configuration — simulates Airflow/dbt batch workloads. */
+/** Batch processing configuration - simulates Airflow/dbt batch workloads. */
 export const BATCH_CONFIG = {
   /** Default rows per micro-batch in the simulation. */
   defaultBatchSize: 10_000,

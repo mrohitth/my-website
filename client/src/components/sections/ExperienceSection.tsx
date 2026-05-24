@@ -35,13 +35,12 @@ function ExperienceTimeline() {
       {/* Desktop Timeline */}
       <div className="hidden md:block relative max-w-5xl mx-auto">
         <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-portfolio-primary to-transparent rounded-full">
-          <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-r from-portfolio-primary/20 via-portfolio-primary/40 to-portfolio-primary/20 rounded-full" />
         </div>
 
         <div className="flex justify-between items-start gap-8">
           {EXPERIENCES.map((exp, index) => {
             const logos = EXPERIENCE_LOGOS[exp.id] ?? [];
-            const progressWidth = index === 0 ? "w-full" : index === 1 ? "w-3/4" : "w-1/2";
             return (
               <div
                 key={exp.id}
@@ -67,7 +66,7 @@ function ExperienceTimeline() {
                       ))}
                     </div>
                   )}
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full" />
                 </div>
 
                 {/* Content card */}
@@ -97,7 +96,7 @@ function ExperienceTimeline() {
                   {/* Progress bar */}
                   <div className="w-full bg-portfolio-muted/20 rounded-full h-1.5 mt-3">
                     <div
-                      className={`h-1.5 bg-gradient-to-r from-portfolio-primary to-emerald-400 rounded-full transition-all duration-1000 ${progressWidth}`}
+                      className="h-1.5 bg-gradient-to-r from-portfolio-primary to-emerald-400 rounded-full transition-all duration-1000 w-1/3"
                     />
                   </div>
                 </div>

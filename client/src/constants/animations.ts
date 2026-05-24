@@ -1,5 +1,5 @@
 /**
- * Animation timing constants — centralized for easy tuning.
+ * Animation timing constants - centralized for easy tuning.
  * All values in milliseconds unless noted.
  */
 
@@ -31,7 +31,7 @@ export const SCROLL_ANIMATION = {
   scrollToTopPx: 300,
 } as const
 
-/** Subtle flow background elements in HeroSection — randomized at mount. */
+/** Subtle flow background elements in HeroSection - randomized at mount. */
 export const FLOW_ELEMENTS = {
   /** Animation duration range in seconds [min, max]. */
   durationRangeS: [8, 20] as const,

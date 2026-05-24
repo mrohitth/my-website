@@ -51,18 +51,18 @@ export function SandboxSection() {
               <div className="text-left">
                 <p className="text-base font-bold text-portfolio-foreground flex items-center gap-2">
                   <span className="text-xl">🔬</span>
-                  Production Data Engineering — Live Sandboxes
+                  Production Data Engineering - Live Sandboxes
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   {!isOpen ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 text-xs font-medium text-cyan-400">
                       <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                      Status: Dormant — Click to Initialize
+                      Status: Dormant - Click to Initialize
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-400">
                       <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
-                      Status: Active — Click to Collapse
+                      Status: Active - Click to Collapse
                     </span>
                   )}
                 </div>
@@ -114,7 +114,7 @@ export function SandboxSection() {
                     </h3>
                     <p className="text-portfolio-muted-foreground text-sm max-w-2xl">
                       These aren&apos;t toy demos. Each sandbox models a real data engineering
-                      problem I&apos;ve worked on in production — built so you can see the
+                      problem I&apos;ve worked on in production - built so you can see the
                       architecture, tweak the parameters, and understand the trade-offs.
                     </p>
                   </div>
