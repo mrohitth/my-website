@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, ReactNode, RefObject } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 "use client";
 
 
@@ -30,17 +31,23 @@ const ScrollFloat: React.FC<ScrollFloatProps> = ({
   stagger = 0.015
 }) => {
   const containerRef = useRef<HTMLHeadingElement>(null);
+  const reducedMotion = useReducedMotion();
 
+  // If user prefers reduced motion, just render children normally without animation
   const splitText = useMemo(() => {
+    if (reducedMotion) {
+      return <span className={textClassName}>{children}</span>;
+    }
     const text = typeof children === 'string' ? children : '';
     return text.split('').map((char, index) => (
       <span className="char" key={index}>
         {char === ' ' ? '\u00A0' : char}
       </span>
     ));
-  }, [children]);
+  }, [children, textClassName, reducedMotion]);
 
   useEffect(() => {
+    if (reducedMotion) return;
     const el = containerRef.current;
     if (!el) return;
 

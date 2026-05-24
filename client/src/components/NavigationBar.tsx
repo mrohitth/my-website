@@ -126,6 +126,7 @@ export function NavigationBar() {
             ? "bg-portfolio-background/95 backdrop-blur-md border-b border-portfolio-border/50 shadow-sm"
             : "bg-transparent"
         }`}
+        aria-label="Primary navigation"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">

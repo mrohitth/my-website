@@ -27,7 +27,7 @@ export default function Portfolio() {
       <NavigationBar />
 
       {/* Page sections */}
-      <main>
+      <main id="main-content" aria-label="Portfolio sections">
         <HeroSection />
         <AboutSection />
         <TechStackSection />

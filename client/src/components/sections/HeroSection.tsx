@@ -6,6 +6,7 @@ import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ROLES } from "@/data/portfolio";
 import heroProfilePic from "@/assets/profile3.webp";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 const MLNetworkBackground = lazy(() => import("@/components/mlnetworkbackground"));
 
@@ -21,9 +22,15 @@ export function HeroSection() {
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentSection, setCurrentSection] = useState("hero-top");
+  const reducedMotion = useReducedMotion();
 
-  // Typing animation
+  // Typing animation — disabled when reduced motion preferred
   useEffect(() => {
+    if (reducedMotion) {
+      setDisplayedText(ROLES[currentRoleIndex]);
+      return;
+    }
+
     const currentRole = ROLES[currentRoleIndex];
     let typingSpeed = isDeleting ? 50 : 100;
     let timeout: NodeJS.Timeout;
@@ -44,7 +51,7 @@ export function HeroSection() {
     }
 
     return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, currentRoleIndex]);
+  }, [displayedText, isDeleting, currentRoleIndex, reducedMotion]);
 
 
 
@@ -90,25 +97,27 @@ export function HeroSection() {
           </Suspense>
         </div>
 
-        {/* Subtle Flow Animation Background */}
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {subtleFlowElements.map((element) => (
-            <div
-              key={element.id}
-              className="absolute rounded-full bg-cyan-400/75 subtle-flow"
-              style={{
-                top: `${element.top}%`,
-                left: "-8px",
-                width: `${element.width * 1.25}px`,
-                height: "3px",
-                animationDuration: `${element.duration}s`,
-                animationDelay: `${element.delay}s`,
-                filter: "blur(1.5px)",
-              }}
-            />
-          ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-portfolio-background/20 to-portfolio-background/40" />
-        </div>
+        {/* Subtle Flow Animation Background — disabled when reduced motion preferred */}
+        {!reducedMotion && (
+          <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+            {subtleFlowElements.map((element) => (
+              <div
+                key={element.id}
+                className="absolute rounded-full bg-cyan-400/75 subtle-flow"
+                style={{
+                  top: `${element.top}%`,
+                  left: "-8px",
+                  width: `${element.width * 1.25}px`,
+                  height: "3px",
+                  animationDuration: `${element.duration}s`,
+                  animationDelay: `${element.delay}s`,
+                  filter: "blur(1.5px)",
+                }}
+              />
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-portfolio-background/20 to-portfolio-background/40" />
+          </div>
+        )}
 
         {/* Hero Content */}
         <div className="relative z-20 max-w-4xl mx-auto text-center">
@@ -116,7 +125,7 @@ export function HeroSection() {
             <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
               <img
                 src={heroProfilePic}
-                alt="Mathew Thomson"
+                alt="Rohit Mathew Thomson, Senior Data Engineer specializing in real-time streaming pipelines and data lakehouse architecture"
                 width={2750}
                 height={2580}
                 className="w-full h-full object-cover"

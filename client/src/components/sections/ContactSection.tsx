@@ -13,7 +13,7 @@ import { CONTACT } from "@/data/contact";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollTopBtn, setShowScrollTopBtn] = useState(false);
 
@@ -59,7 +59,7 @@ export function ContactSection() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsSubmitting(true);
+    setFormStatus("submitting");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -67,16 +67,15 @@ export function ContactSection() {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
-        alert("Message sent successfully!");
+        setFormStatus("success");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        alert("Failed to send message. Please try again.");
+        setFormStatus("error");
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred. Please try again.");
+      setFormStatus("error");
     }
-    setIsSubmitting(false);
   }
 
   function handleInputChange(
@@ -102,7 +101,7 @@ export function ContactSection() {
           >
             <img
               src={cat}
-              alt="Cute cat pointing up"
+              alt="Scroll to top"
               className="w-12 h-12 transform transition-transform duration-200 hover:scale-180 hover:-rotate-12"
             />
           </Button>
@@ -131,7 +130,18 @@ export function ContactSection() {
               onSubmit={handleSubmit}
               className="space-y-6"
               data-testid="contact-form"
+              noValidate
             >
+              {/* Status announcement for screen readers */}
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+              >
+                {formStatus === "submitting" && "Sending your message..."}
+                {formStatus === "success" && "Message sent successfully! Rohit will respond soon."}
+                {formStatus === "error" && "Failed to send message. Please try again or contact via email."}
+              </div>
               <div>
                 <Label
                   htmlFor="name"
@@ -188,11 +198,12 @@ export function ContactSection() {
               </div>
               <Button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground font-medium py-3 px-6"
+                disabled={formStatus === "submitting"}
+                aria-busy={formStatus === "submitting"}
+                className="w-full bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground font-medium py-3 px-6 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                 data-testid="button-submit-form"
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                {formStatus === "submitting" ? "Sending..." : "Send Message"}
                 <Mail className="ml-2 h-4 w-4" />
               </Button>
             </form>
@@ -254,35 +265,39 @@ export function ContactSection() {
               <div className="flex space-x-4">
                 <a
                   href={CONTACT.github}
-                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
+                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                   data-testid="link-github"
+                  aria-label="GitHub profile"
                 >
-                  <Github className="h-5 w-5" />
+                  <Github className="h-5 w-5" aria-hidden="true" />
                 </a>
                 <a
                   href={CONTACT.linkedin}
-                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
+                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                   data-testid="link-linkedin"
+                  aria-label="LinkedIn profile"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
                 <a
                   href={CONTACT.twitter}
-                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
+                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                   data-testid="link-twitter"
+                  aria-label="Twitter profile"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
                   </svg>
                 </a>
                 <a
                   href={CONTACT.instagram}
-                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200"
+                  className="w-10 h-10 bg-portfolio-muted hover:bg-portfolio-primary text-portfolio-muted-foreground hover:text-portfolio-primary-foreground rounded-lg flex items-center justify-center transition-all duration-200 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                   data-testid="link-instagram"
+                  aria-label="Instagram profile"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.618 5.367 11.987 11.988 11.987s11.987-5.369 11.987-11.987C24.014 5.367 18.635.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.295C4.198 14.553 3.5 13.26 3.5 11.987c0-1.297.698-2.566 1.626-3.706.875-.805 2.026-1.295 3.323-1.295s2.448.49 3.323 1.295c.928 1.14 1.626 2.409 1.626 3.706 0 1.273-.698 2.566-1.626 3.706-.875.805-2.026 1.295-3.323 1.295zm7.068 0c-1.297 0-2.448-.49-3.323-1.295-.928-1.14-1.626-2.433-1.626-3.706 0-1.297.698-2.566 1.626-3.706.875-.805 2.026-1.295 3.323-1.295s2.448.49 3.323 1.295c.928 1.14 1.626 2.409 1.626 3.706 0 1.273-.698 2.566-1.626 3.706-.875.805-2.026 1.295-3.323 1.295z" />
                   </svg>
                 </a>
