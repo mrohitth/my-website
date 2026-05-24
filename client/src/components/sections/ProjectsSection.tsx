@@ -118,11 +118,59 @@ export function ProjectsSection() {
                 {cvProjects.map((project) => {
                   const slug = project.title.toLowerCase().replace(/\s+/g, "-");
                   return (
-                    <div data-testid={`cv-card-${slug}`} className="rounded-lg border bg-card text-card-foreground shadow-sm flex-shrink-0 w-80 p-6">
-                      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                      <img src={project.image} alt={project.title} className="w-full h-48 object-cover mb-3" />
-                      <p className="text-sm text-muted-foreground">{project.impact}</p>
-                    </div>
+                    <Card
+                      key={project.title}
+                      className="flex-shrink-0 w-80 bg-portfolio-card border-portfolio-border hover:shadow-xl hover:scale-105 hover:z-10 hover:-mx-2 transition-all duration-300 group relative"
+                      data-testid={`project-card-${slug}`}
+                    >
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          if (!target.dataset.fallbackUsed) {
+                            target.dataset.fallbackUsed = "true";
+                            target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400";
+                          }
+                        }}
+                        data-testid={`project-image-${slug}`}
+                      />
+                      <div className="p-6">
+                        <h3 className="text-xl font-semibold mb-3 text-portfolio-card-foreground" data-testid={`project-title-${slug}`}>
+                          {project.title}
+                        </h3>
+
+                        {/* Hidden description that appears on hover */}
+                        <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-60 mb-4">
+                          <p className="text-portfolio-muted-foreground" data-testid={`project-description-${slug}`}>
+                            {project.description}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 mb-4" data-testid={`project-technologies-${slug}`}>
+                          {project.technologies.map((tech, techIndex) => (
+                            <span
+                              key={`${slug}-${techIndex}`}
+                              className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+                              data-testid={`project-tech-${slug}-${tech.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex gap-3">
+                          <a
+                            href={project.github}
+                            className="text-portfolio-primary hover:text-portfolio-primary/80 transition-colors duration-200 flex items-center"
+                            data-testid={`project-github-${slug}`}
+                          >
+                            <Github className="mr-2 h-4 w-4" />
+                            View Project
+                          </a>
+                        </div>
+                      </div>
+                    </Card>
                   );
                 })}
               </div>
