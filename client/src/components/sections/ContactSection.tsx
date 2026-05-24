@@ -96,7 +96,7 @@ export function ContactSection() {
         >
           <Button
             onClick={scrollToTop}
-            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 hover:bg-portfolio-primary transform transition-transform duration-200 hover:-rotate-12 hover:scale-180 active:scale-90 animate-bounce"
+            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 hover:bg-portfolio-secondary transform transition-transform duration-200 hover:-rotate-12 hover:scale-180 active:scale-90 animate-bounce"
             style={{ animationDuration: "2s" }}
           >
             <img
