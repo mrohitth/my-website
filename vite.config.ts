@@ -16,30 +16,23 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "client", "dist-frontend"),
     emptyOutDir: true,
+    target: "es2020",
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom"],
-          "vendor-framer": ["framer-motion"],
-          "vendor-gsap": ["gsap"],
-          "vendor-charts": ["recharts"],
-          "vendor-radix": [
-            "@radix-ui/react-accordion",
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-tabs",
-            "@radix-ui/react-tooltip",
-            "@radix-ui/react-toast",
-          ],
-          sandbox: [
-            path.resolve(
-              import.meta.dirname,
-              "client",
-              "src",
-              "components",
-              "simulations",
-              "DataPlatformSandbox"
-            ),
-          ],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react")) return "vendor-react";
+            if (id.includes("framer-motion")) return "vendor-framer";
+            if (id.includes("gsap")) return "vendor-gsap";
+            if (id.includes("recharts")) return "vendor-charts";
+            if (id.includes("@radix-ui")) return "vendor-radix";
+            if (id.includes("d3") || id.includes("victory") || id.includes("chart.js") || id.includes("chartjs")) return "vendor-charts";
+          }
+          // Sandbox is lazy — split to its own chunk
+          if (id.includes("DataPlatformSandbox") || id.includes("sandbox") && id.includes("simulations")) {
+            return "vendor-sandbox";
+          }
         },
       },
     },

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import profilePic from "@/assets/profile4.jpg";
+import profilePic from "@/assets/profile4.webp";
 import { BarChart3, Database, Zap, Cloud, Code2 } from "lucide-react";
 import {
   SKILL_DOMAINS,

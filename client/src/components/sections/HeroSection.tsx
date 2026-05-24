@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ROLES } from "@/data/portfolio";
-import heroProfilePic from "@/assets/profile3.jpg";
+import heroProfilePic from "@/assets/profile3.webp";
 
 const MLNetworkBackground = lazy(() => import("@/components/mlnetworkbackground"));
 
@@ -117,7 +117,11 @@ export function HeroSection() {
               <img
                 src={heroProfilePic}
                 alt="Mathew Thomson"
+                width={2750}
+                height={2580}
                 className="w-full h-full object-cover"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>

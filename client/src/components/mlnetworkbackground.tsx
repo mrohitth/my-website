@@ -7,26 +7,23 @@ export default function MLNetworkBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Disable on mobile or when user prefers reduced motion
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        // Disable on mobile or when user prefers reduced motion
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const prefersReducedMotion = typeof window !== 'undefined' &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isMobile || prefersReducedMotion) return;
-
-    const _ctx = canvas.getContext('2d');
-    if (!_ctx) return;
-    const ctx = _ctx as CanvasRenderingContext2D;
 
     let width = canvas.parentElement?.offsetWidth || window.innerWidth;
     let height = canvas.parentElement?.offsetHeight || window.innerHeight;
 
     canvas.width = width;
     canvas.height = height;
+    canvas.style.willChange = 'transform';
 
     const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
-    const nodeCount = isMobile
-      ? Math.floor((width * height) / 40000)   // 40% fewer nodes on mobile
-      : Math.floor((width * height) / 12500);   // density based on canvas size
+    const densityFactor = isMobile ? 40000 : 12500;
+    const nodeCount = Math.floor((width * height) / densityFactor);
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
@@ -37,17 +34,27 @@ export default function MLNetworkBackground() {
       });
     }
 
-    function animate() {
+    let rafId: number;
+    let lastFrameTime = 0;
+    const targetFrameTime = 1000 / 60;
+    let isRunning = false;
+
+    function animate(timestamp: number) {
+      if (timestamp - lastFrameTime < targetFrameTime) {
+        rafId = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime = timestamp;
+
       ctx.clearRect(0, 0, width, height);
 
-      // Draw connections
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(0, 255, 255, ${0.05 *(1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(0, 255, 255, ${0.05 * (1 - dist / 120)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -57,35 +64,77 @@ export default function MLNetworkBackground() {
         }
       }
 
-      // Draw nodes
       nodes.forEach((node) => {
         ctx.fillStyle = 'rgba(0, 255, 255, 0.1)';
         ctx.beginPath();
         ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
         ctx.fill();
-
         node.x += node.vx;
         node.y += node.vy;
-
         if (node.x < 0 || node.x > width) node.vx *= -1;
         if (node.y < 0 || node.y > height) node.vy *= -1;
       });
 
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
 
-    animate();
+    function startAnimation() {
+      if (isRunning) return;
+      isRunning = true;
+      lastFrameTime = 0;
+      rafId = requestAnimationFrame(animate);
+    }
 
-    // Handle window resize
-    const handleResize = () => {
-      width = canvas.parentElement?.offsetWidth || window.innerWidth;
-      height = canvas.parentElement?.offsetHeight || window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    };
+    function stopAnimation() {
+      isRunning = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      ctx.clearRect(0, 0, width, height);
+    }
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    if (typeof document !== 'undefined') {
+      if (document.visibilityState === 'visible') {
+        startAnimation();
+      }
+
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
+      const handleResize = () => {
+        width = canvas.parentElement?.offsetWidth || window.innerWidth;
+        height = canvas.parentElement?.offsetHeight || window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        nodes.length = 0;
+        const newDensityFactor = width < 768 ? 40000 : 12500;
+        const newNodeCount = Math.floor((width * height) / newDensityFactor);
+        for (let i = 0; i < newNodeCount; i++) {
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+          });
+        }
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('resize', handleResize);
+        stopAnimation();
+      };
+    } else {
+      startAnimation();
+      return () => stopAnimation();
+    }
   }, []);
 
   return (
@@ -93,6 +142,7 @@ export default function MLNetworkBackground() {
       ref={canvasRef}
       className="w-full h-full block"
       style={{ display: 'block' }}
+      aria-hidden="true"
     />
   );
 }
