@@ -6,17 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MapPin, Github } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { Github } from "lucide-react";
+import cat from "@/assets/cat_up.gif";
 import { CONTACT } from "@/data/contact";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollTopBtn, setShowScrollTopBtn] = useState(false);
+
+  // Scroll-to-top visibility
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Scroll-to-top button visibility
   useEffect(() => {
-    const handleScroll = () => setShowScrollTopBtn(window.scrollY > 300);
+    const handleScroll = () => setShowScrollTopBtn(window.scrollY > 100);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -39,6 +49,12 @@ export function ContactSection() {
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function scrollToSection(sectionId: string) {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+    window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -80,11 +96,14 @@ export function ContactSection() {
         >
           <Button
             onClick={scrollToTop}
-            className="rounded-full p-3 shadow-lg bg-blue-500 hover:bg-blue-600 text-white"
+            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 hover:bg-portfolio-primary transform transition-transform duration-200 hover:-rotate-12 hover:scale-180 active:scale-90 animate-bounce"
+            style={{ animationDuration: "2s" }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-5">
-              <path fillRule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l1.22-1.22a.75.75 0 1 1 1.06 1.06l-2.5 2.5a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.22 1.22V2.75A.75.75 0 0 1 8 2Z" clipRule="evenodd" />
-            </svg>
+            <img
+              src={cat}
+              alt="Scroll to top"
+              className="w-12 h-12 transform transition-transform duration-200 hover:scale-180 hover:-rotate-12"
+            />
           </Button>
         </motion.div>
       )}
@@ -120,7 +139,7 @@ export function ContactSection() {
                 className="sr-only"
               >
                 {formStatus === "submitting" && "Sending your message..."}
-                {formStatus === "success" && "Message sent successfully! Mathew will respond soon."}
+                {formStatus === "success" && "Message sent successfully! Rohit will respond soon."}
                 {formStatus === "error" && "Failed to send message. Please try again or contact via email."}
               </div>
               <div>

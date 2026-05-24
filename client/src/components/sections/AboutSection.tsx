@@ -11,8 +11,8 @@ import {
 
 const STATS = [
   { value: "3+", label: "Years Experience" },
-  { value: "40M+", label: "Records/Batch" },
-  { value: "4×", label: "Spark Runtime Cut" },
+  { value: "13+", label: "Projects Delivered" },
+  { value: "15+", label: "Technologies Mastered" },
 ];
 
 const DOMAIN_ICONS: Record<string, JSX.Element> = {
@@ -45,7 +45,7 @@ export function AboutSection() {
           {/* Profile Picture */}
           <div className="fade-in md:col-span-1">
             <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl" data-testid="profile-picture">
-              <img src={profilePic} alt="Mathew Rohit Thomson, Data Engineer" className="w-full h-full object-cover rounded-2xl" />
+              <img src={profilePic} alt="Rohit Mathew Thomson, Senior Data Engineer" className="w-full h-full object-cover rounded-2xl" />
             </div>
           </div>
 
@@ -54,17 +54,12 @@ export function AboutSection() {
             <div>
               <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-              Data Engineer with 2+ years building and optimizing large-scale batch and CDC pipelines on AWS EMR and Snowflake. Currently at Capco, embedded with Freddie Mac's data engineering team in Northern Virginia.
-            </p>
-            <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-              Day-to-day is real production DE: PySpark workload tuning, Snowflake data modeling, Control-M orchestration, and building pipelines that cannot fail on regulated financial data.
-            </p>
-            <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-              Before this, I led the engineering team at an AI startup in Atlanta that shipped ML systems under pressure.
-            </p>
-              <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                I hold an MS from Carnegie Mellon (Mechanical Engineering with
-                ML/CV research focus, 4.0 GPA) and a BE from VIT India.
+                I design and optimize distributed data pipelines on AWS EMR and Snowflake,
+                focusing on performance tuning, cost efficiency, and production reliability.
+                Specializing in cloud-native processing on AWS EMR (EC2/EKS) and Snowflake, I
+                build resilient, metadata-driven pipelines that handle tens of millions of
+                records while optimizing for both compute performance and enterprise-level
+                cost-efficiency.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
@@ -105,7 +100,8 @@ export function TechStackSection() {
             <h2 className="text-4xl font-bold text-portfolio-foreground">Skills by Competency Domain</h2>
           </div>
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-            Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span>.
+            Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span> —
+            not just a self-assessed level.
           </p>
         </div>
 
