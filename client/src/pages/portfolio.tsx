@@ -8,6 +8,7 @@ import profilePic from '@/assets/profile4.jpg';
 import heroProfilePic from '@/assets/profile3.jpg';
 import cat from '@/assets/cat_up.gif';
 import { Github, ExternalLink, Mail, Phone, MapPin, Menu, X, Database, BarChart3, TrendingUp, Code, Zap, Star } from 'lucide-react';
+import DataPlatformSandbox from '@/components/simulations/DataPlatformSandbox';
 // Import company logos
 import bosmosLogo from '@/assets/logos/bosmos-logo.png';
 import capcoLogo from '@/assets/logos/capco_logo.png';
@@ -1036,6 +1037,11 @@ const experiences = [
                 </Card>
               ))}
             </div>
+          </div>
+
+          {/* Interactive Data Platform Sandbox */}
+          <div className="mb-12">
+            <DataPlatformSandbox />
           </div>
 
           {/* Academic Research & ML Projects */}
