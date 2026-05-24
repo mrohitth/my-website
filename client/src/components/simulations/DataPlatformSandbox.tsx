@@ -70,14 +70,6 @@ interface AnomalyAlert {
   threshold: number;
 }
 
-interface FileCardDef {
-  id: string;
-  label: string;
-  desc: string;
-  emoji: string;
-  tabHint: string;
-}
-
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
@@ -262,66 +254,6 @@ function TabButton({ id, label, icon, active, onClick, color }: TabButtonProps) 
 // VIRTUAL S3 DROPZONE & FILE CARDS
 // ============================================================================
 
-const VIRTUAL_FILES: FileCardDef[] = [
-  { id: "cdc_cd", label: "daily_user_mutations.csv", desc: "Clean PostgreSQL CDC events", emoji: "📄", tabHint: "CDC / SCD Type 2" },
-  { id: "cdc_bf", label: "black_friday_event_flood.json", desc: "Duplicate row volume burst", emoji: "📄", tabHint: "CDC / SCD Type 2" },
-  { id: "batch_bf", label: "black_friday_event_flood.json", desc: "Duplicate row volume burst", emoji: "📄", tabHint: "dbt + Airflow" },
-  { id: "batch_clean", label: "daily_user_mutations.csv", desc: "Clean ELT batch data", emoji: "📄", tabHint: "dbt + Airflow" },
-  { id: "obs_heartbeat", label: "system_heartbeat_3am.log", desc: "Low-volume night traffic", emoji: "📄", tabHint: "Observability" },
-  { id: "obs_normal", label: "system_heartbeat_normal.log", desc: "Typical 24h traffic", emoji: "📄", tabHint: "Observability" },
-  { id: "obs_spike", label: "system_heartbeat_spike.log", desc: "Sudden volume surge", emoji: "📄", tabHint: "Observability" },
-];
-
-function S3DropZone({ activeFileId, onFileSelect }: { activeFileId: string | null; onFileSelect: (id: string) => void }) {
-  const [isDragOver, setIsDragOver] = useState(false);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    const fileId = e.dataTransfer.getData("text/plain");
-    if (fileId) onFileSelect(fileId);
-  }, [onFileSelect]);
-
-  return (
-    <div className="mb-5 rounded-xl border-2 border-dashed bg-slate-900/40 p-4 transition-all duration-200"
-      onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
-      onDragLeave={() => setIsDragOver(false)}
-      onDrop={handleDrop}
-      style={isDragOver ? { borderColor: "#3b82f6", boxShadow: "0 0 16px #3b82f640", backgroundColor: "#3b82f610" } : {}}
-    >
-      <div className="mb-3 flex items-center gap-2">
-        <span className="text-sm font-bold text-slate-200">🪣 aws-s3-ingest-bucket</span>
-        <span className="rounded bg-slate-700/60 px-2 py-0.5 text-xs text-slate-400">drag files or click to ingest</span>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {VIRTUAL_FILES.map((f) => {
-          const isActive = activeFileId === f.id;
-          return (
-            <div
-              key={f.id}
-              draggable
-              onDragStart={(e) => { e.dataTransfer.setData("text/plain", f.id); }}
-              onClick={() => onFileSelect(f.id)}
-              className={cn(
-                "flex cursor-grab items-center gap-2 rounded-lg border px-3 py-2 text-xs transition-all duration-200",
-                isActive
-                  ? "border-green-500/50 bg-green-500/10 text-green-300"
-                  : "border-slate-600/60 bg-slate-800/40 text-slate-300 hover:border-cyan-500/40 hover:bg-cyan-500/5",
-              )}
-            >
-              <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>{f.emoji}</motion.span>
-              <div>
-                <p className="font-mono font-medium leading-tight">{f.label}</p>
-                <p className="text-slate-500 leading-tight">{f.tabHint}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 // ============================================================================
 // TAB 1: CDC PIPELINE SIMULATOR
 // ============================================================================
@@ -334,7 +266,6 @@ function CDCpipelineSimulator() {
   const [flowState, setFlowState] = useState<"idle" | "flowing" | "done">("idle");
   const [injecting, setInjecting] = useState(false);
   const [batchSize] = useState(10000);
-  const [activeFileId, setActiveFileId] = useState<string | null>(null);
 
   const [metricHistory, setMetricHistory] = useState<
     Array<{ batch: number; iops: number; mode: string }>
@@ -353,80 +284,7 @@ function CDCpipelineSimulator() {
 
   const streamIdRef = useRef(0);
 
-  const handleCDCIngest = useCallback((fileId: string) => {
-    setActiveFileId(fileId);
-    // Reset state first
-    setCdcEvaluated(false);
-    setParticles([]);
-    setSourceFlash(false);
-    setFlowState("idle");
-    setInjecting(false);
-    setEventStream([]);
-    setMetrics({ totalBatches: 0, totalIOPS: 2, peakIOPS: 2 });
-    setMetricHistory(() => {
-      const initial = [];
-      for (let i = 0; i < 12; i++) {
-        initial.push({ batch: i, iops: 2, mode: "setbased" });
-      }
-      return initial;
-    });
 
-    if (fileId === "cdc_cd") {
-      // Clean daily_user_mutations.csv → setbased
-      setPipelineMode("setbased");
-      setTimeout(() => {
-        setCdcEvaluated(true);
-        setFlowState("flowing");
-        setInjecting(true);
-
-        const newIops = 2;
-        setMetrics({ totalBatches: 1, totalIOPS: newIops, peakIOPS: newIops });
-        setMetricHistory((prev) => [...prev.slice(-11), { batch: prev.length, iops: newIops, mode: "setbased" }]);
-        setParticles([{ id: Date.now(), delay: 0, type: "bulk" }]);
-
-        setTimeout(() => {
-          setInjecting(false);
-          setParticles([]);
-          setFlowState("done");
-        }, 800);
-      }, 100);
-    } else if (fileId === "cdc_bf") {
-      // Black Friday event flood → procedural (problematic)
-      setPipelineMode("procedural");
-      setTimeout(() => {
-        setCdcEvaluated(true);
-        setFlowState("flowing");
-        setInjecting(true);
-        setSourceFlash(true);
-
-        const newIops = 30000;
-        setMetrics({ totalBatches: 1, totalIOPS: newIops, peakIOPS: newIops });
-        setMetricHistory((prev) => [...prev.slice(-11), { batch: prev.length, iops: newIops, mode: "procedural" }]);
-
-        const rowParticles = Array.from({ length: 10 }, (_, i) => ({
-          id: Date.now() + i,
-          delay: i * 120,
-          type: "row" as const,
-        }));
-        setParticles(rowParticles);
-
-        const newEvents = Array.from({ length: Math.min(batchSize, 50) }, (_, i) => ({
-          id: ++streamIdRef.current,
-          type: (["INSERT", "UPDATE", "DELETE"] as const)[Math.floor(Math.random() * 3)],
-          rows: Math.floor(Math.random() * 100) + 1,
-          ts: Date.now(),
-        }));
-        setEventStream(newEvents);
-
-        setTimeout(() => {
-          setInjecting(false);
-          setParticles([]);
-          setSourceFlash(false);
-          setFlowState("done");
-        }, 1200 + 10 * 120);
-      }, 100);
-    }
-  }, [batchSize]);
 
   const handleInject = useCallback(() => {
     if (!cdcEvaluated) {
@@ -498,8 +356,32 @@ function CDCpipelineSimulator() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* S3 Dropzone */}
-      <S3DropZone activeFileId={activeFileId} onFileSelect={handleCDCIngest} />
+      {/* Architecture Header */}
+      <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-5">
+        <p className="mb-4 text-sm italic text-slate-300 leading-relaxed">
+          Contrasting imperative row-by-row data replication with set-based bulk processing. This simulation demonstrates how switching from procedural loops to bulk CTEs saves live databases from connection exhaustion.
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-red-400">Procedural Loop Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">Query Complexity:</span> 3N queries per batch</p>
+              <p><span className="text-slate-500">Database IOPS:</span> 30,000+ hits (Max Volume)</p>
+              <p><span className="text-slate-500">Est. Compute Time:</span> 42.4s</p>
+              <p><span className="text-red-400 font-semibold">Status: Connection Saturated</span></p>
+            </div>
+          </div>
+          <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-green-400">Bulk CTE Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">Query Complexity:</span> Constant 2 queries total</p>
+              <p><span className="text-slate-500">Database IOPS:</span> Flat 2 hits (O(1) Memory)</p>
+              <p><span className="text-slate-500">Est. Compute Time:</span> 0.18s</p>
+              <p><span className="text-green-400 font-semibold">Status: Ultra-Efficient</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -773,7 +655,6 @@ function BatchAnalyticsSimulator() {
   const [scenario, setScenario] = useState("clean");
   const [batchEvaluated, setBatchEvaluated] = useState(false);
   const [batchRows, setBatchRows] = useState(0);
-  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [dagState, setDagState] = useState<Record<string, BatchRow>>(() =>
     DAG_STAGES.reduce(
       (acc, stage) => ({
@@ -787,154 +668,7 @@ function BatchAnalyticsSimulator() {
     Array<{ type: "success" | "warning" | "error"; message: string; ts: number }>
   >([]);
 
-  const handleBatchIngest = useCallback((fileId: string) => {
-    setActiveFileId(fileId);
 
-    if (fileId === "batch_bf") {
-      setScenario("duplicate_flood");
-      // Execute with duplicate_flood scenario
-      setBatchEvaluated(false);
-      setExecuting(true);
-      setAlertLog([]);
-      setDagState(() =>
-        DAG_STAGES.reduce(
-          (acc, stage) => ({
-            ...acc,
-            [stage.id]: { id: stage.id, stage: stage.label, rows: 0, status: "pending" },
-          }),
-          {} as Record<string, BatchRow>,
-        ),
-      );
-      setBatchRows(0);
-
-      const baseRows = 5000;
-      const corruptedRows = baseRows * 2;
-
-      const stages = [
-        { id: "stg_events", rows: baseRows, duration: 400 },
-        { id: "dim_users", rows: Math.floor(baseRows * 0.7), duration: 500 },
-        { id: "fact_orders", rows: qualityGate === "silent" ? corruptedRows : baseRows, duration: 600 },
-        { id: "dbt_tests", rows: 0, duration: 700 },
-      ];
-
-      let elapsed = 0;
-      stages.forEach((stage, idx) => {
-        setTimeout(() => {
-          setDagState((prev) => ({
-            ...prev,
-            [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "running" },
-          }));
-
-          setTimeout(() => {
-            const isLast = idx === stages.length - 1;
-
-            if (isLast) {
-              if (qualityGate === "strict") {
-                setDagState((prev) => ({
-                  ...prev,
-                  [stage.id]: { ...prev[stage.id], rows: 0, status: "failed" },
-                }));
-                setAlertLog((prev) => [
-                  ...prev,
-                  {
-                    type: "error",
-                    message: `[dbt] ERROR: duplicate_events test failed — found ${corruptedRows - baseRows} extra rows vs. source (${baseRows}). Trigger rule "all_success" aborted pipeline.`,
-                    ts: Date.now(),
-                  },
-                ]);
-                setBatchRows(corruptedRows);
-              } else {
-                setDagState((prev) => ({
-                  ...prev,
-                  [stage.id]: { ...prev[stage.id], rows: corruptedRows, status: "done" },
-                }));
-                setAlertLog((prev) => [
-                  ...prev,
-                  {
-                    type: "warning",
-                    message: `[Silent Swallow] Pipeline completed with ${corruptedRows} rows. ${corruptedRows - baseRows} duplicate rows absorbed silently — downstream metrics will be corrupted.`,
-                    ts: Date.now(),
-                  },
-                ]);
-                setBatchRows(corruptedRows);
-              }
-              setExecuting(false);
-              setBatchEvaluated(true);
-            } else {
-              setDagState((prev) => ({
-                ...prev,
-                [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "done" },
-              }));
-            }
-          }, 300);
-        }, elapsed);
-        elapsed += stage.duration;
-      });
-    } else if (fileId === "batch_clean") {
-      setScenario("clean");
-      // Execute with clean scenario
-      setBatchEvaluated(false);
-      setExecuting(true);
-      setAlertLog([]);
-      setDagState(() =>
-        DAG_STAGES.reduce(
-          (acc, stage) => ({
-            ...acc,
-            [stage.id]: { id: stage.id, stage: stage.label, rows: 0, status: "pending" },
-          }),
-          {} as Record<string, BatchRow>,
-        ),
-      );
-      setBatchRows(0);
-
-      const baseRows = 2000;
-
-      const stages = [
-        { id: "stg_events", rows: baseRows, duration: 400 },
-        { id: "dim_users", rows: Math.floor(baseRows * 0.7), duration: 500 },
-        { id: "fact_orders", rows: baseRows, duration: 600 },
-        { id: "dbt_tests", rows: 0, duration: 700 },
-      ];
-
-      let elapsed = 0;
-      stages.forEach((stage, idx) => {
-        setTimeout(() => {
-          setDagState((prev) => ({
-            ...prev,
-            [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "running" },
-          }));
-
-          setTimeout(() => {
-            const isLast = idx === stages.length - 1;
-
-            if (isLast) {
-              setDagState((prev) => ({
-                ...prev,
-                [stage.id]: { ...prev[stage.id], rows: baseRows, status: "done" },
-              }));
-              setAlertLog((prev) => [
-                ...prev,
-                {
-                  type: "success",
-                  message: `[dbt] All tests passed. Pipeline completed successfully with ${baseRows} validated rows.`,
-                  ts: Date.now(),
-                },
-              ]);
-              setBatchRows(baseRows);
-              setExecuting(false);
-              setBatchEvaluated(true);
-            } else {
-              setDagState((prev) => ({
-                ...prev,
-                [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "done" },
-              }));
-            }
-          }, 300);
-        }, elapsed);
-        elapsed += stage.duration;
-      });
-    }
-  }, [qualityGate]);
 
   const handleExecute = useCallback(() => {
     setBatchEvaluated(false);
@@ -1023,8 +757,30 @@ function BatchAnalyticsSimulator() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* S3 Dropzone */}
-      <S3DropZone activeFileId={activeFileId} onFileSelect={handleBatchIngest} />
+      {/* Architecture Header */}
+      <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-5">
+        <p className="mb-4 text-sm italic text-slate-300 leading-relaxed">
+          Simulating data quality defense mechanics inside an Airflow DAG. This demonstrates how a silent pipeline allows duplicate event floods to corrupt production warehouses versus how an isolated testing gate blocks data pollution.
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-red-400">Silent Swallow Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">Downstream Integrity:</span> CORRUPTED</p>
+              <p><span className="text-slate-500">Data Leakage:</span> 100% of duplicates written</p>
+              <p><span className="text-red-400 font-semibold">Recovery Cost: Manual Warehouse Backfill Required</span></p>
+            </div>
+          </div>
+          <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-green-400">Strict Isolation Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">Downstream Integrity:</span> 100% PROTECTED</p>
+              <p><span className="text-slate-500">Data Leakage:</span> 0% (Circuit Breaker Tripped)</p>
+              <p><span className="text-green-400 font-semibold">Recovery Cost: $0 (Automated Pipeline Freeze)</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -1404,7 +1160,6 @@ function DataObservabilitySimulator() {
   const [obsEvaluated, setObsEvaluated] = useState(false);
   const [alerts, setAlerts] = useState<AnomalyAlert[]>([]);
   const [lastAlertFingerprint, setLastAlertFingerprint] = useState<string | null>(null);
-  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [runCount, setRunCount] = useState(0);
 
   const chartData = useMemo(() => generateBaselineData(anomalyType), [anomalyType]);
@@ -1437,27 +1192,10 @@ function DataObservabilitySimulator() {
     23: { lower: 60, upper: 400 },
   };
 
-  const handleObsIngest = useCallback((fileId: string) => {
-    setActiveFileId(fileId);
-    setObsEvaluated(false);
-    setAlerts([]);
-    setLastAlertFingerprint(null);
 
-    if (fileId === "obs_heartbeat") {
-      setAnomalyType("trough");
-      setTimeout(() => runEvaluate("trough"), 100);
-    } else if (fileId === "obs_normal") {
-      setAnomalyType("normal");
-      setTimeout(() => runEvaluate("normal"), 100);
-    } else if (fileId === "obs_spike") {
-      setAnomalyType("spike");
-      setTimeout(() => runEvaluate("spike"), 100);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const runEvaluate = useCallback((type?: AnomalyType) => {
-    const evalType = type ?? anomalyType;
-    const evalData = generateBaselineData(evalType);
+  const handleEvaluate = useCallback(() => {
+    const evalData = generateBaselineData(anomalyType);
     const newAlerts: AnomalyAlert[] = [];
 
     evalData.forEach((point) => {
@@ -1504,11 +1242,6 @@ function DataObservabilitySimulator() {
     setObsEvaluated(true);
   }, [anomalyType, detectionMode, hourBaselines]);
 
-  const handleEvaluate = useCallback(() => {
-    setObsEvaluated(true);
-    runEvaluate();
-  }, [runEvaluate]);
-
   const alertRate = chartData.filter((d) => {
     if (detectionMode === "static") return d.actual < staticThreshold;
     const bl = hourBaselines[d.h];
@@ -1519,8 +1252,30 @@ function DataObservabilitySimulator() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* S3 Dropzone */}
-      <S3DropZone activeFileId={activeFileId} onFileSelect={handleObsIngest} />
+      {/* Architecture Header */}
+      <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-5">
+        <p className="mb-4 text-sm italic text-slate-300 leading-relaxed">
+          Evaluating statistical intelligence in production monitoring. This demonstrates how rigid static tracking rules create catastrophic on-call alert storms during normal off-peak hours versus an hour-of-day seasonal baseline.
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-red-400">Static Threshold Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">False Positive Rate:</span> 84%</p>
+              <p><span className="text-slate-500">3 AM Evaluation:</span> Critical False Alarm</p>
+              <p><span className="text-red-400 font-semibold">Operational Cost: Severe On-Call Engineer Burnout</span></p>
+            </div>
+          </div>
+          <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-green-400">Seasonal Baseline Stats</p>
+            <div className="space-y-1 font-mono text-xs text-slate-300">
+              <p><span className="text-slate-500">False Positive Rate:</span> &lt;1%</p>
+              <p><span className="text-slate-500">3 AM Evaluation:</span> Evaluated Safe Against Historical Bucket</p>
+              <p><span className="text-green-400 font-semibold">Operational Cost: 0% Noise (Self-Healing Operational Plane)</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
