@@ -6,8 +6,9 @@ export default function MLNetworkBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const _ctx = canvas.getContext('2d');
+    if (!_ctx) return;
+    const ctx = _ctx as CanvasRenderingContext2D;
 
     let width = canvas.parentElement?.offsetWidth || window.innerWidth;
     let height = canvas.parentElement?.offsetHeight || window.innerHeight;
