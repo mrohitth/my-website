@@ -24,7 +24,16 @@ export type ProjectCategory =
   | "Computer Vision"
   | "Data Engineering";
 
+export type ProjectTag =
+  | "streaming"
+  | "batch"
+  | "lakehouse"
+  | "ml"
+  | "observability"
+  | "infrastructure";
+
 export interface Project {
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -34,10 +43,12 @@ export interface Project {
   featured: boolean;
   category?: ProjectCategory;
   highlight?: string;
+  tags?: ProjectTag[];
 }
 
-export const FEATURED_PROJECTS: Project[] = [
+export const PROJECTS: Project[] = [
   {
+    id: "cdc-historical-warehouse",
     title: "CDC & Historical Warehouse Platform",
     description:
       "Engineered a metadata-driven CDC pipeline extracting PostgreSQL changes into append-only JSON logs with deterministic replay. Implemented SCD Type-2 versioning and idempotent batch execution to maintain complete historical lineage and auditability for analytics and ML feature generation.",
@@ -53,8 +64,12 @@ export const FEATURED_PROJECTS: Project[] = [
     ],
     github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
     featured: true,
+    category: "Data Engineering",
+    highlight: "Processed 40M+ records per batch with SCD Type-2 versioning across 22+ years of history",
+    tags: ["batch", "infrastructure"],
   },
   {
+    id: "data-observability",
     title: "Data Observability Platform",
     description:
       "Designed a statistical data observability framework using rolling-window baselining and Z-score anomaly detection to identify freshness gaps, schema drift, and volume anomalies. Automated threshold learning to prevent silent data failures in distributed batch pipelines.",
@@ -70,8 +85,12 @@ export const FEATURED_PROJECTS: Project[] = [
     ],
     github: "https://github.com/mrohitth/data-observability-platform",
     featured: true,
+    category: "Data Engineering",
+    highlight: "Reduced silent data failures by detecting freshness gaps, schema drift, and volume anomalies",
+    tags: ["observability", "batch"],
   },
   {
+    id: "batch-analytics",
     title: "Batch Analytics Platform",
     description:
       "Built a containerized ELT platform orchestrated with Airflow and dbt to process large-scale event data. Implemented idempotent transformations, partition-aware modeling, and automated quality validation to simulate production-grade analytics workloads.",
@@ -87,11 +106,12 @@ export const FEATURED_PROJECTS: Project[] = [
     ],
     github: "https://github.com/mrohitth/batch-analytics-platform",
     featured: true,
+    category: "Data Engineering",
+    highlight: "Simulated production-grade analytics workloads with idempotent transformations and automated quality validation",
+    tags: ["batch", "lakehouse"],
   },
-];
-
-export const RESEARCH_PROJECTS: Project[] = [
   {
+    id: "brain-tumor-ml",
     title: "Brain Tumor Classification Using Machine Learning",
     description:
       "Classified brain MRI scans into 4 tumor types using hand-engineered features (GLCM, HOG, PCA) with 96% accuracy. Benchmarked against deep learning models (ResNet50, DenseNet169), outperforming ResNet50 with classical ML approaches.",
@@ -110,8 +130,11 @@ export const RESEARCH_PROJECTS: Project[] = [
       "https://github.com/mrohitth/Brain-Tumor-Classification-Using-Machine-Learning",
     featured: false,
     category: "Machine Learning",
+    highlight: "96% accuracy on 4-class brain tumor classification, outperforming ResNet50 with classical ML",
+    tags: ["ml"],
   },
   {
+    id: "mars-semantic-segmentation",
     title: "Mars Terrain Semantic Segmentation",
     description:
       "Developed U-Net architecture for pixel-level classification of Mars rover imagery from AI4Mars dataset. Integrated depth data from planetary data systems to improve terrain segmentation accuracy for autonomous navigation.",
@@ -129,8 +152,11 @@ export const RESEARCH_PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Semantic-Segmentation-using-U-Net",
     featured: false,
     category: "Deep Learning",
+    highlight: "Pixel-level terrain classification for autonomous Mars rover navigation",
+    tags: ["ml"],
   },
   {
+    id: "neural-networks-visual-recognition",
     title: "Neural Networks for Visual Recognition",
     description:
       "Built classification models from scratch using pure Python and PyTorch for flowers, digits, and alphabets. Implemented feedforward networks, CNNs, and autoencoders with backpropagation for dimensionality reduction and feature learning.",
@@ -149,8 +175,11 @@ export const RESEARCH_PROJECTS: Project[] = [
       "https://github.com/mrohitth/Neural-Networks-for-Recognition",
     featured: false,
     category: "Deep Learning",
+    highlight: "Built feedforward networks, CNNs, and autoencoders from scratch in pure Python",
+    tags: ["ml"],
   },
   {
+    id: "ar-planar-homographies",
     title: "Augmented Reality with Planar Homographies",
     description:
       "Implemented real-time video overlay on book covers using homography estimation and feature detection. Built AR pipeline with automatic corner detection, perspective transformation, and seamless video blending for moving camera scenarios.",
@@ -168,8 +197,11 @@ export const RESEARCH_PROJECTS: Project[] = [
       "https://github.com/mrohitth/Augmented-Reality-with-Planar-Homographies",
     featured: false,
     category: "Computer Vision",
+    highlight: "Real-time AR video overlay with automatic corner detection and perspective transformation",
+    tags: ["ml"],
   },
   {
+    id: "3d-reconstruction",
     title: "3D Reconstruction from Images",
     description:
       "Developed structure-from-motion pipeline using 7-point and 8-point algorithms for epipolar geometry. Implemented RANSAC for outlier rejection and bundle adjustment for multi-view 3D point cloud optimization.",
@@ -186,8 +218,11 @@ export const RESEARCH_PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/3D-Reconstruction",
     featured: false,
     category: "Computer Vision",
+    highlight: "Multi-view 3D point cloud optimization using 7-point/8-point algorithms and bundle adjustment",
+    tags: ["ml"],
   },
   {
+    id: "lucas-kanade-tracking",
     title: "Lucas-Kanade Object Tracking",
     description:
       "Built optical flow-based tracking system using Lucas-Kanade algorithm with iterative refinement. Implemented template warping and appearance adaptation to handle illumination changes and object deformation across video frames.",
@@ -204,8 +239,11 @@ export const RESEARCH_PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Lucas-Kanade-Tracking",
     featured: false,
     category: "Computer Vision",
+    highlight: "Optical flow tracking with iterative Lucas-Kanade refinement and template warping",
+    tags: ["ml"],
   },
   {
+    id: "photometric-stereo",
     title: "Photometric Stereo for 3D Surface Reconstruction",
     description:
       "Reconstructed 3D surface topography from multiple images captured under varying lighting conditions. Used photometric stereo to estimate surface normals and recover depth maps from intensity gradients.",
@@ -222,8 +260,11 @@ export const RESEARCH_PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/Photometric-Stereo",
     featured: false,
     category: "Computer Vision",
+    highlight: "3D surface topography from varying lighting using photometric stereo and intensity gradients",
+    tags: ["ml"],
   },
   {
+    id: "spatial-pyramid-scene",
     title: "Spatial Pyramid Matching for Scene Classification",
     description:
       "Implemented classical scene recognition using Bag-of-Visual-Words with spatial pyramid pooling. Applied TF-IDF weighting and KNN classification to achieve hierarchical image representation for 8-category scene classification.",
@@ -242,48 +283,56 @@ export const RESEARCH_PROJECTS: Project[] = [
       "https://github.com/mrohitth/Spatial-Pyramid-Matching-for-Scene-Classification",
     featured: false,
     category: "Computer Vision",
+    highlight: "8-category hierarchical scene classification using BoVW with spatial pyramid pooling",
+    tags: ["ml"],
   },
 ];
-
-// All projects combined (featured first)
-export const PROJECTS: Project[] = [...FEATURED_PROJECTS, ...RESEARCH_PROJECTS];
 
 // ============================================================================
 // EXPERIENCE TYPES & DATA
 // ============================================================================
 
 export interface Experience {
+  id: string;
   title: string;
   company: string;
   period: string;
+  location?: string;
   description: string;
   logos: string[]; // import() URLs — resolved at render site
+  highlights?: string[];
 }
 
 export const EXPERIENCES: Experience[] = [
   {
+    id: "capco-data-engineer",
     title: "Data Engineer",
     company: "Capco (Client: Freddie Mac)",
     period: "Apr 2024 - Present",
     description:
       "Architecting distributed ETL pipelines on AWS EMR (EC2/EKS) and Snowflake processing 40M+ records per batch. Reduced Spark/SQL runtimes by 75% through partitioning and shuffle optimization. Engineered SCD Type-2 historical models spanning 22+ years to support analytics and ML-driven reporting workloads.",
     logos: [], // assigned at render site: [freddieMacLogo]
+    highlights: ["40M+ records per batch", "75% runtime reduction", "22+ years history modeled"],
   },
   {
+    id: "bosmos-lead-ai",
     title: "Lead AI Developer",
     company: "Bosmos",
     period: "Sep 2023 - Mar 2024",
     description:
       "Led a 5-engineer team to design and deploy a production-grade NLP platform using TensorFlow. Built scalable inference services and optimized model serving pipelines to achieve low-latency real-time prediction at scale.",
     logos: [], // assigned at render site: [bosmosLogo]
+    highlights: ["5-engineer team led", "Production-grade NLP platform", "Low-latency real-time prediction"],
   },
   {
+    id: "drc-research-assistant",
     title: "Research Assistant",
     company: "Design Research Collective",
     period: "Dec 2021 - May 2023",
     description:
       "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation.",
     logos: [], // assigned at render site: [drcLogo]
+    highlights: ["4.0 GPA", "Deep learning research", "High-dimensional data analysis"],
   },
 ];
 
@@ -293,7 +342,7 @@ export const EXPERIENCES: Experience[] = [
 
 export interface PipelineTool {
   name: string;
-  icon?: string; // icon component name — resolved at render site via Si* imports
+  icon?: string;
   level: "Advanced" | "Intermediate" | string;
   usage: string;
   color: string;
@@ -486,6 +535,10 @@ export const PIPELINE_STAGES: PipelineStage[] = [
   },
 ];
 
+// ============================================================================
+// LEVEL HELPERS
+// ============================================================================
+
 export function getLevelColor(level: string): string {
   switch (level) {
     case "Advanced":
@@ -497,15 +550,13 @@ export function getLevelColor(level: string): string {
   }
 }
 
-export function getLevelIcon(
-  level: string
-): React.ReactNode /* LucideIcon-like */ {
+export function getLevelIcon(level: string): string {
   switch (level) {
     case "Advanced":
       return "★";
     case "Intermediate":
       return "◆";
     default:
-      return null;
+      return "";
   }
 }
