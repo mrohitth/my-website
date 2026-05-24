@@ -115,14 +115,7 @@ export function ProjectsSection() {
             )}
             {activeTab === "cv" && (
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container">
-                {cvProjects.length === 0 ? (
-                  <p className="text-portfolio-muted-foreground text-sm">No Computer Vision projects found.</p>
-                ) : (
-                  cvProjects.map((project) => {
-                    const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                    return <ProjectCard key={project.title} project={project} index={0} slug={slug} />;
-                  })
-                )}
+                <div className="bg-red-500 text-white px-4 py-2 rounded">CV TAB WORKING - {cvProjects.length} projects</div>
               </div>
             )}
           </div>
