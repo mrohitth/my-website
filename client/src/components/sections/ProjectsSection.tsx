@@ -157,10 +157,8 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
         src={project.image}
         alt={project.title}
         className="w-full h-48 object-cover"
-        loading="lazy"
         onError={(e) => {
           const target = e.currentTarget as HTMLImageElement;
-          console.warn(`Image error for ${slug}: ${project.image}`);
           if (!target.dataset.fallbackUsed) {
             target.dataset.fallbackUsed = "true";
             target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400";
@@ -188,17 +186,11 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
         </div>
 
         {/* Description */}
-        {isFeatured ? (
-          <p className="text-portfolio-muted-foreground text-sm mb-3" data-testid={`project-description-${slug}`}>
-            {project.description}
-          </p>
-        ) : (
-          <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-60 mb-3">
+        <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-60 mb-3">
             <p className="text-portfolio-muted-foreground text-sm" data-testid={`project-description-${slug}`}>
               {project.description}
             </p>
           </div>
-        )}
 
         {/* Expandable Architecture section */}
         {project.architecture && (
