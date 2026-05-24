@@ -125,7 +125,7 @@ export function HeroSection() {
             <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
               <img
                 src={heroProfilePic}
-                alt="Rohit Mathew Thomson, Senior Data Engineer specializing in real-time streaming pipelines and data lakehouse architecture"
+                alt="Mathew Rohit Thomson, Senior Data Engineer specializing in real-time streaming pipelines and data lakehouse architecture"
                 width={2750}
                 height={2580}
                 className="w-full h-full object-cover"

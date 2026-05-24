@@ -45,7 +45,7 @@ export function AboutSection() {
           {/* Profile Picture */}
           <div className="fade-in md:col-span-1">
             <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl" data-testid="profile-picture">
-              <img src={profilePic} alt="Rohit Mathew Thomson, Senior Data Engineer" className="w-full h-full object-cover rounded-2xl" />
+              <img src={profilePic} alt="Mathew Rohit Thomson, Senior Data Engineer" className="w-full h-full object-cover rounded-2xl" />
             </div>
           </div>
 

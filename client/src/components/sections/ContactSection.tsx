@@ -139,7 +139,7 @@ export function ContactSection() {
                 className="sr-only"
               >
                 {formStatus === "submitting" && "Sending your message..."}
-                {formStatus === "success" && "Message sent successfully! Rohit will respond soon."}
+                {formStatus === "success" && "Message sent successfully! Mathew will respond soon."}
                 {formStatus === "error" && "Failed to send message. Please try again or contact via email."}
               </div>
               <div>
