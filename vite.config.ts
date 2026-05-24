@@ -27,9 +27,7 @@ export default defineConfig({
             if (id.includes("gsap")) return "vendor-gsap";
             if (id.includes("recharts")) return "vendor-charts";
             if (id.includes("@radix-ui")) return "vendor-radix";
-            if (id.includes("d3") || id.includes("victory") || id.includes("chart.js") || id.includes("chartjs")) return "vendor-charts";
           }
-          // Sandbox is lazy — split to its own chunk
           if (id.includes("DataPlatformSandbox") || id.includes("sandbox") && id.includes("simulations")) {
             return "vendor-sandbox";
           }
