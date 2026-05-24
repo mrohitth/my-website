@@ -880,10 +880,11 @@ function DataObservabilitySimulator() {
       }
 
       if (isAnomaly) {
-        const alert = {
+        const alertSeverity: "critical" | "warn" = point.actual < threshold * 0.5 ? "critical" : "warn";
+        const alert: AnomalyAlert = {
           id: `alert-${point.h}-${Date.now()}`,
           timestamp: Date.now(),
-          severity: point.actual < threshold * 0.5 ? "critical" : "warn" as const,
+          severity: alertSeverity,
           message,
           metric: "data_volume",
           value: point.actual,
