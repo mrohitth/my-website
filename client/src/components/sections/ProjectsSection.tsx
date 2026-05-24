@@ -63,7 +63,7 @@ export function ProjectsSection() {
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} slug={`featured-${index}`} />
+              <ProjectCard key={project.title} project={project} index={index} slug={`featured-${index}`} />
             ))}
           </div>
         </div>
@@ -108,7 +108,7 @@ export function ProjectsSection() {
                 ) : (
                   mlProjects.map((project) => {
                     const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                    return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
+                    return <ProjectCard key={project.title} project={project} index={0} slug={slug} />;
                   })
                 )}
               </div>
@@ -120,7 +120,7 @@ export function ProjectsSection() {
                 ) : (
                   cvProjects.map((project) => {
                     const slug = project.title.toLowerCase().replace(/\s+/g, "-");
-                    return <ProjectCard key={project.id} project={project} index={0} slug={slug} />;
+                    return <ProjectCard key={project.title} project={project} index={0} slug={slug} />;
                   })
                 )}
               </div>
