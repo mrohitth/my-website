@@ -1,14 +1,12 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
 
 interface NavItem {
-  id: string;
-  label: string;
+  id: string
+  label: string
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -18,28 +16,28 @@ const NAV_ITEMS: NavItem[] = [
   { id: "projects", label: "Projects" },
   { id: "philosophy", label: "Philosophy" },
   { id: "contact", label: "Contact" },
-];
+]
 
-function scrollToSection(sectionId: string) {
-  const el = document.getElementById(sectionId);
-  if (!el) return;
-  const offset = 72;
-  const top = el.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: "smooth" });
+function scrollToSection(_sectionId: string) {
+  const el = document.getElementById(_sectionId)
+  if (!el) return
+  const offset = 72
+  const top = el.getBoundingClientRect().top + window.scrollY - offset
+  window.scrollTo({ top, behavior: "smooth" })
 }
 
 function NavLink({
-  id,
+  _id,
   label,
   isActive,
   onClick,
 }: {
-  id: string;
-  label: string;
-  isActive: boolean;
-  onClick: () => void;
+  _id: string
+  label: string
+  isActive: boolean
+  onClick: () => void
 }) {
-  const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState(false)
 
   return (
     <button
@@ -69,52 +67,52 @@ function NavLink({
         />
       )}
     </button>
-  );
+  )
 }
 
 export function NavigationBar() {
-  const [activeSection, setActiveSection] = useState("hero");
-  const [isVisible, setIsVisible] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero")
+  const [isVisible, setIsVisible] = useState(true)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   // Show/hide navbar based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const threshold = window.innerHeight * 0.05;
-      setIsVisible(scrollY <= threshold);
-      setIsScrolled(scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      const scrollY = window.scrollY
+      const threshold = window.innerHeight * 0.05
+      setIsVisible(scrollY <= threshold)
+      setIsScrolled(scrollY > 20)
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   // IntersectionObserver for active section tracking
   useEffect(() => {
-    const sectionIds = NAV_ITEMS.map((n) => n.id);
+    const sectionIds = NAV_ITEMS.map((n) => n.id)
 
-    const observers: IntersectionObserver[] = [];
+    const observers: IntersectionObserver[] = []
 
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    sectionIds.forEach((sectionId) => {
+      const el = document.getElementById(sectionId)
+      if (!el) return
 
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setActiveSection(id);
+            setActiveSection(sectionId)
           }
         },
         { threshold: 0.3, rootMargin: "-72px 0px 0px 0px" }
-      );
+      )
 
-      observer.observe(el);
-      observers.push(observer);
-    });
+      observer.observe(el)
+      observers.push(observer)
+    })
 
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
+    return () => observers.forEach((o) => o.disconnect())
+  }, [])
 
   return (
     <>
@@ -144,7 +142,7 @@ export function NavigationBar() {
               {NAV_ITEMS.map((item) => (
                 <NavLink
                   key={item.id}
-                  id={item.id}
+                  _id={item.id}
                   label={item.label}
                   isActive={activeSection === item.id}
                   onClick={() => scrollToSection(item.id)}
@@ -187,8 +185,8 @@ export function NavigationBar() {
                       <button
                         key={item.id}
                         onClick={() => {
-                          scrollToSection(item.id);
-                          setIsMobileOpen(false);
+                          scrollToSection(item.id)
+                          setIsMobileOpen(false)
                         }}
                         className={`text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
                           activeSection === item.id
@@ -220,5 +218,5 @@ export function NavigationBar() {
 
       {/* Scroll-to-top floating button handled in ContactSection */}
     </>
-  );
+  )
 }

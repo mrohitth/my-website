@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { ROLES } from "@/data/portfolio";
@@ -32,7 +32,7 @@ export function HeroSection() {
     }
 
     const currentRole = ROLES[currentRoleIndex];
-    let typingSpeed = isDeleting ? 50 : 100;
+    const typingSpeed = isDeleting ? 50 : 100;
     let timeout: NodeJS.Timeout;
 
     if (!isDeleting && displayedText.length < currentRole.length) {

@@ -14,12 +14,11 @@ import { CONTACT } from "@/data/contact";
 export function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollTopBtn, setShowScrollTopBtn] = useState(false);
 
   // Scroll-to-top visibility
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+    const handleScroll = () => setShowScrollTopBtn(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -51,7 +50,7 @@ export function ContactSection() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function scrollToSection(sectionId: string) {
+  function _scrollToSection(sectionId: string) {
     const el = document.getElementById(sectionId);
     if (!el) return;
     window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });

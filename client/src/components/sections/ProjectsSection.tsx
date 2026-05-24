@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+
 import { Card } from "@/components/ui/card";
 import { Github, ChevronDown, ChevronUp, Scale, Layers } from "lucide-react";
 import { PROJECTS } from "@/data/portfolio";

@@ -40,7 +40,21 @@ var vite_config_default = defineConfig({
   base: "/my-website/",
   build: {
     outDir: path.resolve(import.meta.dirname, "client", "dist-frontend"),
-    emptyOutDir: true
+    emptyOutDir: true,
+    target: "es2020",
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react")) return "vendor-react";
+            if (id.includes("framer-motion")) return "vendor-framer";
+            if (id.includes("gsap")) return "vendor-gsap";
+            if (id.includes("@radix-ui")) return "vendor-radix";
+          }
+        }
+      }
+    }
   },
   server: {
     host: "0.0.0.0",

@@ -3,7 +3,6 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -12,11 +11,8 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  LineChart,
-  Line,
-  ReferenceLine,
-  Cell,
   ComposedChart,
+  ReferenceLine,
 } from "recharts";
 import { cn } from "@/lib/utils";
 import {
@@ -28,12 +24,10 @@ import {
   XCircle,
   ChevronRight,
   Layers,
-  ArrowDown,
   ArrowRight,
   Box,
   GitBranch,
   FlaskConical,
-  Clock,
   ShieldAlert,
   TrendingDown,
   TrendingUp,
@@ -41,7 +35,6 @@ import {
   Webhook,
   Eye,
   EyeOff,
-  Cloud,
 } from "lucide-react";
 
 // ============================================================================
@@ -106,12 +99,6 @@ const CHART_COLORS = {
   muted: "#64748b",
   grid: "#1e293b",
   bg: "#0f172a",
-};
-
-const METRIC_COLORS = {
-  iops: ["#3b82f6", "#60a5fa"],
-  cteloop: ["#ef4444", "#f87171"],
-  setbased: ["#22c55e", "#4ade80"],
 };
 
 // ============================================================================
@@ -263,7 +250,7 @@ function CDCpipelineSimulator() {
   const [cdcEvaluated, setCdcEvaluated] = useState(false);
   const [particles, setParticles] = useState<Array<{ id: number; delay: number; type: "row" | "bulk" }>>([]);
   const [sourceFlash, setSourceFlash] = useState(false);
-  const [flowState, setFlowState] = useState<"idle" | "flowing" | "done">("idle");
+  const [_flowState, setFlowState] = useState<"idle" | "flowing" | "done">("idle");
   const [injecting, setInjecting] = useState(false);
   const [batchSize] = useState(10000);
 
@@ -294,7 +281,7 @@ function CDCpipelineSimulator() {
     }
     setInjecting(true);
 
-    const newEvents = Array.from({ length: Math.min(batchSize, 50) }, (_, i) => ({
+    const newEvents = Array.from({ length: Math.min(batchSize, 50) }, (_, _i) => ({
       id: ++streamIdRef.current,
       type: (["INSERT", "UPDATE", "DELETE"] as const)[Math.floor(Math.random() * 3)],
       rows: Math.floor(Math.random() * 100) + 1,
@@ -1306,7 +1293,7 @@ function DataObservabilitySimulator() {
   const chartData = useMemo(() => generateBaselineData(anomalyType), [anomalyType]);
 
   const staticThreshold = 3000;
-  const hourBaselines: Record<number, { lower: number; upper: number }> = {
+  const hourBaselines = useMemo<Record<number, { lower: number; upper: number }>>(() => ({
     0: { lower: 50, upper: 400 },
     1: { lower: 50, upper: 350 },
     2: { lower: 50, upper: 300 },
@@ -1331,7 +1318,7 @@ function DataObservabilitySimulator() {
     21: { lower: 100, upper: 500 },
     22: { lower: 80, upper: 450 },
     23: { lower: 60, upper: 400 },
-  };
+  }), []);
 
 
 

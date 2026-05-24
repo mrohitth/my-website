@@ -82,7 +82,7 @@ const ScrollFloat: React.FC<ScrollFloatProps> = ({
         }
       }
     );
-  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
+  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger, reducedMotion]);
 
   return (
   <span ref={containerRef} className={`scroll-float ${containerClassName}`}>
