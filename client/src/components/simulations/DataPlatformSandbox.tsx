@@ -257,6 +257,8 @@ function CDCpipelineSimulator() {
   const [pipelineMode, setPipelineMode] = useState<PipelineMode>("setbased");
   const [injecting, setInjecting] = useState(false);
   const [batchSize] = useState(10000);
+  const [particles, setParticles] = useState<Array<{ id: number; delay: number }>>([]);
+  const [injectFlash, setInjectFlash] = useState(false);
 
   const [metricHistory, setMetricHistory] = useState<
     Array<{ batch: number; iops: number; mode: string }>
@@ -301,6 +303,29 @@ function CDCpipelineSimulator() {
     });
 
     setTimeout(() => setInjecting(false), 600);
+
+    // Trigger CDC pipeline flow animation
+    setInjectFlash(pipelineMode === "procedural");
+
+    if (pipelineMode === "procedural") {
+      // Spawn 10 individual row particles (one-by-one)
+      const rowParticles = Array.from({ length: 10 }, (_, i) => ({
+        id: Date.now() + i,
+        delay: i * 120,
+      }));
+      setParticles(rowParticles);
+      setTimeout(() => {
+        setParticles([]);
+        setInjectFlash(false);
+      }, 1200 + 10 * 120);
+    } else {
+      // Spawn single bulk payload particle
+      const bulkParticles = [{ id: Date.now(), delay: 0 }];
+      setParticles(bulkParticles);
+      setTimeout(() => {
+        setParticles([]);
+      }, 800);
+    }
   }, [pipelineMode, batchSize]);
 
   const chartData = useMemo(
@@ -364,6 +389,83 @@ function CDCpipelineSimulator() {
         )}
         {injecting ? "Injecting..." : "Inject Change Event Batch"}
       </motion.button>
+
+      {/* Live Pipeline Flow Visualizer */}
+      <div className="mb-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+        {/* Source DB Node */}
+        <div
+          className={cn(
+            "flex flex-col items-center gap-1 rounded-xl border-2 px-5 py-3 transition-all duration-300 min-w-[100px]",
+            injectFlash && pipelineMode === "procedural"
+              ? "border-red-500 bg-red-500/20 shadow-lg shadow-red-500/40 animate-pulse"
+              : pipelineMode === "setbased"
+                ? "border-green-500/60 bg-green-500/10"
+                : "border-slate-600 bg-slate-800/40",
+          )}
+        >
+          <Database className={cn("h-5 w-5", pipelineMode === "procedural" && injectFlash ? "text-red-400" : "text-slate-400")} />
+          <span className="text-xs font-medium text-slate-300">Source DB</span>
+          {injectFlash && pipelineMode === "procedural" && (
+            <span className="text-xs text-red-400 animate-pulse font-semibold">Saturated!</span>
+          )}
+          {pipelineMode === "setbased" && (
+            <span className="text-xs text-green-400">Bulk Ready</span>
+          )}
+        </div>
+
+        {/* Connector Path */}
+        <div className="relative flex items-center gap-2">
+          <div
+            className={cn(
+              "h-0.5 w-16 sm:w-24 rounded transition-colors duration-300",
+              injectFlash && pipelineMode === "procedural" ? "bg-red-500" : "bg-slate-600",
+            )}
+          />
+          <div className="flex gap-1">
+            {particles.map((p) =>
+              pipelineMode === "setbased" ? (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, x: -20, scale: 0.5 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ delay: p.delay / 1000 }}
+                  className="h-4 w-8 rounded bg-green-400 shadow-lg shadow-green-400/50"
+                />
+              ) : (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: [0, 1, 1, 0], x: [0, 40, 60, 80] }}
+                  transition={{ delay: p.delay / 1000, duration: 0.5, ease: "easeOut" }}
+                  className="h-2 w-2 rounded-full bg-red-400 shadow-md shadow-red-400/50"
+                />
+              ),
+            )}
+          </div>
+          <ArrowRight className={cn("h-4 w-4 transition-colors duration-300", injectFlash && pipelineMode === "procedural" ? "text-red-400" : "text-slate-500")} />
+        </div>
+
+        {/* Data Warehouse Staging Node */}
+        <div
+          className={cn(
+            "flex flex-col items-center gap-1 rounded-xl border-2 px-5 py-3 transition-all duration-300 min-w-[100px]",
+            pipelineMode === "setbased"
+              ? "border-green-500/60 bg-green-500/10"
+              : injectFlash && pipelineMode === "procedural"
+                ? "border-red-500/40 bg-red-500/5"
+                : "border-slate-600 bg-slate-800/40",
+          )}
+        >
+          <Layers className={cn("h-5 w-5", pipelineMode === "setbased" ? "text-green-400" : "text-slate-400")} />
+          <span className="text-xs font-medium text-slate-300">Warehouse Staging</span>
+          {pipelineMode === "setbased" && (
+            <span className="text-xs text-green-400">Bulk Payload</span>
+          )}
+          {pipelineMode === "procedural" && (
+            <span className="text-xs text-slate-500">N× Query</span>
+          )}
+        </div>
+      </div>
 
       {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -659,6 +761,142 @@ function BatchAnalyticsSimulator() {
         )}
         {executing ? "Executing Batch..." : "Execute Batch Run"}
       </motion.button>
+
+      {/* ── Traffic Light DAG Flow Visualizer ─────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-0 rounded-xl border border-slate-700/40 bg-slate-900/50 px-4 py-3">
+        {/* stg_events */}
+        <div className="flex flex-col items-center gap-1">
+          <motion.div
+            animate={
+              executing && scenario === "clean"
+                ? { borderColor: ["#22c55e"], boxShadow: ["0 0 12px #22c55e"] }
+                : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                  ? { borderColor: ["#ef4444", "#7f1d1d", "#ef4444"], boxShadow: ["0 0 12px #ef4444"] }
+                  : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+            }
+            transition={{ duration: 0.3, repeat: executing && scenario !== "clean" ? Infinity : 0 }}
+            className={cn(
+              "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
+              !executing ? "border-slate-600 bg-slate-800/30" :
+              scenario === "clean" ? "border-green-500/70 bg-green-500/10" :
+              "border-red-500/70 bg-red-500/10"
+            )}
+          >
+            <Box className={cn("h-5 w-5", !executing ? "text-slate-400" : scenario === "clean" ? "text-green-400" : "text-red-400")} />
+          </motion.div>
+          <span className="text-[10px] font-semibold text-slate-300">stg_events</span>
+          <span className="text-[9px] text-slate-500">Raw</span>
+        </div>
+
+        {/* Arrow 1 */}
+        <div className="relative mx-1 flex items-center justify-center sm:mx-2">
+          <motion.div
+            animate={
+              executing && scenario === "clean" ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] } :
+              executing && scenario === "duplicate_flood" && qualityGate === "silent" ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] } :
+              { scaleX: 0, backgroundColor: ["#64748b"] }
+            }
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="h-0.5 w-6 sm:w-10 rounded-full origin-left"
+          />
+          <motion.div
+            animate={
+              executing && qualityGate === "strict" && scenario === "duplicate_flood"
+                ? { opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] }
+                : { opacity: 0 }
+            }
+            transition={{ duration: 0.3, repeat: Infinity }}
+            className="absolute -top-3 rounded bg-red-500/90 px-1.5 py-0.5 text-[8px] font-bold text-white"
+          >
+            BLOCKED
+          </motion.div>
+        </div>
+
+        {/* dim_users */}
+        <div className="flex flex-col items-center gap-1">
+          <motion.div
+            animate={
+              executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
+                : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                  ? { borderColor: ["#ef4444"], boxShadow: ["0 0 12px #ef4444"] }
+                  : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+            }
+            transition={{ duration: 0.3 }}
+            className={cn(
+              "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
+              !executing ? "border-slate-600 bg-slate-800/30" :
+              scenario === "duplicate_flood" && qualityGate === "strict" ? "border-yellow-500/70 bg-yellow-500/10" :
+              scenario === "duplicate_flood" ? "border-red-500/70 bg-red-500/10" :
+              "border-slate-600 bg-slate-800/30"
+            )}
+          >
+            <Layers className={cn("h-5 w-5", !executing ? "text-slate-400" : scenario === "duplicate_flood" && qualityGate === "strict" ? "text-yellow-400" : "text-slate-400")} />
+          </motion.div>
+          <span className="text-[10px] font-semibold text-slate-300">dim_users</span>
+          <span className="text-[9px] text-slate-500">Transform</span>
+        </div>
+
+        {/* Arrow 2 */}
+        <div className="relative mx-1 flex items-center justify-center sm:mx-2">
+          <motion.div
+            animate={
+              executing && scenario === "clean" ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] } :
+              executing && scenario === "duplicate_flood" && qualityGate === "silent" ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] } :
+              { scaleX: 0, backgroundColor: ["#64748b"] }
+            }
+            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+            className="h-0.5 w-6 sm:w-10 rounded-full origin-left"
+          />
+        </div>
+
+        {/* fact_orders */}
+        <div className="flex flex-col items-center gap-1">
+          <motion.div
+            animate={
+              executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                ? { borderColor: ["#ef4444", "#7f1d1d"], boxShadow: ["0 0 16px #ef4444"] }
+                : executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                  ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
+                  : executing && scenario === "clean"
+                    ? { borderColor: ["#22c55e"], boxShadow: ["0 0 12px #22c55e"] }
+                    : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+            }
+            transition={{ duration: 0.3, repeat: executing && scenario === "duplicate_flood" && qualityGate === "silent" ? Infinity : 0 }}
+            className={cn(
+              "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
+              !executing ? "border-slate-600 bg-slate-800/30" :
+              scenario === "duplicate_flood" && qualityGate === "silent" ? "border-red-500/70 bg-red-500/10" :
+              scenario === "duplicate_flood" && qualityGate === "strict" ? "border-yellow-500/70 bg-yellow-500/10" :
+              "border-green-500/70 bg-green-500/10"
+            )}
+          >
+            {executing && scenario === "duplicate_flood" && qualityGate === "silent" ? (
+              <XCircle className="h-5 w-5 text-red-400" />
+            ) : executing && scenario === "duplicate_flood" && qualityGate === "strict" ? (
+              <XCircle className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <GitBranch className={cn("h-5 w-5", !executing ? "text-slate-400" : "text-green-400")} />
+            )}
+          </motion.div>
+          <span className="text-[10px] font-semibold text-slate-300">fact_orders</span>
+          <span className={cn("text-[9px]", executing && scenario === "duplicate_flood" && qualityGate === "silent" ? "text-red-400 font-bold" : "text-slate-500")}>
+            {executing && scenario === "duplicate_flood" && qualityGate === "silent" ? "CORRUPTED" : "Aggregated"}
+          </span>
+        </div>
+
+        {/* Alert badge for Strict + Duplicate */}
+        {executing && scenario === "duplicate_flood" && qualityGate === "strict" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="ml-3 flex items-center gap-1.5 rounded-lg border border-yellow-500/40 bg-yellow-500/10 px-3 py-1.5"
+          >
+            <FlaskConical className="h-3.5 w-3.5 text-yellow-400" />
+            <span className="text-[9px] font-bold text-yellow-400">dbt_test: Unique Constraint Failed</span>
+          </motion.div>
+        )}
+      </div>
 
       {/* Row Counter */}
       <div className="grid grid-cols-1 gap-3">
@@ -966,6 +1204,73 @@ function DataObservabilitySimulator() {
         <Eye className="h-4 w-4" />
         Run Anomaly Evaluation
       </motion.button>
+
+      {/* ── System Status Bar ─────────────────────────────────────────────── */}
+      <div
+        className={cn(
+          "flex items-center justify-between rounded-xl border px-5 py-3 transition-all duration-500",
+          alerts.length > 0 && detectionMode === "static"
+            ? "border-red-500/60 bg-red-500/10 shadow-lg shadow-red-500/20"
+            : alerts.length > 0 && detectionMode === "seasonal"
+              ? "border-green-500/60 bg-green-500/10 shadow-lg shadow-green-500/20"
+              : "border-slate-700/50 bg-slate-800/30",
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <motion.div
+            animate={
+              alerts.length > 0 && detectionMode === "static"
+                ? { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }
+                : { scale: 1, opacity: 1 }
+            }
+            transition={{ duration: 0.6, repeat: alerts.length > 0 && detectionMode === "static" ? Infinity : 0 }}
+            className={cn(
+              "flex h-9 w-9 items-center justify-center rounded-lg",
+              alerts.length > 0 && detectionMode === "static"
+                ? "bg-red-500/20"
+                : alerts.length > 0 && detectionMode === "seasonal"
+                  ? "bg-green-500/20"
+                  : "bg-slate-700/50",
+            )}
+          >
+            {alerts.length > 0 && detectionMode === "static" ? (
+              <Bell className="h-5 w-5 text-red-400" />
+            ) : alerts.length > 0 && detectionMode === "seasonal" ? (
+              <CheckCircle2 className="h-5 w-5 text-green-400" />
+            ) : (
+              <Activity className="h-5 w-5 text-slate-400" />
+            )}
+          </motion.div>
+          <div>
+            {alerts.length > 0 && detectionMode === "static" ? (
+              <p className="text-sm font-bold text-red-400">⚠ ALERT STORM ACTIVE</p>
+            ) : alerts.length > 0 && detectionMode === "seasonal" ? (
+              <p className="text-sm font-bold text-green-400">✓ Anomaly Evaluated Against Historical Bucket</p>
+            ) : (
+              <p className="text-sm font-bold text-slate-300">System Status: OPERATIONAL</p>
+            )}
+            <p className="text-xs text-slate-400">
+              {alerts.length > 0 && detectionMode === "static"
+                ? `${alerts.length} false-positive alerts — 3AM trough below static threshold`
+                : alerts.length > 0 && detectionMode === "seasonal"
+                  ? `Zero false alarms — 3AM evaluated against seasonal baseline`
+                  : `Anomaly engine monitoring 24-hour baseline`}
+            </p>
+          </div>
+        </div>
+        <div
+          className={cn(
+            "rounded-full px-3 py-1 text-xs font-bold",
+            alerts.length > 0 && detectionMode === "static"
+              ? "bg-red-500/20 text-red-400 border border-red-500/40"
+              : alerts.length > 0 && detectionMode === "seasonal"
+                ? "bg-green-500/20 text-green-400 border border-green-500/40"
+                : "bg-slate-700/50 text-slate-400 border border-slate-600",
+          )}
+        >
+          {alerts.length > 0 && detectionMode === "static" ? "CRITICAL" : alerts.length > 0 && detectionMode === "seasonal" ? "SAFE" : "NOMINAL"}
+        </div>
+      </div>
 
       {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
