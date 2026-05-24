@@ -9,6 +9,13 @@ import heroProfilePic from "@/assets/profile3.jpg";
 
 const MLNetworkBackground = lazy(() => import("@/components/mlnetworkbackground"));
 
+function scrollToSection(sectionId: string) {
+  const el = document.getElementById(sectionId);
+  if (!el) return;
+  const offset = el.offsetTop - 80;
+  window.scrollTo({ top: offset, behavior: "smooth" });
+}
+
 export function HeroSection() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
@@ -31,7 +38,7 @@ export function HeroSection() {
         setDisplayedText(currentRole.slice(0, displayedText.length - 1));
       }, typingSpeed);
     } else if (!isDeleting && displayedText.length === currentRole.length) {
-      timeout = setTimeout(() => setIsDeleting(true), 1500);
+      timeout = setTimeout(() => setIsDeleting(true), 1800);
     } else if (isDeleting && displayedText.length === 0) {
       setIsDeleting(false);
       setCurrentRoleIndex((prev) => (prev + 1) % ROLES.length);
@@ -74,13 +81,6 @@ export function HeroSection() {
       })),
     []
   );
-
-  function scrollToSection(sectionId: string) {
-    const el = document.getElementById(sectionId);
-    if (!el) return;
-    const offset = el.offsetTop - 80;
-    window.scrollTo({ top: offset, behavior: "smooth" });
-  }
 
   return (
     <>
@@ -150,13 +150,19 @@ export function HeroSection() {
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-6">
               Hey, I&apos;m <span className="gradient-text">Mathew</span>
             </h1>
+            {/* Technically precise role title */}
             <div className="text-xl md:text-2xl text-portfolio-muted-foreground mb-6 max-w-2xl mx-auto h-16 flex items-center justify-center">
               <span className="typing-animation">{displayedText}</span>
             </div>
-            <p className="text-lg text-portfolio-muted-foreground/80 mb-12 max-w-xl mx-auto">
-              Architecting resilient, cost-optimized data platforms for
-              large-scale financial and ML workloads.
+
+            {/* SCALE-METRIC TAGLINE — outcome-first */}
+            <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed">
+              Building real-time streaming pipelines on Kafka &amp; Flink, designing
+              multi-petabyte lakehouses on Snowflake, and reducing cloud spend by
+              <span className="text-portfolio-primary font-semibold"> 40–70% </span>
+              through intelligent partitioning and query optimization.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={() => scrollToSection("projects")}

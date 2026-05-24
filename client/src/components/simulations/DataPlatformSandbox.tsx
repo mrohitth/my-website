@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart,
@@ -1629,6 +1629,14 @@ const TABS = [
     color: "#22c55e",
     description: "Anomaly detection and alerting",
   },
+  {
+    id: 3,
+    key: "schema-designer",
+    label: "Schema Designer",
+    icon: <FlaskConical className="h-4 w-4" />,
+    color: "#a855f7",
+    description: "Design dimensional star schemas and snowflake models",
+  },
 ];
 
 export default function DataPlatformSandbox() {
@@ -1705,8 +1713,276 @@ export default function DataPlatformSandbox() {
           {activeTab === 0 && <CDCpipelineSimulator key="cdc-0" />}
           {activeTab === 1 && <BatchAnalyticsSimulator key="batch-1" />}
           {activeTab === 2 && <DataObservabilitySimulator key="obs-2" />}
+          {activeTab === 3 && <SchemaDesignerSimulator key="schema-3" />}
         </motion.div>
       </AnimatePresence>
     </section>
+  );
+}
+// ============================================================================
+// SCHEMA DESIGNER SIMULATOR
+// ============================================================================
+
+interface SchemaColumn {
+  name: string;
+  type: string;
+  pk: boolean;
+  fk: boolean;
+  nullable: boolean;
+  description: string;
+}
+
+interface SchemaTable {
+  id: string;
+  name: string;
+  type: "fact" | "dimension" | "bridge";
+  columns: SchemaColumn[];
+  x: number;
+  y: number;
+}
+
+const PRESET_SCHEMAS = [
+  {
+    name: "Sales & Orders (Star)",
+    tables: [
+      { id: "fact_orders", name: "FACT_ORDERS", type: "fact" as const, x: 50, y: 40, columns: [
+        { name: "ORDER_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "ORDER_DATE_KEY", type: "INT", pk: false, fk: true, nullable: false, description: "FK to DIM_DATE" },
+        { name: "CUSTOMER_KEY", type: "BIGINT", pk: false, fk: true, nullable: false, description: "FK to DIM_CUSTOMER" },
+        { name: "PRODUCT_KEY", type: "BIGINT", pk: false, fk: true, nullable: false, description: "FK to DIM_PRODUCT" },
+        { name: "STORE_KEY", type: "BIGINT", pk: false, fk: true, nullable: false, description: "FK to DIM_STORE" },
+        { name: "ORDER_AMOUNT", type: "DECIMAL(12,2)", pk: false, fk: false, nullable: false, description: "Gross order value" },
+        { name: "ORDER_QTY", type: "INT", pk: false, fk: false, nullable: false, description: "Total line items" },
+        { name: "DISCOUNT_AMOUNT", type: "DECIMAL(12,2)", pk: false, fk: false, nullable: true, description: "Promotional discount" },
+      ]},
+      { id: "dim_date", name: "DIM_DATE", type: "dimension" as const, x: 20, y: 10, columns: [
+        { name: "DATE_KEY", type: "INT", pk: true, fk: false, nullable: false, description: "PK (YYYYMMDD)" },
+        { name: "CALENDAR_DATE", type: "DATE", pk: false, fk: false, nullable: false, description: "Calendar date" },
+        { name: "FISCAL_YEAR", type: "INT", pk: false, fk: false, nullable: false, description: "FY (2024)" },
+        { name: "FISCAL_PERIOD", type: "INT", pk: false, fk: false, nullable: false, description: "FP (1-13)" },
+        { name: "DAY_OF_WEEK", type: "INT", pk: false, fk: false, nullable: false, description: "1-7" },
+        { name: "DAY_NAME", type: "VARCHAR(10)", pk: false, fk: false, nullable: false, description: "Monday-Sunday" },
+      ]},
+      { id: "dim_customer", name: "DIM_CUSTOMER", type: "dimension" as const, x: 5, y: 55, columns: [
+        { name: "CUSTOMER_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "CUSTOMER_ID", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "Natural key" },
+        { name: "CUSTOMER_NAME", type: "VARCHAR(100)", pk: false, fk: false, nullable: false, description: "Full name" },
+        { name: "CUSTOMER_SEGMENT", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "Gold/Silver/Bronze" },
+        { name: "CITY", type: "VARCHAR(50)", pk: false, fk: false, nullable: true, description: "City" },
+        { name: "STATE", type: "VARCHAR(2)", pk: false, fk: false, nullable: true, description: "State code" },
+        { name: "REGION", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "Sales region" },
+      ]},
+      { id: "dim_product", name: "DIM_PRODUCT", type: "dimension" as const, x: 75, y: 55, columns: [
+        { name: "PRODUCT_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "PRODUCT_ID", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "SKU" },
+        { name: "PRODUCT_NAME", type: "VARCHAR(200)", pk: false, fk: false, nullable: false, description: "Product description" },
+        { name: "CATEGORY", type: "VARCHAR(50)", pk: false, fk: false, nullable: false, description: "Product category" },
+        { name: "SUBCATEGORY", type: "VARCHAR(50)", pk: false, fk: false, nullable: false, description: "Subcategory" },
+        { name: "UNIT_COST", type: "DECIMAL(10,2)", pk: false, fk: false, nullable: false, description: "Standard unit cost" },
+        { name: "UNIT_PRICE", type: "DECIMAL(10,2)", pk: false, fk: false, nullable: false, description: "Standard list price" },
+      ]},
+      { id: "dim_store", name: "DIM_STORE", type: "dimension" as const, x: 60, y: 80, columns: [
+        { name: "STORE_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "STORE_ID", type: "VARCHAR(10)", pk: false, fk: false, nullable: false, description: "Store number" },
+        { name: "STORE_NAME", type: "VARCHAR(100)", pk: false, fk: false, nullable: false, description: "Store name" },
+        { name: "STORE_FORMAT", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "Hyper/Super/Express" },
+        { name: "STORE_CITY", type: "VARCHAR(50)", pk: false, fk: false, nullable: false, description: "City" },
+        { name: "ANNUAL_REVENUE", type: "DECIMAL(12,2)", pk: false, fk: false, nullable: true, description: "Annual revenue" },
+        { name: "OPEN_DATE", type: "DATE", pk: false, fk: false, nullable: true, description: "Opening date" },
+      ]},
+    ],
+  },
+  {
+    name: "SCD Type-2 (Slowly Changing Dimension)",
+    tables: [
+      { id: "fact_events", name: "FACT_EVENTS", type: "fact" as const, x: 50, y: 50, columns: [
+        { name: "EVENT_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "CUSTOMER_KEY", type: "BIGINT", pk: false, fk: true, nullable: false, description: "FK to DIM_CUSTOMER_SCD2" },
+        { name: "EVENT_DATE", type: "DATE", pk: false, fk: false, nullable: false, description: "Event timestamp" },
+        { name: "EVENT_TYPE", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "LOGIN/PURCHASE/LOGOUT" },
+        { name: "REVENUE", type: "DECIMAL(10,2)", pk: false, fk: false, nullable: true, description: "Revenue event" },
+      ]},
+      { id: "dim_customer_scd2", name: "DIM_CUSTOMER_SCD2", type: "dimension" as const, x: 15, y: 20, columns: [
+        { name: "CUSTOMER_KEY", type: "BIGINT", pk: true, fk: false, nullable: false, description: "Surrogate key" },
+        { name: "CUSTOMER_ID", type: "VARCHAR(20)", pk: false, fk: false, nullable: false, description: "Natural key (business key)" },
+        { name: "CUSTOMER_NAME", type: "VARCHAR(100)", pk: false, fk: false, nullable: false, description: "Name at time" },
+        { name: "TIER", type: "VARCHAR(10)", pk: false, fk: false, nullable: false, description: "Gold/Silver/Bronze at time" },
+        { name: "EFFECTIVE_DATE", type: "DATE", pk: false, fk: false, nullable: false, description: "Row valid from" },
+        { name: "EXPIRATION_DATE", type: "DATE", pk: false, fk: false, nullable: false, description: "Row valid to (9999-12-31 if current)" },
+        { name: "IS_CURRENT", type: "BOOLEAN", pk: false, fk: false, nullable: false, description: "Current row flag" },
+        { name: "VERSION", type: "INT", pk: false, fk: false, nullable: false, description: "Row version number" },
+      ]},
+    ],
+  },
+];
+
+function SchemaDesignerSimulator() {
+  const [presetIdx, setPresetIdx] = useState(0);
+  const [tables, setTables] = useState<SchemaTable[]>([]);
+  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [showSql, setShowSql] = useState(false);
+  const [sqlOutput, setSqlOutput] = useState("");
+
+  // Initialize from preset
+  const loadPreset = (idx: number) => {
+    const p = PRESET_SCHEMAS[idx];
+    setTables(p.tables.map(t => ({ ...t, columns: t.columns.map(c => ({ ...c })) })));
+    setSelectedTable(null);
+  };
+
+  useEffect(() => { loadPreset(presetIdx); }, [presetIdx]);
+
+  const selected = tables.find(t => t.id === selectedTable);
+
+  const generateSql = (tbl: SchemaTable) => {
+    const typeLabel = tbl.type === "fact" ? "FACT TABLE" : tbl.type === "bridge" ? "BRIDGE TABLE" : "DIMENSION TABLE";
+    const colDefs = tbl.columns.map(c => {
+      const pk = c.pk ? " PRIMARY KEY" : "";
+      const nul = c.nullable ? " NULL" : " NOT NULL";
+      return `  ${c.name.padEnd(25)} ${c.type.padEnd(20)}${pk}${nul}`;
+    }).join(",\n");
+    return `CREATE TABLE ${tbl.name} (${typeLabel})\n(\n${colDefs}\n);\n`;
+  };
+
+  const renderTableCard = (tbl: SchemaTable) => {
+    const typeColors = { fact: "border-blue-500/50 bg-blue-500/5", dimension: "border-emerald-500/50 bg-emerald-500/5", bridge: "border-purple-500/50 bg-purple-500/5" };
+    const badgeColors = { fact: "bg-blue-500/20 text-blue-400", dimension: "bg-emerald-500/20 text-emerald-400", bridge: "bg-purple-500/20 text-purple-400" };
+    const isSelected = selectedTable === tbl.id;
+    return (
+      <div
+        key={tbl.id}
+        onClick={() => setSelectedTable(isSelected ? null : tbl.id)}
+        className={cn(
+          "cursor-pointer rounded-xl border p-4 transition-all duration-200 hover:scale-105",
+          typeColors[tbl.type],
+          isSelected ? "ring-2 ring-white/30" : ""
+        )}
+      >
+        <div className="mb-2 flex items-center justify-between">
+          <span className={cn("rounded px-2 py-0.5 text-xs font-bold", badgeColors[tbl.type])}>{tbl.type.toUpperCase()}</span>
+          <span className="text-xs text-slate-400">{tbl.columns.length} cols</span>
+        </div>
+        <h4 className="mb-2 font-mono text-sm font-bold text-slate-100">{tbl.name}</h4>
+        <div className="space-y-1">
+          {tbl.columns.slice(0, 4).map(col => (
+            <div key={col.name} className="flex items-center gap-2">
+              <span className="text-xs text-slate-400">{col.pk ? "🔑" : col.fk ? "🔗" : "·"}</span>
+              <span className="font-mono text-xs text-slate-300">{col.name}</span>
+              <span className="ml-auto text-xs text-slate-500">{col.type}</span>
+            </div>
+          ))}
+          {tbl.columns.length > 4 && <div className="text-xs text-slate-500 pl-5">+{tbl.columns.length - 4} more</div>}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Preset Selector */}
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="text-sm font-medium text-slate-300">Preset Schema:</label>
+        {PRESET_SCHEMAS.map((p, i) => (
+          <button key={i} onClick={() => setPresetIdx(i)} className={cn(
+            "rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
+            presetIdx === i ? "bg-purple-500/30 text-purple-300 ring-1 ring-purple-500/50" : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
+          )}>{p.name}</button>
+        ))}
+      </div>
+
+      {/* Schema Cards Grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {tables.map(tbl => renderTableCard(tbl))}
+      </div>
+
+      {/* Relationship Lines (visual hint) */}
+      <div className="rounded-lg border border-slate-700/30 bg-slate-900/20 p-4">
+        <div className="mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Referenced By (FK Relationships)</div>
+        <div className="space-y-1">
+          {tables.filter(t => t.type === "fact" || t.type === "bridge").flatMap(ft =>
+            ft.columns.filter(c => c.fk).map(c => {
+              const refName = c.description.replace("FK to ", "").replace(/.$/, "");
+              const targetTable = tables.find(t => t.columns.some(col => col.name === refName));
+              return (
+                <div key={ft.id + c.name} className="flex items-center gap-2 text-xs">
+                  <span className="font-mono text-blue-400">{ft.name}.{c.name}</span>
+                  <ArrowRight className="h-3 w-3 text-slate-500" />
+                  <span className="font-mono text-emerald-400">{refName}</span>
+                  {targetTable && <span className={cn("ml-2 rounded px-1.5 py-0.5 text-xs", targetTable.type === "fact" ? "bg-blue-500/20 text-blue-400" : "bg-emerald-500/20 text-emerald-400")}>{targetTable.type}</span>}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* Column Detail */}
+      {selected && (
+        <div className="rounded-xl border border-slate-700/50 bg-slate-800/40 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h4 className="font-mono text-sm font-bold text-white">
+              {selected.name}
+              <span className="ml-2 text-xs text-slate-400">— {selected.columns.length} columns</span>
+            </h4>
+            <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} className="text-xs text-purple-400 hover:text-purple-300">
+              Generate DDL →
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-slate-700/50 text-slate-400">
+                  <th className="pb-2 text-left font-medium">Column</th>
+                  <th className="pb-2 text-left font-medium">Type</th>
+                  <th className="pb-2 text-left font-medium">PK</th>
+                  <th className="pb-2 text-left font-medium">FK</th>
+                  <th className="pb-2 text-left font-medium">Null?</th>
+                  <th className="pb-2 text-left font-medium">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selected.columns.map(col => (
+                  <tr key={col.name} className="border-b border-slate-700/20 hover:bg-slate-700/20">
+                    <td className="py-2 font-mono text-slate-200">{col.name}</td>
+                    <td className="py-2 font-mono text-slate-400">{col.type}</td>
+                    <td className="py-2">{col.pk ? <span className="text-yellow-400">🔑</span> : <span className="text-slate-600">·</span>}</td>
+                    <td className="py-2">{col.fk ? <span className="text-blue-400">🔗</span> : <span className="text-slate-600">·</span>}</td>
+                    <td className="py-2">{col.nullable ? <span className="text-slate-500">NULL</span> : <span className="text-slate-300">NOT NULL</span>}</td>
+                    <td className="py-2 text-slate-400">{col.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* DDL Output */}
+      {showSql && sqlOutput && (
+        <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Generated DDL</span>
+            <button onClick={() => setShowSql(false)} className="text-xs text-slate-400 hover:text-white">✕ Close</button>
+          </div>
+          <pre className="overflow-x-auto font-mono text-xs text-emerald-400">{sqlOutput}</pre>
+        </div>
+      )}
+
+      {/* Star Schema Summary */}
+      <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="rounded-lg border border-blue-500/30 bg-blue-500/5 p-4">
+          <div className="text-2xl font-bold text-blue-400">{tables.filter(t => t.type === "fact").length}</div>
+          <div className="text-xs text-slate-400">Fact Tables</div>
+        </div>
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4">
+          <div className="text-2xl font-bold text-emerald-400">{tables.filter(t => t.type === "dimension").length}</div>
+          <div className="text-xs text-slate-400">Dimension Tables</div>
+        </div>
+        <div className="rounded-lg border border-purple-500/30 bg-purple-500/5 p-4">
+          <div className="text-2xl font-bold text-purple-400">{tables.filter(t => t.type === "bridge").length}</div>
+          <div className="text-xs text-slate-400">Bridge Tables</div>
+        </div>
+      </div>
+    </div>
   );
 }
