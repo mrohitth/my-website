@@ -362,7 +362,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Capco (Client: Freddie Mac)",
     period: "Apr 2024 - Present",
     description:
-      "Architecting distributed ETL pipelines on AWS EMR (EC2/EKS) and Snowflake processing 40M+ records per batch. Reduced Spark/SQL runtimes by 75% through partitioning and shuffle optimization. Engineered SCD Type-2 historical models spanning 22+ years to support analytics and ML-driven reporting workloads.",
+      "Led the design and delivery of a metadata-driven CDC platform processing 40M+ records per batch — eliminating manual reconciliation for the entire credit risk reporting team. Reduced nightly batch runtime from 14 hours to 3.5 hours through partition-aware shuffle optimization, saving ~10.5h of EMR cluster time per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve historical data without DE support.",
     metrics: [
       "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
       "60% reduction in direct DB load (eliminated repeated full-table scans)",
@@ -379,7 +379,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Bosmos",
     period: "Sep 2023 - Mar 2024",
     description:
-      "Led a 5-engineer team to design and deploy a production-grade NLP platform using TensorFlow. Built scalable inference services and optimized model serving pipelines to achieve low-latency real-time prediction at scale.",
+      "Led a 5-engineer team to design and deploy a production-grade NLP inference platform on TensorFlow Serving, achieving sub-50ms p99 latency at 10,000 requests/minute. Built automated model drift detection that reduced model staleness incidents by 80%, from ~5 per week to ~1 per week. Managed full ML lifecycle: data ingestion → training → validation → serving → monitoring.",
     metrics: [
       "Sub-50ms p99 latency at 10K requests/minute",
       "5-engineer team led: full ML lifecycle from ingestion to monitoring",
@@ -396,7 +396,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Design Research Collective",
     period: "Dec 2021 - May 2023",
     description:
-      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation.",
+      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant.",
     metrics: [
       "4.0 GPA across graduate coursework",
       "Published 2 papers on 3D reconstruction and photometric stereo",
