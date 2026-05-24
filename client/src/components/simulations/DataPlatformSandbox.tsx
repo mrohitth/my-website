@@ -41,6 +41,7 @@ import {
   Webhook,
   Eye,
   EyeOff,
+  Cloud,
 } from "lucide-react";
 
 // ============================================================================
@@ -67,6 +68,14 @@ interface AnomalyAlert {
   metric: string;
   value: number;
   threshold: number;
+}
+
+interface FileCardDef {
+  id: string;
+  label: string;
+  desc: string;
+  emoji: string;
+  tabHint: string;
 }
 
 // ============================================================================
@@ -250,15 +259,82 @@ function TabButton({ id, label, icon, active, onClick, color }: TabButtonProps) 
 }
 
 // ============================================================================
+// VIRTUAL S3 DROPZONE & FILE CARDS
+// ============================================================================
+
+const VIRTUAL_FILES: FileCardDef[] = [
+  { id: "cdc_cd", label: "daily_user_mutations.csv", desc: "Clean PostgreSQL CDC events", emoji: "📄", tabHint: "CDC / SCD Type 2" },
+  { id: "cdc_bf", label: "black_friday_event_flood.json", desc: "Duplicate row volume burst", emoji: "📄", tabHint: "CDC / SCD Type 2" },
+  { id: "batch_bf", label: "black_friday_event_flood.json", desc: "Duplicate row volume burst", emoji: "📄", tabHint: "dbt + Airflow" },
+  { id: "batch_clean", label: "daily_user_mutations.csv", desc: "Clean ELT batch data", emoji: "📄", tabHint: "dbt + Airflow" },
+  { id: "obs_heartbeat", label: "system_heartbeat_3am.log", desc: "Low-volume night traffic", emoji: "📄", tabHint: "Observability" },
+  { id: "obs_normal", label: "system_heartbeat_normal.log", desc: "Typical 24h traffic", emoji: "📄", tabHint: "Observability" },
+  { id: "obs_spike", label: "system_heartbeat_spike.log", desc: "Sudden volume surge", emoji: "📄", tabHint: "Observability" },
+];
+
+function S3DropZone({ activeFileId, onFileSelect }: { activeFileId: string | null; onFileSelect: (id: string) => void }) {
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const fileId = e.dataTransfer.getData("text/plain");
+    if (fileId) onFileSelect(fileId);
+  }, [onFileSelect]);
+
+  return (
+    <div className="mb-5 rounded-xl border-2 border-dashed bg-slate-900/40 p-4 transition-all duration-200"
+      onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={handleDrop}
+      style={isDragOver ? { borderColor: "#3b82f6", boxShadow: "0 0 16px #3b82f640", backgroundColor: "#3b82f610" } : {}}
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <span className="text-sm font-bold text-slate-200">🪣 aws-s3-ingest-bucket</span>
+        <span className="rounded bg-slate-700/60 px-2 py-0.5 text-xs text-slate-400">drag files or click to ingest</span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {VIRTUAL_FILES.map((f) => {
+          const isActive = activeFileId === f.id;
+          return (
+            <div
+              key={f.id}
+              draggable
+              onDragStart={(e) => { e.dataTransfer.setData("text/plain", f.id); }}
+              onClick={() => onFileSelect(f.id)}
+              className={cn(
+                "flex cursor-grab items-center gap-2 rounded-lg border px-3 py-2 text-xs transition-all duration-200",
+                isActive
+                  ? "border-green-500/50 bg-green-500/10 text-green-300"
+                  : "border-slate-600/60 bg-slate-800/40 text-slate-300 hover:border-cyan-500/40 hover:bg-cyan-500/5",
+              )}
+            >
+              <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>{f.emoji}</motion.span>
+              <div>
+                <p className="font-mono font-medium leading-tight">{f.label}</p>
+                <p className="text-slate-500 leading-tight">{f.tabHint}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
 // TAB 1: CDC PIPELINE SIMULATOR
 // ============================================================================
 
 function CDCpipelineSimulator() {
   const [pipelineMode, setPipelineMode] = useState<PipelineMode>("setbased");
+  const [cdcEvaluated, setCdcEvaluated] = useState(false);
+  const [particles, setParticles] = useState<Array<{ id: number; delay: number; type: "row" | "bulk" }>>([]);
+  const [sourceFlash, setSourceFlash] = useState(false);
+  const [flowState, setFlowState] = useState<"idle" | "flowing" | "done">("idle");
   const [injecting, setInjecting] = useState(false);
   const [batchSize] = useState(10000);
-  const [particles, setParticles] = useState<Array<{ id: number; delay: number }>>([]);
-  const [injectFlash, setInjectFlash] = useState(false);
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
 
   const [metricHistory, setMetricHistory] = useState<
     Array<{ batch: number; iops: number; mode: string }>
@@ -277,7 +353,87 @@ function CDCpipelineSimulator() {
 
   const streamIdRef = useRef(0);
 
+  const handleCDCIngest = useCallback((fileId: string) => {
+    setActiveFileId(fileId);
+    // Reset state first
+    setCdcEvaluated(false);
+    setParticles([]);
+    setSourceFlash(false);
+    setFlowState("idle");
+    setInjecting(false);
+    setEventStream([]);
+    setMetrics({ totalBatches: 0, totalIOPS: 2, peakIOPS: 2 });
+    setMetricHistory(() => {
+      const initial = [];
+      for (let i = 0; i < 12; i++) {
+        initial.push({ batch: i, iops: 2, mode: "setbased" });
+      }
+      return initial;
+    });
+
+    if (fileId === "cdc_cd") {
+      // Clean daily_user_mutations.csv → setbased
+      setPipelineMode("setbased");
+      setTimeout(() => {
+        setCdcEvaluated(true);
+        setFlowState("flowing");
+        setInjecting(true);
+
+        const newIops = 2;
+        setMetrics({ totalBatches: 1, totalIOPS: newIops, peakIOPS: newIops });
+        setMetricHistory((prev) => [...prev.slice(-11), { batch: prev.length, iops: newIops, mode: "setbased" }]);
+        setParticles([{ id: Date.now(), delay: 0, type: "bulk" }]);
+
+        setTimeout(() => {
+          setInjecting(false);
+          setParticles([]);
+          setFlowState("done");
+        }, 800);
+      }, 100);
+    } else if (fileId === "cdc_bf") {
+      // Black Friday event flood → procedural (problematic)
+      setPipelineMode("procedural");
+      setTimeout(() => {
+        setCdcEvaluated(true);
+        setFlowState("flowing");
+        setInjecting(true);
+        setSourceFlash(true);
+
+        const newIops = 30000;
+        setMetrics({ totalBatches: 1, totalIOPS: newIops, peakIOPS: newIops });
+        setMetricHistory((prev) => [...prev.slice(-11), { batch: prev.length, iops: newIops, mode: "procedural" }]);
+
+        const rowParticles = Array.from({ length: 10 }, (_, i) => ({
+          id: Date.now() + i,
+          delay: i * 120,
+          type: "row" as const,
+        }));
+        setParticles(rowParticles);
+
+        const newEvents = Array.from({ length: Math.min(batchSize, 50) }, (_, i) => ({
+          id: ++streamIdRef.current,
+          type: (["INSERT", "UPDATE", "DELETE"] as const)[Math.floor(Math.random() * 3)],
+          rows: Math.floor(Math.random() * 100) + 1,
+          ts: Date.now(),
+        }));
+        setEventStream(newEvents);
+
+        setTimeout(() => {
+          setInjecting(false);
+          setParticles([]);
+          setSourceFlash(false);
+          setFlowState("done");
+        }, 1200 + 10 * 120);
+      }, 100);
+    }
+  }, [batchSize]);
+
   const handleInject = useCallback(() => {
+    if (!cdcEvaluated) {
+      // Trigger with current mode
+      setCdcEvaluated(true);
+      setFlowState("flowing");
+    }
     setInjecting(true);
 
     const newEvents = Array.from({ length: Math.min(batchSize, 50) }, (_, i) => ({
@@ -304,29 +460,29 @@ function CDCpipelineSimulator() {
 
     setTimeout(() => setInjecting(false), 600);
 
-    // Trigger CDC pipeline flow animation
-    setInjectFlash(pipelineMode === "procedural");
+    setSourceFlash(pipelineMode === "procedural");
 
     if (pipelineMode === "procedural") {
-      // Spawn 10 individual row particles (one-by-one)
       const rowParticles = Array.from({ length: 10 }, (_, i) => ({
         id: Date.now() + i,
         delay: i * 120,
+        type: "row" as const,
       }));
       setParticles(rowParticles);
       setTimeout(() => {
         setParticles([]);
-        setInjectFlash(false);
+        setSourceFlash(false);
+        setFlowState("done");
       }, 1200 + 10 * 120);
     } else {
-      // Spawn single bulk payload particle
-      const bulkParticles = [{ id: Date.now(), delay: 0 }];
+      const bulkParticles = [{ id: Date.now(), delay: 0, type: "bulk" as const }];
       setParticles(bulkParticles);
       setTimeout(() => {
         setParticles([]);
+        setFlowState("done");
       }, 800);
     }
-  }, [pipelineMode, batchSize]);
+  }, [pipelineMode, batchSize, cdcEvaluated]);
 
   const chartData = useMemo(
     () =>
@@ -338,8 +494,13 @@ function CDCpipelineSimulator() {
     [metricHistory],
   );
 
+  const isIdle = !cdcEvaluated;
+
   return (
     <div className="flex flex-col gap-6">
+      {/* S3 Dropzone */}
+      <S3DropZone activeFileId={activeFileId} onFileSelect={handleCDCIngest} />
+
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <ToggleSwitch
@@ -396,19 +557,21 @@ function CDCpipelineSimulator() {
         <div
           className={cn(
             "flex flex-col items-center gap-1 rounded-xl border-2 px-5 py-3 transition-all duration-300 min-w-[100px]",
-            injectFlash && pipelineMode === "procedural"
-              ? "border-red-500 bg-red-500/20 shadow-lg shadow-red-500/40 animate-pulse"
-              : pipelineMode === "setbased"
-                ? "border-green-500/60 bg-green-500/10"
-                : "border-slate-600 bg-slate-800/40",
+            isIdle
+              ? "border-slate-600 bg-slate-800/40"
+              : sourceFlash && pipelineMode === "procedural"
+                ? "border-red-500 bg-red-500/20 shadow-lg shadow-red-500/40 animate-pulse"
+                : pipelineMode === "setbased"
+                  ? "border-green-500/60 bg-green-500/10"
+                  : "border-slate-600 bg-slate-800/40",
           )}
         >
-          <Database className={cn("h-5 w-5", pipelineMode === "procedural" && injectFlash ? "text-red-400" : "text-slate-400")} />
+          <Database className={cn("h-5 w-5", !isIdle && sourceFlash && pipelineMode === "procedural" ? "text-red-400" : "text-slate-400")} />
           <span className="text-xs font-medium text-slate-300">Source DB</span>
-          {injectFlash && pipelineMode === "procedural" && (
-            <span className="text-xs text-red-400 animate-pulse font-semibold">Saturated!</span>
+          {!isIdle && sourceFlash && pipelineMode === "procedural" && (
+            <span className="text-xs text-red-400 animate-pulse font-semibold">SATURATED</span>
           )}
-          {pipelineMode === "setbased" && (
+          {!isIdle && pipelineMode === "setbased" && (
             <span className="text-xs text-green-400">Bulk Ready</span>
           )}
         </div>
@@ -418,12 +581,12 @@ function CDCpipelineSimulator() {
           <div
             className={cn(
               "h-0.5 w-16 sm:w-24 rounded transition-colors duration-300",
-              injectFlash && pipelineMode === "procedural" ? "bg-red-500" : "bg-slate-600",
+              !isIdle && sourceFlash && pipelineMode === "procedural" ? "bg-red-500" : "bg-slate-700",
             )}
           />
           <div className="flex gap-1">
             {particles.map((p) =>
-              pipelineMode === "setbased" ? (
+              p.type === "bulk" ? (
                 <motion.div
                   key={p.id}
                   initial={{ opacity: 0, x: -20, scale: 0.5 }}
@@ -442,26 +605,26 @@ function CDCpipelineSimulator() {
               ),
             )}
           </div>
-          <ArrowRight className={cn("h-4 w-4 transition-colors duration-300", injectFlash && pipelineMode === "procedural" ? "text-red-400" : "text-slate-500")} />
+          <ArrowRight className={cn("h-4 w-4 transition-colors duration-300", !isIdle && sourceFlash && pipelineMode === "procedural" ? "text-red-400" : "text-slate-500")} />
         </div>
 
         {/* Data Warehouse Staging Node */}
         <div
           className={cn(
             "flex flex-col items-center gap-1 rounded-xl border-2 px-5 py-3 transition-all duration-300 min-w-[100px]",
-            pipelineMode === "setbased"
-              ? "border-green-500/60 bg-green-500/10"
-              : injectFlash && pipelineMode === "procedural"
-                ? "border-red-500/40 bg-red-500/5"
+            isIdle
+              ? "border-slate-600 bg-slate-800/40"
+              : pipelineMode === "setbased"
+                ? "border-green-500/60 bg-green-500/10"
                 : "border-slate-600 bg-slate-800/40",
           )}
         >
-          <Layers className={cn("h-5 w-5", pipelineMode === "setbased" ? "text-green-400" : "text-slate-400")} />
+          <Layers className={cn("h-5 w-5", !isIdle && pipelineMode === "setbased" ? "text-green-400" : "text-slate-400")} />
           <span className="text-xs font-medium text-slate-300">Warehouse Staging</span>
-          {pipelineMode === "setbased" && (
+          {!isIdle && pipelineMode === "setbased" && (
             <span className="text-xs text-green-400">Bulk Payload</span>
           )}
-          {pipelineMode === "procedural" && (
+          {!isIdle && pipelineMode === "procedural" && (
             <span className="text-xs text-slate-500">N× Query</span>
           )}
         </div>
@@ -471,25 +634,25 @@ function CDCpipelineSimulator() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Batches Processed"
-          value={metrics.totalBatches}
+          value={cdcEvaluated ? metrics.totalBatches : "—"}
           icon={<Layers className="h-4 w-4" />}
           color={CHART_COLORS.primary}
-          highlight
+          highlight={cdcEvaluated}
         />
         <MetricCard
           label="Current IOPS"
-          value={metrics.totalIOPS.toLocaleString()}
-          unit="ops"
-          trend={metrics.totalIOPS > 1000 ? "up" : "stable"}
+          value={cdcEvaluated ? metrics.totalIOPS.toLocaleString() : "—"}
+          unit={cdcEvaluated ? "ops" : undefined}
+          trend={cdcEvaluated && metrics.totalIOPS > 1000 ? "up" : cdcEvaluated ? "stable" : undefined}
           icon={<Activity className="h-4 w-4" />}
-          color={metrics.totalIOPS > 1000 ? CHART_COLORS.danger : CHART_COLORS.success}
-          highlight={metrics.totalIOPS > 1000}
+          color={cdcEvaluated && metrics.totalIOPS > 1000 ? CHART_COLORS.danger : CHART_COLORS.success}
+          highlight={cdcEvaluated && metrics.totalIOPS > 1000}
         />
         <MetricCard
           label="Peak IOPS"
-          value={metrics.peakIOPS.toLocaleString()}
-          unit="ops"
-          trend={metrics.peakIOPS > 1000 ? "up" : "stable"}
+          value={cdcEvaluated ? metrics.peakIOPS.toLocaleString() : "—"}
+          unit={cdcEvaluated ? "ops" : undefined}
+          trend={cdcEvaluated && metrics.peakIOPS > 1000 ? "up" : cdcEvaluated ? "stable" : undefined}
           icon={<TrendingUp className="h-4 w-4" />}
           color={CHART_COLORS.warning}
         />
@@ -558,7 +721,7 @@ function CDCpipelineSimulator() {
           </AnimatePresence>
           {eventStream.length === 0 && (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-slate-500">No events yet. Click "Inject" to simulate.</p>
+              <p className="text-sm text-slate-500">No events yet. Drop a data file or click "Inject".</p>
             </div>
           )}
         </div>
@@ -566,7 +729,7 @@ function CDCpipelineSimulator() {
 
       {/* Mode Warning */}
       <AnimatePresence>
-        {pipelineMode === "procedural" && (
+        {cdcEvaluated && pipelineMode === "procedural" && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -608,7 +771,9 @@ function BatchAnalyticsSimulator() {
   const [qualityGate, setQualityGate] = useState<QualityGate>("strict");
   const [executing, setExecuting] = useState(false);
   const [scenario, setScenario] = useState("clean");
+  const [batchEvaluated, setBatchEvaluated] = useState(false);
   const [batchRows, setBatchRows] = useState(0);
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [dagState, setDagState] = useState<Record<string, BatchRow>>(() =>
     DAG_STAGES.reduce(
       (acc, stage) => ({
@@ -622,7 +787,157 @@ function BatchAnalyticsSimulator() {
     Array<{ type: "success" | "warning" | "error"; message: string; ts: number }>
   >([]);
 
+  const handleBatchIngest = useCallback((fileId: string) => {
+    setActiveFileId(fileId);
+
+    if (fileId === "batch_bf") {
+      setScenario("duplicate_flood");
+      // Execute with duplicate_flood scenario
+      setBatchEvaluated(false);
+      setExecuting(true);
+      setAlertLog([]);
+      setDagState(() =>
+        DAG_STAGES.reduce(
+          (acc, stage) => ({
+            ...acc,
+            [stage.id]: { id: stage.id, stage: stage.label, rows: 0, status: "pending" },
+          }),
+          {} as Record<string, BatchRow>,
+        ),
+      );
+      setBatchRows(0);
+
+      const baseRows = 5000;
+      const corruptedRows = baseRows * 2;
+
+      const stages = [
+        { id: "stg_events", rows: baseRows, duration: 400 },
+        { id: "dim_users", rows: Math.floor(baseRows * 0.7), duration: 500 },
+        { id: "fact_orders", rows: qualityGate === "silent" ? corruptedRows : baseRows, duration: 600 },
+        { id: "dbt_tests", rows: 0, duration: 700 },
+      ];
+
+      let elapsed = 0;
+      stages.forEach((stage, idx) => {
+        setTimeout(() => {
+          setDagState((prev) => ({
+            ...prev,
+            [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "running" },
+          }));
+
+          setTimeout(() => {
+            const isLast = idx === stages.length - 1;
+
+            if (isLast) {
+              if (qualityGate === "strict") {
+                setDagState((prev) => ({
+                  ...prev,
+                  [stage.id]: { ...prev[stage.id], rows: 0, status: "failed" },
+                }));
+                setAlertLog((prev) => [
+                  ...prev,
+                  {
+                    type: "error",
+                    message: `[dbt] ERROR: duplicate_events test failed — found ${corruptedRows - baseRows} extra rows vs. source (${baseRows}). Trigger rule "all_success" aborted pipeline.`,
+                    ts: Date.now(),
+                  },
+                ]);
+                setBatchRows(corruptedRows);
+              } else {
+                setDagState((prev) => ({
+                  ...prev,
+                  [stage.id]: { ...prev[stage.id], rows: corruptedRows, status: "done" },
+                }));
+                setAlertLog((prev) => [
+                  ...prev,
+                  {
+                    type: "warning",
+                    message: `[Silent Swallow] Pipeline completed with ${corruptedRows} rows. ${corruptedRows - baseRows} duplicate rows absorbed silently — downstream metrics will be corrupted.`,
+                    ts: Date.now(),
+                  },
+                ]);
+                setBatchRows(corruptedRows);
+              }
+              setExecuting(false);
+              setBatchEvaluated(true);
+            } else {
+              setDagState((prev) => ({
+                ...prev,
+                [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "done" },
+              }));
+            }
+          }, 300);
+        }, elapsed);
+        elapsed += stage.duration;
+      });
+    } else if (fileId === "batch_clean") {
+      setScenario("clean");
+      // Execute with clean scenario
+      setBatchEvaluated(false);
+      setExecuting(true);
+      setAlertLog([]);
+      setDagState(() =>
+        DAG_STAGES.reduce(
+          (acc, stage) => ({
+            ...acc,
+            [stage.id]: { id: stage.id, stage: stage.label, rows: 0, status: "pending" },
+          }),
+          {} as Record<string, BatchRow>,
+        ),
+      );
+      setBatchRows(0);
+
+      const baseRows = 2000;
+
+      const stages = [
+        { id: "stg_events", rows: baseRows, duration: 400 },
+        { id: "dim_users", rows: Math.floor(baseRows * 0.7), duration: 500 },
+        { id: "fact_orders", rows: baseRows, duration: 600 },
+        { id: "dbt_tests", rows: 0, duration: 700 },
+      ];
+
+      let elapsed = 0;
+      stages.forEach((stage, idx) => {
+        setTimeout(() => {
+          setDagState((prev) => ({
+            ...prev,
+            [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "running" },
+          }));
+
+          setTimeout(() => {
+            const isLast = idx === stages.length - 1;
+
+            if (isLast) {
+              setDagState((prev) => ({
+                ...prev,
+                [stage.id]: { ...prev[stage.id], rows: baseRows, status: "done" },
+              }));
+              setAlertLog((prev) => [
+                ...prev,
+                {
+                  type: "success",
+                  message: `[dbt] All tests passed. Pipeline completed successfully with ${baseRows} validated rows.`,
+                  ts: Date.now(),
+                },
+              ]);
+              setBatchRows(baseRows);
+              setExecuting(false);
+              setBatchEvaluated(true);
+            } else {
+              setDagState((prev) => ({
+                ...prev,
+                [stage.id]: { ...prev[stage.id], rows: stage.rows, status: "done" },
+              }));
+            }
+          }, 300);
+        }, elapsed);
+        elapsed += stage.duration;
+      });
+    }
+  }, [qualityGate]);
+
   const handleExecute = useCallback(() => {
+    setBatchEvaluated(false);
     setExecuting(true);
     setAlertLog([]);
     const baseRows = scenario === "duplicate_flood" ? 5000 : 2000;
@@ -691,6 +1006,7 @@ function BatchAnalyticsSimulator() {
               setBatchRows(baseRows);
             }
             setExecuting(false);
+            setBatchEvaluated(true);
           } else {
             setDagState((prev) => ({
               ...prev,
@@ -703,8 +1019,13 @@ function BatchAnalyticsSimulator() {
     });
   }, [qualityGate, scenario]);
 
+  const isIdle = !batchEvaluated;
+
   return (
     <div className="flex flex-col gap-6">
+      {/* S3 Dropzone */}
+      <S3DropZone activeFileId={activeFileId} onFileSelect={handleBatchIngest} />
+
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <ToggleSwitch
@@ -772,17 +1093,19 @@ function BatchAnalyticsSimulator() {
                 ? { borderColor: ["#22c55e"], boxShadow: ["0 0 12px #22c55e"] }
                 : executing && scenario === "duplicate_flood" && qualityGate === "silent"
                   ? { borderColor: ["#ef4444", "#7f1d1d", "#ef4444"], boxShadow: ["0 0 12px #ef4444"] }
-                  : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+                  : { borderColor: (isIdle ? "#64748b" : executing ? "#22c55e" : "#64748b"), boxShadow: ["0 0 0px transparent"] }
             }
             transition={{ duration: 0.3, repeat: executing && scenario !== "clean" ? Infinity : 0 }}
             className={cn(
               "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
-              !executing ? "border-slate-600 bg-slate-800/30" :
-              scenario === "clean" ? "border-green-500/70 bg-green-500/10" :
-              "border-red-500/70 bg-red-500/10"
+              isIdle
+                ? "border-slate-600 bg-slate-800/30"
+                : executing && scenario === "clean"
+                  ? "border-green-500/70 bg-green-500/10"
+                  : "border-red-500/70 bg-red-500/10"
             )}
           >
-            <Box className={cn("h-5 w-5", !executing ? "text-slate-400" : scenario === "clean" ? "text-green-400" : "text-red-400")} />
+            <Box className={cn("h-5 w-5", isIdle ? "text-slate-400" : executing && scenario === "clean" ? "text-green-400" : "text-red-400")} />
           </motion.div>
           <span className="text-[10px] font-semibold text-slate-300">stg_events</span>
           <span className="text-[9px] text-slate-500">Raw</span>
@@ -792,9 +1115,13 @@ function BatchAnalyticsSimulator() {
         <div className="relative mx-1 flex items-center justify-center sm:mx-2">
           <motion.div
             animate={
-              executing && scenario === "clean" ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] } :
-              executing && scenario === "duplicate_flood" && qualityGate === "silent" ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] } :
-              { scaleX: 0, backgroundColor: ["#64748b"] }
+              isIdle
+                ? { scaleX: 0, backgroundColor: ["#64748b"] }
+                : executing && scenario === "clean"
+                  ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] }
+                  : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                    ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] }
+                    : { scaleX: isIdle ? 0 : 1, backgroundColor: ["#64748b"] }
             }
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="h-0.5 w-6 sm:w-10 rounded-full origin-left"
@@ -816,22 +1143,27 @@ function BatchAnalyticsSimulator() {
         <div className="flex flex-col items-center gap-1">
           <motion.div
             animate={
-              executing && scenario === "duplicate_flood" && qualityGate === "strict"
-                ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
-                : executing && scenario === "duplicate_flood" && qualityGate === "silent"
-                  ? { borderColor: ["#ef4444"], boxShadow: ["0 0 12px #ef4444"] }
-                  : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+              isIdle
+                ? { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+                : executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                  ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
+                  : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                    ? { borderColor: ["#ef4444"], boxShadow: ["0 0 12px #ef4444"] }
+                    : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
             }
             transition={{ duration: 0.3 }}
             className={cn(
               "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
-              !executing ? "border-slate-600 bg-slate-800/30" :
-              scenario === "duplicate_flood" && qualityGate === "strict" ? "border-yellow-500/70 bg-yellow-500/10" :
-              scenario === "duplicate_flood" ? "border-red-500/70 bg-red-500/10" :
-              "border-slate-600 bg-slate-800/30"
+              isIdle
+                ? "border-slate-600 bg-slate-800/30"
+                : executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                  ? "border-yellow-500/70 bg-yellow-500/10"
+                  : executing && scenario === "duplicate_flood"
+                    ? "border-red-500/70 bg-red-500/10"
+                    : "border-slate-600 bg-slate-800/30"
             )}
           >
-            <Layers className={cn("h-5 w-5", !executing ? "text-slate-400" : scenario === "duplicate_flood" && qualityGate === "strict" ? "text-yellow-400" : "text-slate-400")} />
+            <Layers className={cn("h-5 w-5", isIdle ? "text-slate-400" : scenario === "duplicate_flood" && qualityGate === "strict" ? "text-yellow-400" : "text-slate-400")} />
           </motion.div>
           <span className="text-[10px] font-semibold text-slate-300">dim_users</span>
           <span className="text-[9px] text-slate-500">Transform</span>
@@ -841,9 +1173,13 @@ function BatchAnalyticsSimulator() {
         <div className="relative mx-1 flex items-center justify-center sm:mx-2">
           <motion.div
             animate={
-              executing && scenario === "clean" ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] } :
-              executing && scenario === "duplicate_flood" && qualityGate === "silent" ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] } :
-              { scaleX: 0, backgroundColor: ["#64748b"] }
+              isIdle
+                ? { scaleX: 0, backgroundColor: ["#64748b"] }
+                : executing && scenario === "clean"
+                  ? { scaleX: [0, 1], backgroundColor: ["#22c55e"] }
+                  : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                    ? { scaleX: [0, 1], backgroundColor: ["#ef4444"] }
+                    : { scaleX: isIdle ? 0 : 1, backgroundColor: ["#64748b"] }
             }
             transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
             className="h-0.5 w-6 sm:w-10 rounded-full origin-left"
@@ -854,21 +1190,26 @@ function BatchAnalyticsSimulator() {
         <div className="flex flex-col items-center gap-1">
           <motion.div
             animate={
-              executing && scenario === "duplicate_flood" && qualityGate === "silent"
-                ? { borderColor: ["#ef4444", "#7f1d1d"], boxShadow: ["0 0 16px #ef4444"] }
-                : executing && scenario === "duplicate_flood" && qualityGate === "strict"
-                  ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
-                  : executing && scenario === "clean"
-                    ? { borderColor: ["#22c55e"], boxShadow: ["0 0 12px #22c55e"] }
-                    : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+              isIdle
+                ? { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
+                : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                  ? { borderColor: ["#ef4444", "#7f1d1d"], boxShadow: ["0 0 16px #ef4444"] }
+                  : executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                    ? { borderColor: ["#f59e0b"], boxShadow: ["0 0 12px #f59e0b"] }
+                    : executing && scenario === "clean"
+                      ? { borderColor: ["#22c55e"], boxShadow: ["0 0 12px #22c55e"] }
+                      : { borderColor: ["#64748b"], boxShadow: ["0 0 0px transparent"] }
             }
             transition={{ duration: 0.3, repeat: executing && scenario === "duplicate_flood" && qualityGate === "silent" ? Infinity : 0 }}
             className={cn(
               "flex h-11 w-11 items-center justify-center rounded-xl border-2 transition-all duration-300",
-              !executing ? "border-slate-600 bg-slate-800/30" :
-              scenario === "duplicate_flood" && qualityGate === "silent" ? "border-red-500/70 bg-red-500/10" :
-              scenario === "duplicate_flood" && qualityGate === "strict" ? "border-yellow-500/70 bg-yellow-500/10" :
-              "border-green-500/70 bg-green-500/10"
+              isIdle
+                ? "border-slate-600 bg-slate-800/30"
+                : executing && scenario === "duplicate_flood" && qualityGate === "silent"
+                  ? "border-red-500/70 bg-red-500/10"
+                  : executing && scenario === "duplicate_flood" && qualityGate === "strict"
+                    ? "border-yellow-500/70 bg-yellow-500/10"
+                    : "border-green-500/70 bg-green-500/10"
             )}
           >
             {executing && scenario === "duplicate_flood" && qualityGate === "silent" ? (
@@ -876,12 +1217,12 @@ function BatchAnalyticsSimulator() {
             ) : executing && scenario === "duplicate_flood" && qualityGate === "strict" ? (
               <XCircle className="h-5 w-5 text-yellow-400" />
             ) : (
-              <GitBranch className={cn("h-5 w-5", !executing ? "text-slate-400" : "text-green-400")} />
+              <GitBranch className={cn("h-5 w-5", isIdle ? "text-slate-400" : "text-green-400")} />
             )}
           </motion.div>
           <span className="text-[10px] font-semibold text-slate-300">fact_orders</span>
-          <span className={cn("text-[9px]", executing && scenario === "duplicate_flood" && qualityGate === "silent" ? "text-red-400 font-bold" : "text-slate-500")}>
-            {executing && scenario === "duplicate_flood" && qualityGate === "silent" ? "CORRUPTED" : "Aggregated"}
+          <span className={cn("text-[9px]", !isIdle && executing && scenario === "duplicate_flood" && qualityGate === "silent" ? "text-red-400 font-bold" : "text-slate-500")}>
+            {batchEvaluated && scenario === "duplicate_flood" && qualityGate === "silent" ? "CORRUPTED" : "Aggregated"}
           </span>
         </div>
 
@@ -902,9 +1243,9 @@ function BatchAnalyticsSimulator() {
       <div className="grid grid-cols-1 gap-3">
         <MetricCard
           label="Fact Table Row Count"
-          value={batchRows > 0 ? batchRows.toLocaleString() : "—"}
+          value={batchEvaluated && batchRows > 0 ? batchRows.toLocaleString() : "—"}
           icon={<Database className="h-4 w-4" />}
-          highlight
+          highlight={batchEvaluated}
           color={CHART_COLORS.secondary}
         />
       </div>
@@ -929,7 +1270,8 @@ function BatchAnalyticsSimulator() {
                   }
                   className={cn(
                     "flex h-12 w-12 items-center justify-center rounded-xl border-2 transition-all duration-300",
-                    state.status === "pending" && "border-slate-600 bg-slate-800/40",
+                    isIdle && "border-slate-600 bg-slate-800/40",
+                    state.status === "pending" && !isIdle && "border-slate-600 bg-slate-800/40",
                     state.status === "running" && "border-cyan-400 bg-cyan-500/20 text-cyan-400 shadow-lg shadow-cyan-500/30",
                     state.status === "done" && "border-green-500 bg-green-500/20 text-green-400",
                     state.status === "failed" && "border-red-500 bg-red-500/20 text-red-400 shadow-lg shadow-red-500/30",
@@ -982,14 +1324,14 @@ function BatchAnalyticsSimulator() {
             </div>
           ))}
           {alertLog.length === 0 && (
-            <p className="py-4 text-center text-sm text-slate-500">No logs yet. Execute a batch run to see output.</p>
+            <p className="py-4 text-center text-sm text-slate-500">No logs yet. Drop a data file above to execute a batch run.</p>
           )}
         </div>
       </div>
 
       {/* Scenario Warning */}
       <AnimatePresence>
-        {scenario === "duplicate_flood" && (
+        {batchEvaluated && scenario === "duplicate_flood" && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1059,8 +1401,10 @@ function generateBaselineData(anomalyType: AnomalyType) {
 function DataObservabilitySimulator() {
   const [anomalyType, setAnomalyType] = useState<AnomalyType>("normal");
   const [detectionMode, setDetectionMode] = useState<DetectionMode>("seasonal");
+  const [obsEvaluated, setObsEvaluated] = useState(false);
   const [alerts, setAlerts] = useState<AnomalyAlert[]>([]);
   const [lastAlertFingerprint, setLastAlertFingerprint] = useState<string | null>(null);
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [runCount, setRunCount] = useState(0);
 
   const chartData = useMemo(() => generateBaselineData(anomalyType), [anomalyType]);
@@ -1093,8 +1437,27 @@ function DataObservabilitySimulator() {
     23: { lower: 60, upper: 400 },
   };
 
-  const handleEvaluate = useCallback(() => {
-    const evalData = generateBaselineData(anomalyType);
+  const handleObsIngest = useCallback((fileId: string) => {
+    setActiveFileId(fileId);
+    setObsEvaluated(false);
+    setAlerts([]);
+    setLastAlertFingerprint(null);
+
+    if (fileId === "obs_heartbeat") {
+      setAnomalyType("trough");
+      setTimeout(() => runEvaluate("trough"), 100);
+    } else if (fileId === "obs_normal") {
+      setAnomalyType("normal");
+      setTimeout(() => runEvaluate("normal"), 100);
+    } else if (fileId === "obs_spike") {
+      setAnomalyType("spike");
+      setTimeout(() => runEvaluate("spike"), 100);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const runEvaluate = useCallback((type?: AnomalyType) => {
+    const evalType = type ?? anomalyType;
+    const evalData = generateBaselineData(evalType);
     const newAlerts: AnomalyAlert[] = [];
 
     evalData.forEach((point) => {
@@ -1138,7 +1501,13 @@ function DataObservabilitySimulator() {
       setLastAlertFingerprint(fp);
     }
     setRunCount((c) => c + 1);
+    setObsEvaluated(true);
   }, [anomalyType, detectionMode, hourBaselines]);
+
+  const handleEvaluate = useCallback(() => {
+    setObsEvaluated(true);
+    runEvaluate();
+  }, [runEvaluate]);
 
   const alertRate = chartData.filter((d) => {
     if (detectionMode === "static") return d.actual < staticThreshold;
@@ -1146,8 +1515,13 @@ function DataObservabilitySimulator() {
     return bl && d.actual < bl.lower;
   }).length;
 
+  const isIdle = !obsEvaluated;
+
   return (
     <div className="flex flex-col gap-6">
+      {/* S3 Dropzone */}
+      <S3DropZone activeFileId={activeFileId} onFileSelect={handleObsIngest} />
+
       {/* Controls */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2 rounded-xl border border-slate-700/50 bg-slate-800/30 p-4">
@@ -1209,66 +1583,83 @@ function DataObservabilitySimulator() {
       <div
         className={cn(
           "flex items-center justify-between rounded-xl border px-5 py-3 transition-all duration-500",
-          alerts.length > 0 && detectionMode === "static"
-            ? "border-red-500/60 bg-red-500/10 shadow-lg shadow-red-500/20"
-            : alerts.length > 0 && detectionMode === "seasonal"
-              ? "border-green-500/60 bg-green-500/10 shadow-lg shadow-green-500/20"
-              : "border-slate-700/50 bg-slate-800/30",
+          isIdle
+            ? "border-slate-700/50 bg-slate-800/30"
+            : alerts.length > 0 && detectionMode === "static"
+              ? "border-red-500/60 bg-red-500/10 shadow-lg shadow-red-500/20"
+              : alerts.length > 0 && detectionMode === "seasonal"
+                ? "border-green-500/60 bg-green-500/10 shadow-lg shadow-green-500/20"
+                : "border-green-500/60 bg-green-500/10 shadow-lg shadow-green-500/20",
         )}
       >
         <div className="flex items-center gap-3">
           <motion.div
             animate={
-              alerts.length > 0 && detectionMode === "static"
+              !isIdle && alerts.length > 0 && detectionMode === "static"
                 ? { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }
                 : { scale: 1, opacity: 1 }
             }
-            transition={{ duration: 0.6, repeat: alerts.length > 0 && detectionMode === "static" ? Infinity : 0 }}
+            transition={{ duration: 0.6, repeat: !isIdle && alerts.length > 0 && detectionMode === "static" ? Infinity : 0 }}
             className={cn(
               "flex h-9 w-9 items-center justify-center rounded-lg",
-              alerts.length > 0 && detectionMode === "static"
-                ? "bg-red-500/20"
-                : alerts.length > 0 && detectionMode === "seasonal"
-                  ? "bg-green-500/20"
-                  : "bg-slate-700/50",
+              isIdle
+                ? "bg-slate-700/50"
+                : alerts.length > 0 && detectionMode === "static"
+                  ? "bg-red-500/20"
+                  : alerts.length > 0 && detectionMode === "seasonal"
+                    ? "bg-green-500/20"
+                    : "bg-green-500/20",
             )}
           >
-            {alerts.length > 0 && detectionMode === "static" ? (
+            {isIdle ? (
+              <Activity className="h-5 w-5 text-slate-400" />
+            ) : alerts.length > 0 && detectionMode === "static" ? (
               <Bell className="h-5 w-5 text-red-400" />
             ) : alerts.length > 0 && detectionMode === "seasonal" ? (
               <CheckCircle2 className="h-5 w-5 text-green-400" />
             ) : (
-              <Activity className="h-5 w-5 text-slate-400" />
+              <CheckCircle2 className="h-5 w-5 text-green-400" />
             )}
           </motion.div>
           <div>
-            {alerts.length > 0 && detectionMode === "static" ? (
-              <p className="text-sm font-bold text-red-400">⚠ ALERT STORM ACTIVE</p>
+            {isIdle ? (
+              <>
+                <p className="text-sm font-bold text-slate-300">System Status: OPERATIONAL</p>
+                <p className="text-xs text-slate-400">Anomaly engine monitoring 24-hour baseline</p>
+              </>
+            ) : alerts.length > 0 && detectionMode === "static" ? (
+              <>
+                <p className="text-sm font-bold text-red-400">⚠ ALERT STORM ACTIVE</p>
+                <p className="text-xs text-slate-400">
+                  {alerts.length} false-positive alerts — 3AM trough below static threshold
+                </p>
+              </>
             ) : alerts.length > 0 && detectionMode === "seasonal" ? (
-              <p className="text-sm font-bold text-green-400">✓ Anomaly Evaluated Against Historical Bucket</p>
+              <>
+                <p className="text-sm font-bold text-green-400">✓ Anomaly Evaluated Against Historical Bucket</p>
+                <p className="text-xs text-slate-400">Zero false alarms — 3AM evaluated against seasonal baseline</p>
+              </>
             ) : (
-              <p className="text-sm font-bold text-slate-300">System Status: OPERATIONAL</p>
+              <>
+                <p className="text-sm font-bold text-green-400">System Status: NOMINAL</p>
+                <p className="text-xs text-slate-400">All metrics within expected ranges</p>
+              </>
             )}
-            <p className="text-xs text-slate-400">
-              {alerts.length > 0 && detectionMode === "static"
-                ? `${alerts.length} false-positive alerts — 3AM trough below static threshold`
-                : alerts.length > 0 && detectionMode === "seasonal"
-                  ? `Zero false alarms — 3AM evaluated against seasonal baseline`
-                  : `Anomaly engine monitoring 24-hour baseline`}
-            </p>
           </div>
         </div>
         <div
           className={cn(
             "rounded-full px-3 py-1 text-xs font-bold",
-            alerts.length > 0 && detectionMode === "static"
-              ? "bg-red-500/20 text-red-400 border border-red-500/40"
-              : alerts.length > 0 && detectionMode === "seasonal"
-                ? "bg-green-500/20 text-green-400 border border-green-500/40"
-                : "bg-slate-700/50 text-slate-400 border border-slate-600",
+            isIdle
+              ? "bg-slate-700/50 text-slate-400 border border-slate-600"
+              : alerts.length > 0 && detectionMode === "static"
+                ? "bg-red-500/20 text-red-400 border border-red-500/40"
+                : alerts.length > 0 && detectionMode === "seasonal"
+                  ? "bg-green-500/20 text-green-400 border border-green-500/40"
+                  : "bg-green-500/20 text-green-400 border border-green-500/40",
           )}
         >
-          {alerts.length > 0 && detectionMode === "static" ? "CRITICAL" : alerts.length > 0 && detectionMode === "seasonal" ? "SAFE" : "NOMINAL"}
+          {isIdle ? "NOMINAL" : alerts.length > 0 && detectionMode === "static" ? "CRITICAL" : alerts.length > 0 && detectionMode === "seasonal" ? "SAFE" : "NOMINAL"}
         </div>
       </div>
 
@@ -1276,15 +1667,15 @@ function DataObservabilitySimulator() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Alerts Triggered"
-          value={alerts.length}
+          value={obsEvaluated ? alerts.length : "—"}
           icon={<Bell className="h-4 w-4" />}
-          color={alerts.length > 5 ? CHART_COLORS.danger : alerts.length > 0 ? CHART_COLORS.warning : CHART_COLORS.success}
-          highlight={alerts.length > 0}
+          color={!isIdle && alerts.length > 5 ? CHART_COLORS.danger : !isIdle && alerts.length > 0 ? CHART_COLORS.warning : CHART_COLORS.success}
+          highlight={!isIdle && alerts.length > 0}
         />
         <MetricCard
           label="Alert Rate"
-          value={`${alertRate}/24`}
-          unit="hours"
+          value={obsEvaluated ? `${alertRate}/24` : "—"}
+          unit={obsEvaluated ? "hours" : undefined}
           icon={<Activity className="h-4 w-4" />}
           color={CHART_COLORS.secondary}
         />
@@ -1377,7 +1768,7 @@ function DataObservabilitySimulator() {
       <div className="flex flex-col gap-2 rounded-xl border border-slate-700/50 bg-slate-800/30 p-4">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-slate-200">AlertDispatcher Log</p>
-          {alerts.length > 0 && (
+          {obsEvaluated && alerts.length > 0 && (
             <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-xs text-red-400">
               {alerts.length} alert{alerts.length !== 1 ? "s" : ""}
             </span>
@@ -1412,7 +1803,7 @@ function DataObservabilitySimulator() {
           {alerts.length === 0 && (
             <div className="flex items-center gap-2 py-4 text-center text-slate-500">
               <EyeOff className="h-4 w-4" />
-              <span>No alerts — system is healthy. Run evaluation to analyze volume.</span>
+              <span>No alerts — system is healthy. Drop a data file to evaluate.</span>
             </div>
           )}
         </div>
@@ -1420,7 +1811,7 @@ function DataObservabilitySimulator() {
 
       {/* Webhook Payload Preview */}
       <AnimatePresence>
-        {lastAlertFingerprint && alerts.length > 0 && (
+        {obsEvaluated && lastAlertFingerprint && alerts.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1556,9 +1947,9 @@ export default function DataPlatformSandbox() {
           transition={{ duration: 0.3 }}
           className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-6 backdrop-blur-sm"
         >
-          {activeTab === 0 && <CDCpipelineSimulator />}
-          {activeTab === 1 && <BatchAnalyticsSimulator />}
-          {activeTab === 2 && <DataObservabilitySimulator />}
+          {activeTab === 0 && <CDCpipelineSimulator key="cdc-0" />}
+          {activeTab === 1 && <BatchAnalyticsSimulator key="batch-1" />}
+          {activeTab === 2 && <DataObservabilitySimulator key="obs-2" />}
         </motion.div>
       </AnimatePresence>
     </section>
