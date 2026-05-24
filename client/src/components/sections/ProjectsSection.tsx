@@ -160,9 +160,10 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
         loading="lazy"
         onError={(e) => {
           const target = e.currentTarget as HTMLImageElement;
+          console.warn(`Image error for ${slug}: ${project.image}`);
           if (!target.dataset.fallbackUsed) {
             target.dataset.fallbackUsed = "true";
-            target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400";
+            target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400";
           }
         }}
         data-testid={`project-image-${slug}`}
