@@ -36,6 +36,10 @@ import {
   SiElasticsearch,
   SiInformatica
 } from 'react-icons/si';
+
+import { ROLES, PROJECTS, EXPERIENCES, PIPELINE_STAGES, getLevelColor, getLevelIcon } from "@/data/portfolio";
+import { CONTACT } from "@/data/contact";
+
 const SubtleNetworkCursor = lazy(() => import("@/components/subtlenetworkcursor"));
 const MLNetworkBackground = lazy(() => import("@/components/mlnetworkbackground"));
 
@@ -149,22 +153,9 @@ export default function Portfolio() {
   const [currentSection, setCurrentSection] = useState("home");
 
   
-  // Typing animation for roles
-  const roles = [
-  "Data Engineer",
-  "Python Ninja",
-  "Cloud Explorer",
-  "Data Pipeline Architect",
-  "SQL Sorcerer",
-  "Big Data Wrangler",
-  "Data Whisperer for Machines",
-  "Neural Data Forger",
-  "Machine Intelligence Artisan"
-];
-
-  // Typing animation for roles
+  // roles imported from @/data/portfolio
   useEffect(() => {
-    const currentRole = roles[currentRoleIndex];
+    const currentRole = ROLES[currentRoleIndex];
 
     let typingSpeed = isDeleting ? 50 : 100; // faster delete
     let timeout: NodeJS.Timeout;
@@ -185,7 +176,7 @@ export default function Portfolio() {
     } else if (isDeleting && displayedText.length === 0) {
       // move to next word
       setIsDeleting(false);
-      setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+      setCurrentRoleIndex((prev) => (prev + 1) % ROLES.length);
     }
 
     return () => clearTimeout(timeout);
@@ -360,199 +351,10 @@ export default function Portfolio() {
     });
   };
 
-  const projects = [
-    // Featured Data Engineering Projects
-    {
-      title: "CDC & Historical Warehouse Platform",
-      description: "Engineered a metadata-driven CDC pipeline extracting PostgreSQL changes into append-only JSON logs with deterministic replay. Implemented SCD Type-2 versioning and idempotent batch execution to maintain complete historical lineage and auditability for analytics and ML feature generation.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "PostgreSQL", "Docker", "SCD Type 2", "Bash Scripting", "JSON Logs"],
-      github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
-      featured: true
-    },
-    {
-      title: "Data Observability Platform",
-      description: "Designed a statistical data observability framework using rolling-window baselining and Z-score anomaly detection to identify freshness gaps, schema drift, and volume anomalies. Automated threshold learning to prevent silent data failures in distributed batch pipelines.",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "PostgreSQL", "Pandas", "Statistical Analysis", "YAML Config", "Docker"],
-      github: "https://github.com/mrohitth/data-observability-platform",
-      featured: true
-    },
-    {
-      title: "Batch Analytics Platform",
-      description: "Built a containerized ELT platform orchestrated with Airflow and dbt to process large-scale event data. Implemented idempotent transformations, partition-aware modeling, and automated quality validation to simulate production-grade analytics workloads.",
-      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Apache Airflow", "dbt", "PostgreSQL", "MinIO", "Docker", "Python"],
-      github: "https://github.com/mrohitth/batch-analytics-platform",
-      featured: true
-    },
-    // Academic Research & ML Projects
-    {
-      title: "Brain Tumor Classification Using Machine Learning",
-      description: "Classified brain MRI scans into 4 tumor types using hand-engineered features (GLCM, HOG, PCA) with 96% accuracy. Benchmarked against deep learning models (ResNet50, DenseNet169), outperforming ResNet50 with classical ML approaches.",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "scikit-learn", "OpenCV", "SVM", "Random Forest", "Feature Engineering", "Medical Imaging"],
-      github: "https://github.com/mrohitth/Brain-Tumor-Classification-Using-Machine-Learning",
-      featured: false,
-      category: "Machine Learning"
-    },
-    {
-      title: "Mars Terrain Semantic Segmentation",
-      description: "Developed U-Net architecture for pixel-level classification of Mars rover imagery from AI4Mars dataset. Integrated depth data from planetary data systems to improve terrain segmentation accuracy for autonomous navigation.",
-      image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "PyTorch", "U-Net", "Jupyter Notebook", "Semantic Segmentation", "CNNs", "Deep Learning"],
-      github: "https://github.com/mrohitth/Semantic-Segmentation-using-U-Net",
-      featured: false,
-      category: "Deep Learning"
-    },
-    {
-      title: "Neural Networks for Visual Recognition",
-      description: "Built classification models from scratch using pure Python and PyTorch for flowers, digits, and alphabets. Implemented feedforward networks, CNNs, and autoencoders with backpropagation for dimensionality reduction and feature learning.",
-      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "PyTorch", "NumPy", "Neural Networks", "CNNs", "Autoencoders", "Backpropagation"],
-      github: "https://github.com/mrohitth/Neural-Networks-for-Recognition",
-      featured: false,
-      category: "Deep Learning"
-    },
-    {
-      title: "Augmented Reality with Planar Homographies",
-      description: "Implemented real-time video overlay on book covers using homography estimation and feature detection. Built AR pipeline with automatic corner detection, perspective transformation, and seamless video blending for moving camera scenarios.",
-      image: "https://images.unsplash.com/photo-1617802690658-1173a812650d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "OpenCV", "NumPy", "Homography Estimation", "Feature Matching", "Image Warping"],
-      github: "https://github.com/mrohitth/Augmented-Reality-with-Planar-Homographies",
-      featured: false,
-      category: "Computer Vision"
-    },
-    {
-      title: "3D Reconstruction from Images",
-      description: "Developed structure-from-motion pipeline using 7-point and 8-point algorithms for epipolar geometry. Implemented RANSAC for outlier rejection and bundle adjustment for multi-view 3D point cloud optimization.",
-      image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "OpenCV", "NumPy", "RANSAC", "Bundle Adjustment", "Epipolar Geometry"],
-      github: "https://github.com/mrohitth/3D-Reconstruction",
-      featured: false,
-      category: "Computer Vision"
-    },
-    {
-      title: "Lucas-Kanade Object Tracking",
-      description: "Built optical flow-based tracking system using Lucas-Kanade algorithm with iterative refinement. Implemented template warping and appearance adaptation to handle illumination changes and object deformation across video frames.",
-      image: "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "OpenCV", "Optical Flow", "Template Matching", "Image Gradients", "NumPy"],
-      github: "https://github.com/mrohitth/Lucas-Kanade-Tracking",
-      featured: false,
-      category: "Computer Vision"
-    },
-    {
-      title: "Photometric Stereo for 3D Surface Reconstruction",
-      description: "Reconstructed 3D surface topography from multiple images captured under varying lighting conditions. Used photometric stereo to estimate surface normals and recover depth maps from intensity gradients.",
-      image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "NumPy", "Computer Vision", "Linear Algebra", "Surface Normals", "Depth Estimation"],
-      github: "https://github.com/mrohitth/Photometric-Stereo",
-      featured: false,
-      category: "Computer Vision"
-    },
-    {
-      title: "Spatial Pyramid Matching for Scene Classification",
-      description: "Implemented classical scene recognition using Bag-of-Visual-Words with spatial pyramid pooling. Applied TF-IDF weighting and KNN classification to achieve hierarchical image representation for 8-category scene classification.",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
-      technologies: ["Python", "Jupyter Notebook", "SIFT Features", "Bag-of-Words", "TF-IDF", "KNN", "scikit-learn"],
-      github: "https://github.com/mrohitth/Spatial-Pyramid-Matching-for-Scene-Classification",
-      featured: false,
-      category: "Computer Vision"
-    }
-  ];
-
-  // Debug logs for tab switching
-  // console.log("Active Tab:", activeTab);
-  // console.log("CV Projects Found:", projects.filter(p => 
-  //   !p.featured && p.category === "Computer Vision"
-  // ).length);
-  // console.log("ML Projects Found:", projects.filter(p => 
-  //   !p.featured && (p.category === "Machine Learning" || p.category === "Deep Learning")
-  // ).length);
-  // console.log("All Projects Categories:", projects.map(p => ({title: p.title, category: p.category})));
 
   // Data Engineering Pipeline organized by stages
-  const dataEngineeringPipeline = [
-    {
-      stage: "Data Sources",
-      emoji: "🗄️",
-      description: "Operational and analytical data systems",
-      tools: [
-        { name: "PostgreSQL", icon: SiPostgresql, level: "Advanced", usage: "Relational modeling, OLTP systems", color: "text-blue-600" },
-        { name: "AWS S3", icon: SiAmazon, level: "Advanced", usage: "Object storage & data lake", color: "text-orange-400" },
-        { name: "CSV/JSON", level: "Advanced", usage: "Flat file & semi-structured data ingestion", color: "text-gray-600" },
-        { name: "MongoDB", icon: SiMongodb, level: "Intermediate", usage: "Document-based storage", color: "text-green-500" }
-      ]
-    },
-    {
-      stage: "Data Ingestion",
-      emoji: "📥",
-      description: "Batch ingestion & data integration",
-      tools: [
-        { name: "Python", icon: SiPython, level: "Advanced", usage: "ETL development, connectors", color: "text-yellow-400" },
-        { name: "AWS S3", icon: SiAmazon, level: "Advanced", usage: "Data lake storage & ingestion", color: "text-orange-400" },
-        { name: "Informatica IICS", icon: SiInformatica, level: "Intermediate", usage: "Enterprise data ingestion", color: "text-blue-600" },
-        { name: "Snowpipe", level: "Intermediate", usage: "Snowflake data loading", color: "text-blue-300" }
-      ]
-    },
-    {
-      stage: "Processing & Transformation",
-      emoji: "⚡",
-      description: "Distributed data processing & modeling",
-      tools: [
-        { name: "Apache Spark", icon: SiApachespark, level: "Advanced", usage: "Distributed batch processing", color: "text-orange-500" },
-        { name: "SQL", level: "Advanced", usage: "Complex joins, CTEs, window functions", color: "text-blue-600" },
-        { name: "AWS EMR (EC2/EKS)", icon: SiAmazon, level: "Intermediate", usage: "Managed Spark clusters", color: "text-orange-400" },
-        { name: "dbt", icon: SiDbt, level: "Intermediate", usage: "SQL-based transformations & modeling", color: "text-orange-400" }
-      ]
-    },
-    {
-      stage: "Storage & Warehousing",
-      emoji: "🏗️",
-      description: "Scalable cloud data platforms",
-      tools: [
-        { name: "Snowflake", icon: SiSnowflake, level: "Advanced", usage: "Cloud data warehouse & analytics", color: "text-blue-300" },
-        { name: "Data Modeling", level: "Advanced", usage: "Star schema, fact/dimension design", color: "text-purple-500" },
-        { name: "AWS S3", icon: SiAmazon, level: "Intermediate", usage: "Data lake storage", color: "text-orange-400" }
-      ]
-    },
-    {
-      stage: "Orchestration",
-      emoji: "🎼",
-      description: "Workflow automation & reliability",
-      tools: [
-        { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling", color: "text-blue-600" },
-        { name: "Apache Airflow", icon: SiApacheairflow, level: "Intermediate", usage: "DAG-based orchestration", color: "text-red-400" },
-        { name: "Jenkins", icon: SiJenkins, level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" }
-      ]
-    },
-    {
-      stage: "Observability & DevOps",
-      emoji: "📊",
-      description: "Data reliability & deployment",
-      tools: [
-        { name: "Git", icon: SiGit, level: "Advanced", usage: "Version control & collaboration", color: "text-orange-600" },
-        { name: "Docker", icon: SiDocker, level: "Intermediate", usage: "Containerized environments", color: "text-blue-500" }
-      ]
-    }
-  ];
-
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case "Advanced": return "text-emerald-400 bg-emerald-400/10";
-      case "Intermediate": return "text-blue-400 bg-blue-400/10";
-      default: return "text-gray-400 bg-gray-400/10";
-    }
-  };
-
-  // Get animated icon for each skill level
-  const getLevelIcon = (level: string) => {
-    switch (level) {
-      case "Advanced": return <Star className="w-3 h-3 mr-1 group-hover:animate-spin" />;
-      case "Intermediate": return <Database className="w-3 h-3 mr-1 group-hover:animate-pulse" />;
-      default: return null;
-    }
-  };
+  // dataEngineeringPipeline, getLevelColor, getLevelIcon imported from @/data/portfolio
+  // experiences imported from @/data/portfolio
 
 const experiences = [
     {
@@ -1011,7 +813,7 @@ const experiences = [
           
           {/* Compact Pipeline Categories */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {dataEngineeringPipeline.map((stage, stageIndex) => (
+            {PIPELINE_STAGES.map((stage: typeof PIPELINE_STAGES[0], stageIndex: number) => (
               <div key={stageIndex} className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer">
                 {/* Stage Header */}
                 <div className="flex items-center gap-3 mb-4">
@@ -1093,7 +895,7 @@ const experiences = [
               ⭐ Featured Data Engineering Projects
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.filter(project => project.featured).map((project, index) => (
+              {PROJECTS.filter(project => project.featured).map((project, index) => (
                 <Card key={index} className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 group relative" data-testid={`project-card-${index}`}>
                   {project.featured && (
                     <div className="absolute top-2 right-2 bg-portfolio-primary text-white text-xs px-2 py-1 rounded-full font-medium">
@@ -1184,7 +986,7 @@ const experiences = [
               {/* ML Projects Tab */}
               {activeTab === 'ml' && (
                 <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide animate-fadeIn" data-testid="ml-projects-container" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                  {projects.filter(project => !project.featured && 
+                  {PROJECTS.filter(project => !project.featured && 
                     (project.category === "Machine Learning" || project.category === "Deep Learning"))
                     .map((project) => {
                       const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
@@ -1239,7 +1041,7 @@ const experiences = [
               {/* Computer Vision Projects Tab */}
               {activeTab === 'cv' && (
                 <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide animate-fadeIn" data-testid="cv-projects-container" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                  {projects.filter(project => !project.featured && project.category === "Computer Vision")
+                  {PROJECTS.filter(project => !project.featured && project.category === "Computer Vision")
                     .map((project) => {
                       const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
                       return (
