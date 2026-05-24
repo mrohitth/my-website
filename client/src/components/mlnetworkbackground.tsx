@@ -6,6 +6,13 @@ export default function MLNetworkBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    // Disable on mobile or when user prefers reduced motion
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const prefersReducedMotion = typeof window !== 'undefined' &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isMobile || prefersReducedMotion) return;
+
     const _ctx = canvas.getContext('2d');
     if (!_ctx) return;
     const ctx = _ctx as CanvasRenderingContext2D;
@@ -17,7 +24,9 @@ export default function MLNetworkBackground() {
     canvas.height = height;
 
     const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
-    const nodeCount = Math.floor((width * height) / 12500); // density based on canvas size
+    const nodeCount = isMobile
+      ? Math.floor((width * height) / 40000)   // 40% fewer nodes on mobile
+      : Math.floor((width * height) / 12500);   // density based on canvas size
 
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({

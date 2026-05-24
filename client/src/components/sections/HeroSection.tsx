@@ -20,7 +20,6 @@ export function HeroSection() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
   const [currentSection, setCurrentSection] = useState("hero-top");
 
   // Typing animation
@@ -47,11 +46,7 @@ export function HeroSection() {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentRoleIndex]);
 
-  // Hide intro after delay
-  useEffect(() => {
-    const timer = setTimeout(() => setShowIntro(false), 600);
-    return () => clearTimeout(timer);
-  }, []);
+
 
   // Section visibility tracking
   useEffect(() => {
@@ -84,20 +79,6 @@ export function HeroSection() {
 
   return (
     <>
-      {/* Intro overlay */}
-      <AnimatePresence>
-        {showIntro && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-portfolio-background z-50 flex items-center justify-center"
-          >
-            <div className="pipeline-intro" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <section
         id="hero"
         className="hero-gradient min-h-screen flex items-center justify-center px-4 relative overflow-hidden"

@@ -16,6 +16,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "sandbox", label: "Sandbox" },
   { id: "philosophy", label: "Philosophy" },
   { id: "contact", label: "Contact" },
 ];
@@ -23,8 +24,9 @@ const NAV_ITEMS: NavItem[] = [
 function scrollToSection(sectionId: string) {
   const el = document.getElementById(sectionId);
   if (!el) return;
-  const offset = el.offsetTop - 72;
-  window.scrollTo({ top: offset, behavior: "smooth" });
+  const offset = 72;
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
 }
 
 function NavLink({
@@ -131,7 +133,7 @@ export function NavigationBar() {
             {/* Logo */}
             <button
               onClick={() => scrollToSection("hero")}
-              className="font-bold text-portfolio-primary text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 px-3 py-2 rounded-md transition-colors"
+              className="font-bold text-portfolio-primary text-portfolio-foreground hover:text-portfolio-primary hover:bg-portfolio-primary/10 px-4 py-3 rounded-md transition-colors"
               data-testid="logo-button"
             >
               Mathew Thomson

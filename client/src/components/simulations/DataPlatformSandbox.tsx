@@ -356,6 +356,30 @@ function CDCpipelineSimulator() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Problem Statement */}
+      <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 text-yellow-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">Production Scenario</span>
+        </div>
+        <p className="text-sm text-slate-200 leading-relaxed">
+          <span className="font-semibold text-yellow-300">Source:</span> PostgreSQL 14 — 40M records, 3,500 TPS peak. Downstream: Snowflake DW (6am batch), Kafka fraud detection (100K events/min), Spark HDFS for ML features.{" "}
+          <span className="font-semibold text-yellow-300">SLA:</span> &lt;15min from commit to Snowflake availability.{" "}
+          <span className="font-semibold text-red-400">Failure cost:</span> Delayed risk reports = manual reconciliation + regulatory filing amendment per incident.
+        </p>
+      </div>
+
+      {/* Why Not Batch? */}
+      <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/5 p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <Zap className="h-4 w-4 text-cyan-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Why CDC instead of batch?</span>
+        </div>
+        <p className="text-xs text-slate-300 leading-relaxed">
+          Batch requires a maintenance window that blocks writes — unacceptable for active mortgage processing. A 30-minute batch delay means risk models run on stale data, potentially mis-selling a $2.5M commercial loan. CDC captures every commit as it happens and keeps a CDC log as the single source of truth for 22-year historical reconstruction. Batch cannot do that.
+        </p>
+      </div>
+
       {/* Architecture Header */}
       <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-5">
         <p className="mb-4 text-sm italic text-slate-300 leading-relaxed">
@@ -404,6 +428,47 @@ function CDCpipelineSimulator() {
             <span className="font-mono text-sm font-bold text-cyan-400">{batchSize.toLocaleString()}</span>
           </div>
         </div>
+      </div>
+
+      {/* Failure Mode Selector */}
+      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <ShieldAlert className="h-4 w-4 text-red-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-red-400">Failure Scenarios</span>
+        </div>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <button
+            onClick={() => { setPipelineMode("procedural"); }}
+            className="rounded-lg border border-red-500/30 bg-red-500/10 p-2 text-left hover:bg-red-500/20 transition-colors"
+          >
+            <p className="text-xs font-semibold text-red-400">Consumer Lag Spike</p>
+            <p className="text-xs text-slate-400">CDC connector stalls; Kafka consumer falls 3h behind; source WAL accumulates. Flips to Procedural (30K IOPS) as failsafe.</p>
+          </button>
+          <button
+            onClick={() => { setPipelineMode("setbased"); }}
+            className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-2 text-left hover:bg-yellow-500/20 transition-colors"
+          >
+            <p className="text-xs font-semibold text-yellow-400">Schema Incompatibility</p>
+            <p className="text-xs text-slate-400">New column added upstream; CDC JSON parser fails silently; batch switches to set-based CTE as safe fallback (2 IOPS).</p>
+          </button>
+          <button
+            onClick={() => { setPipelineMode("setbased"); }}
+            className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-2 text-left hover:bg-orange-500/20 transition-colors"
+          >
+            <p className="text-xs font-semibold text-orange-400">Idempotency Breach</p>
+            <p className="text-xs text-slate-400">Duplicate key error on replay — set-based CTE uses ON CONFLICT DO NOTHING to absorb duplicates without failing.</p>
+          </button>
+          <button
+            onClick={() => { setPipelineMode("setbased"); }}
+            className="rounded-lg border border-blue-500/30 bg-blue-500/10 p-2 text-left hover:bg-blue-500/20 transition-colors"
+          >
+            <p className="text-xs font-semibold text-blue-400">Offset Drift Recovery</p>
+            <p className="text-xs text-slate-400">Consumer restart reconnects from last committed offset — no data loss, no duplicate processing. Log-based CDC guarantee.</p>
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-slate-500">
+          Click a scenario to see how the pipeline handles it. Each shows the fallback strategy that prevents data loss.
+        </p>
       </div>
 
       {/* Inject Button */}
@@ -638,15 +703,18 @@ function CDCpipelineSimulator() {
 // ============================================================================
 
 const DAG_STAGES = [
-  { id: "stg_events", label: "stg_events", description: "Raw event ingestion", icon: Box },
-  { id: "dim_users", label: "dim_users", description: "User dimension modeling", icon: Layers },
-  { id: "fact_orders", label: "fact_orders", description: "Order fact aggregation", icon: GitBranch },
-  { id: "dbt_tests", label: "run_dbt_tests", description: "Data quality validation", icon: FlaskConical },
+  { id: "stg_events", label: "stg_events", description: "Polls source DB for new CDC events since last run (last_updated > max_checkpoint). Fails if no events found past SLA window — correct behavior, not a bug.", icon: Box },
+  { id: "dim_users", label: "dim_users", description: "dbt incremental upsert: hash payload to skip unchanged rows. Skips — doesn't re-process. Fails if FK to dim_users is NULL for new users.", icon: Layers },
+  { id: "fact_orders", label: "fact_orders", description: "dbt incremental + SCD Type-2 for order status changes. FK dependency on dim_users. Fails: foreign key violation → DAG aborts.", icon: GitBranch },
+  { id: "dbt_tests", label: "run_dbt_tests", description: "dbt test suite: uniqueness, not-null, referential integrity. strict=abort DAG; silent=absorb bad data silently.", icon: FlaskConical },
 ];
 
 const QUALITY_SCENARIOS = [
   { id: "clean", label: "Clean Dataset", description: "Normal data without anomalies" },
   { id: "duplicate_flood", label: "Duplicate Event Flood", description: "Events are duplicated upstream" },
+  { id: "late_arrival", label: "Late-Arriving Events", description: "Records from 6h ago appearing now — SCD Type-2 audit trail risk" },
+  { id: "schema_drift", label: "Schema Drift (New Column)", description: "Unannounced column added upstream — CDC parser fails silently" },
+  { id: "null_flood", label: "NULL Distribution Shift", description: "Critical field NULL rate jumps from 0.1% to 14% — downstream ML model bias risk" },
 ];
 
 function BatchAnalyticsSimulator() {
@@ -674,7 +742,8 @@ function BatchAnalyticsSimulator() {
     setBatchEvaluated(false);
     setExecuting(true);
     setAlertLog([]);
-    const baseRows = scenario === "duplicate_flood" ? 5000 : 2000;
+    const baseRows = scenario === "duplicate_flood" ? 5000 : scenario === "null_flood" ? 2000 : 2000;
+    // Scenarios: clean=2000, duplicate_flood=5000 (2x corrupt), late_arrival=2000 (late events), schema_drift=2000 (bad columns), null_flood=2000 (NULL flood)
     const corruptedRows = scenario === "duplicate_flood" ? baseRows * 2 : baseRows;
 
     const stages = [
@@ -696,7 +765,13 @@ function BatchAnalyticsSimulator() {
           const isLast = idx === stages.length - 1;
 
           if (isLast) {
-            if (qualityGate === "strict" && scenario === "duplicate_flood") {
+            if (qualityGate === "strict" && scenario !== "clean") {
+              const scenarioLabels: Record<string, string> = {
+                duplicate_flood: `duplicate_events test failed — found ${corruptedRows - baseRows} extra rows`,
+                late_arrival: `late-arriving events detected — max(event_ts) regressed 6h behind checkpoint`,
+                schema_drift: `unannounced column detected upstream — CDC JSON parser compatibility broken`,
+                null_flood: `NULL rate on critical field jumped from 0.1% to 14.3% — ML model bias risk`,
+              };
               setDagState((prev) => ({
                 ...prev,
                 [stage.id]: { ...prev[stage.id], rows: 0, status: "failed" },
@@ -705,12 +780,18 @@ function BatchAnalyticsSimulator() {
                 ...prev,
                 {
                   type: "error",
-                  message: `[dbt] ERROR: duplicate_events test failed — found ${corruptedRows - baseRows} extra rows vs. source (${baseRows}). Trigger rule "all_success" aborted pipeline.`,
+                  message: `[dbt] ERROR: ${scenarioLabels[scenario] ?? scenario} — trigger rule "all_success" aborted pipeline.`,
                   ts: Date.now(),
                 },
               ]);
               setBatchRows(corruptedRows);
             } else if (qualityGate === "silent") {
+              const silentLabels: Record<string, string> = {
+                duplicate_flood: `${corruptedRows - baseRows} duplicate rows absorbed silently — downstream metrics will be corrupted`,
+                late_arrival: `late events absorbed silently — SCD Type-2 audit trail may be corrupted by overwriting historical records`,
+                schema_drift: `schema incompatibility absorbed — pipeline continues with partial column set; downstream NULL rates will increase`,
+                null_flood: `${corruptedRows} rows with NULL on critical field written to Snowflake — ML model predictions will be biased`,
+              };
               setDagState((prev) => ({
                 ...prev,
                 [stage.id]: { ...prev[stage.id], rows: corruptedRows, status: "done" },
@@ -719,7 +800,7 @@ function BatchAnalyticsSimulator() {
                 ...prev,
                 {
                   type: "warning",
-                  message: `[Silent Swallow] Pipeline completed with ${corruptedRows} rows. ${corruptedRows - baseRows} duplicate rows absorbed silently — downstream metrics will be corrupted.`,
+                  message: `[Silent Swallow] Pipeline completed with ${corruptedRows} rows. ${silentLabels[scenario] ?? "bad data absorbed silently"}.`,
                   ts: Date.now(),
                 },
               ]);
@@ -814,6 +895,66 @@ function BatchAnalyticsSimulator() {
               </button>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* DAG Stage Dependencies */}
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <GitBranch className="h-4 w-4 text-blue-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-blue-400">DAG Stage Dependencies &amp; Failure Impact</span>
+        </div>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {[
+            { stage: "stg_events", tool: "Airflow Sensor", dep: "None (root)", fail: "No events reach staging. DAG fails at 5:45am — correct behavior. Silent retry past 6am = stale Snowflake data.", color: "blue" },
+            { stage: "dim_users", tool: "dbt incremental", dep: "stg_events", fail: "New users show as 'Unknown User' in BI. Business impact delayed 8-12h (BI team emails DE).", color: "cyan" },
+            { stage: "fact_orders", tool: "dbt + SCD Type-2", dep: "dim_users (FK)", fail: "FK violation → dbt aborts. Revenue dashboard shows $0 at 8am. CFO calls on-call at 7:15am.", color: "emerald" },
+            { stage: "dbt_tests", tool: "dbt test suite", dep: "fact_orders", fail: "strict: DAG aborts, morning report uses yesterday's data. silent: bad data flows to Snowflake undetected.", color: "green" },
+          ].map(({ stage, tool, dep, fail }) => (
+            <div key={stage} className="rounded-lg border border-slate-700/30 bg-slate-800/20 p-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-xs font-bold text-slate-200">{stage}</span>
+                <span className="text-xs text-slate-500">{tool}</span>
+              </div>
+              <p className="text-xs text-slate-400 mb-1">Depends on: <span className="text-cyan-400">{dep}</span></p>
+              <p className="text-xs text-red-400/80">{fail}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* SLA Breach Impact */}
+      <div className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 text-orange-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">If DAG Misses 6am Window — 3 Business Impacts</span>
+        </div>
+        <div className="space-y-2">
+          {[
+            ["7:00am — Risk Report", "Stale risk data → $2.5M loan approved with wrong rate. Manual reconciliation + regulatory filing amendment."],
+            ["8:00am — CFO Revenue", "Looker shows $4.2M vs $8.7M actual. CFO calls on-call at 7:15am. 20min war-room."],
+            ["4:00pm — ML Features", "Feature refresh skipped. Model accuracy degrades 0.3% on $900B portfolio — measurable over weeks."],
+          ].map(([time, impact]) => (
+            <div key={time} className="flex items-start gap-2">
+              <span className="text-xs font-semibold text-orange-400 shrink-0 w-36">{time}</span>
+              <span className="text-xs text-slate-400">{impact}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Snowflake Cost Analysis */}
+      <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <TrendingDown className="h-4 w-4 text-purple-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-purple-400">Snowflake Credit Cost (batchSize=10K rows)</span>
+        </div>
+        <div className="space-y-1 font-mono text-xs text-slate-300">
+          <p><span className="text-slate-500">Medium Warehouse:</span> 2-node × $4/credit × 2 credits/hr = $8/hr</p>
+          <p><span className="text-slate-500">Per-run compute:</span> (45s active + 15m idle)/3600 × 2 credits × $4 = <span className="text-yellow-400">$0.67/run</span></p>
+          <p><span className="text-slate-500">Monthly:</span> $0.67 × 30 = <span className="text-yellow-400">$20/month</span></p>
+          <p><span className="text-slate-500">At 50M rows (1000 partitions):</span> 1000 × $0.067 = <span className="text-red-400">$67/run</span> → $2,010/month</p>
+          <p className="text-xs text-slate-500 mt-1">Auto-suspend at 30s vs 15m idle → ~40% cost reduction.</p>
         </div>
       </div>
 
@@ -1274,6 +1415,42 @@ function DataObservabilitySimulator() {
               <p><span className="text-green-400 font-semibold">Operational Cost: 0% Noise (Self-Healing Operational Plane)</span></p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Quality Scenario Definitions */}
+      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <Activity className="h-4 w-4 text-emerald-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Production Anomaly Scenarios (5 total)</span>
+        </div>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {[
+            { name: "Late-Arriving Events", severity: "P2", method: "Track max(event_ts) — if it regresses below checkpoint by >1h, flag late-arrival.", impact: "SCD Type-2 audit trail corrupted — historical records overwritten with late corrections. Compliance risk." },
+            { name: "Schema Drift", severity: "P1", method: "Compare incoming schema vs known-good manifest (Glue Schema Registry). Any field count/type mismatch = fire.", impact: "CDC JSON parser fails silently, pipeline stalls. Morning risk report uses yesterday's data. Regulatory filing required." },
+            { name: "Distribution Shift", severity: "P1", method: "7-day rolling NULL% on critical fields. Two-proportion Z-test vs historical baseline (p &lt; 0.001 = alert).", impact: "ML model predictions become systematically biased for customers with NULL on risk fields. Affects $900B portfolio decisions." },
+            { name: "Volume Anomaly", severity: "P2", method: "Rolling-window Z-score vs 30-day baseline, per hour-of-day bucket. >3σ = fire.", impact: "Possible upstream system issue or data loss event. Detecting fast reduces blast radius." },
+            { name: "Freshness Breach", severity: "P1", method: "No data received for 15 min during business hours. Direct SLS timestamp check.", impact: "Pipeline stalled. Snowflake tables stop refreshing. All downstream reports show stale data." },
+          ].map(({ name, severity, method, impact }) => (
+            <div key={name} className="rounded-lg border border-slate-700/30 bg-slate-800/20 p-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-semibold text-slate-200">{name}</span>
+                <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${severity === 'P1' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'}`}>{severity}</span>
+              </div>
+              <p className="text-xs text-cyan-400 mb-1">Detect: {method}</p>
+              <p className="text-xs text-slate-500">Impact: {impact}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Alert Severity Reference */}
+      <div className="rounded-xl border border-slate-700/50 bg-slate-800/20 p-4">
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Alert Severity Reference</div>
+        <div className="flex gap-4 text-xs font-mono">
+          <span className="text-red-400">P1 — Page immediately (24/7)</span>
+          <span className="text-yellow-400">P2 — Page within 30 min (business hours)</span>
+          <span className="text-slate-500">P3 — Next business day</span>
         </div>
       </div>
 
