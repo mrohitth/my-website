@@ -366,7 +366,7 @@ function CDCpipelineSimulator() {
       </motion.button>
 
       {/* Metrics */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Batches Processed"
           value={metrics.totalBatches}
@@ -968,7 +968,7 @@ function DataObservabilitySimulator() {
       </motion.button>
 
       {/* Metrics */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="Alerts Triggered"
           value={alerts.length}
