@@ -95,7 +95,7 @@ export function HeroSection() {
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30">
             <button
               onClick={() => scrollToSection("about")}
-              className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600 transition-all"
+              className="bg-portfolio-secondary text-portfolio-foreground rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
