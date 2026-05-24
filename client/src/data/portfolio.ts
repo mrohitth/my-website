@@ -362,7 +362,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Capco (Client: Freddie Mac)",
     period: "Apr 2024 - Present",
     description:
-      "Led the design and delivery of a metadata-driven CDC platform processing 40M+ records per batch — eliminating manual reconciliation for the entire credit risk reporting team. Reduced nightly batch runtime from 14 hours to 3.5 hours through partition-aware shuffle optimization, saving ~10.5h of EMR cluster time per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve historical data without DE support.",
+      "Architecting distributed ETL pipelines on AWS EMR (EC2/EKS) and Snowflake processing 40M+ records per batch. Reduced Spark/SQL runtimes by 75% through partitioning and shuffle optimization. Engineered SCD Type-2 historical models spanning 22+ years to support analytics and ML-driven reporting workloads.",
     metrics: [
       "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
       "60% reduction in direct DB load (eliminated repeated full-table scans)",
@@ -379,7 +379,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Bosmos",
     period: "Sep 2023 - Mar 2024",
     description:
-      "Led a 5-engineer team to design and deploy a production-grade NLP inference platform on TensorFlow Serving, achieving sub-50ms p99 latency at 10,000 requests/minute. Built automated model drift detection that reduced model staleness incidents by 80%, from ~5 per week to ~1 per week. Managed full ML lifecycle: data ingestion → training → validation → serving → monitoring.",
+      "Led a 5-engineer team to design and deploy a production-grade NLP platform using TensorFlow. Built scalable inference services and optimized model serving pipelines to achieve low-latency real-time prediction at scale.",
     metrics: [
       "Sub-50ms p99 latency at 10K requests/minute",
       "5-engineer team led: full ML lifecycle from ingestion to monitoring",
@@ -396,7 +396,7 @@ export const EXPERIENCES: Experience[] = [
     company: "Design Research Collective",
     period: "Dec 2021 - May 2023",
     description:
-      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant.",
+      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation.",
     metrics: [
       "4.0 GPA across graduate coursework",
       "Published 2 papers on 3D reconstruction and photometric stereo",
@@ -425,154 +425,88 @@ export interface SkillDomain {
   tools: SkillTool[];
 }
 
-export const SKILL_DOMAINS: SkillDomain[] = [
+// ============================================================================
+// SKILL DOMAINS — organized by pipeline stage (from feature branch)
+// ============================================================================
+
+export interface PipelineTool {
+  name: string;
+  icon?: string;
+  level: "Advanced" | "Intermediate" | string;
+  usage: string;
+  color: string;
+}
+
+export interface PipelineStage {
+  stage: string;
+  emoji: string;
+  description: string;
+  tools: PipelineTool[];
+}
+
+export const SKILL_DOMAINS: PipelineStage[] = [
   {
-    domain: "Stream Processing & Real-Time Systems",
-    icon: "⚡",
-    description: "Designing and operating low-latency event-driven architectures",
+    stage: "Data Sources",
+    emoji: "🗄️",
+    description: "Operational and analytical data systems",
     tools: [
-      {
-        name: "Apache Kafka",
-        level: "Strong",
-        context: "Production use at Bosmos for real-time NLP inference event streaming at 10K events/min. Designed topic partitioning strategy that reduced consumer lag from 45s to <2s.",
-      },
-      {
-        name: "AWS Kinesis",
-        level: "Strong",
-        context: "Designed Kinesis Data Streams architecture for clickstream ingestion at Freddie Mac — 500K events/day with 99.9% uptime requirement.",
-      },
-      {
-        name: "Apache Flink",
-        level: "Working",
-        context: "Built windowed aggregation prototypes for real-time revenue dashboards. Evaluated Flink vs Spark Streaming for sub-minute latency requirements.",
-      },
-    ],
+      { name: "PostgreSQL", icon: "SiPostgresql", level: "Advanced", usage: "Relational modeling, OLTP systems", color: "text-blue-600" },
+      { name: "AWS S3", icon: "SiAmazon", level: "Advanced", usage: "Object storage & data lake", color: "text-orange-400" },
+      { name: "CSV/JSON", level: "Advanced", usage: "Flat file & semi-structured data ingestion", color: "text-gray-600" },
+      { name: "MongoDB", icon: "SiMongodb", level: "Intermediate", usage: "Document-based storage", color: "text-green-500" }
+    ]
   },
   {
-    domain: "Distributed Data Processing",
-    icon: "🔄",
-    description: "Scaling batch and streaming workloads across commodity clusters",
+    stage: "Data Ingestion",
+    emoji: "📥",
+    description: "Batch ingestion & data integration",
     tools: [
-      {
-        name: "Apache Spark (PySpark / Scala)",
-        level: "Strong",
-        context: "40M+ records/batch at Freddie Mac. Tuned partition/shuffle configs for 75% runtime reduction. Wrote custom UDFs for CDC change data extraction.",
-      },
-      {
-        name: "AWS EMR (EC2 + EKS)",
-        level: "Strong",
-        context: "Production cluster management with spot instance fallback strategies. Achieved 92% spot instance utilization without job failures during capacity events.",
-      },
-      {
-        name: "dbt",
-        level: "Strong",
-        context: "120+ dbt models in Batch Analytics Platform with incremental materialization, CI/CD hooks, and automated schema tests. Reduced Snowflake credit consumption by 45%.",
-      },
-      {
-        name: "Apache Airflow",
-        level: "Strong",
-        context: "Orchestrated 50+ DAGs with cross-DAG dependencies, dead-letter queues, and automated retry with exponential backoff. SLA-driven scheduling for nightly batch.",
-      },
-    ],
+      { name: "Python", icon: "SiPython", level: "Advanced", usage: "ETL development, connectors", color: "text-yellow-400" },
+      { name: "AWS S3", icon: "SiAmazon", level: "Advanced", usage: "Data lake storage & ingestion", color: "text-orange-400" },
+      { name: "Informatica IICS", icon: "SiInformatica", level: "Intermediate", usage: "Enterprise data ingestion", color: "text-blue-600" },
+      { name: "Snowpipe", level: "Intermediate", usage: "Snowflake data loading", color: "text-blue-300" }
+    ]
   },
   {
-    domain: "Data Modeling & Warehouse Architecture",
-    icon: "🏗️",
-    description: "Designing schemas that survive decades of data and thousands of analysts",
+    stage: "Processing & Transformation",
+    emoji: "⚡",
+    description: "Distributed data processing & modeling",
     tools: [
-      {
-        name: "Snowflake",
-        level: "Advanced",
-        context: "Production DW at Freddie Mac — 22TB of data, 15 fact tables, 40+ business dimensions. Implemented zero-copy cloning for safe CI/CD pipeline testing.",
-      },
-      {
-        name: "Star Schema / Kimball Modeling",
-        level: "Advanced",
-        context: "Designed 15+ production fact tables for regulatory reporting. Conformed dimensions shared across 8 data marts to ensure consistent reporting.",
-      },
-      {
-        name: "SCD Type-2 Historization",
-        level: "Advanced",
-        context: "Regulatory requirement for Freddie Mac credit risk — 22 years of history, full audit trail, GDPR-compliant PII handling.",
-      },
-      {
-        name: "Delta Lake / Apache Iceberg",
-        level: "Working",
-        context: "Evaluated Iceberg for lakehouse migration; chose Snowflake for enterprise maturity. Designed partition strategies for time-travel queries.",
-      },
-    ],
+      { name: "Apache Spark", icon: "SiApachespark", level: "Advanced", usage: "Distributed batch processing", color: "text-orange-500" },
+      { name: "SQL", level: "Advanced", usage: "Complex joins, CTEs, window functions", color: "text-blue-600" },
+      { name: "AWS EMR (EC2/EKS)", icon: "SiAmazon", level: "Intermediate", usage: "Managed Spark clusters", color: "text-orange-400" },
+      { name: "dbt", icon: "SiDbt", level: "Intermediate", usage: "SQL-based transformations & modeling", color: "text-orange-400" }
+    ]
   },
   {
-    domain: "Data Reliability & Observability",
-    icon: "📊",
-    description: "Ensuring pipelines never silently fail in production",
+    stage: "Storage & Warehousing",
+    emoji: "🏗️",
+    description: "Scalable cloud data platforms",
     tools: [
-      {
-        name: "Custom Baselining (Z-score)",
-        level: "Advanced",
-        context: "Reduced silent data failures by 80% at Freddie Mac through rolling-window baselining and automated threshold learning. Detected schema drift 48h before consumers broke.",
-      },
-      {
-        name: "Control-M",
-        level: "Strong",
-        context: "Enterprise job scheduling at Capco for Freddie Mac batch pipelines — 200+ jobs, SLA-driven alerting, dependency-aware rerun logic.",
-      },
-      {
-        name: "Prometheus + Grafana",
-        level: "Working",
-        context: "Instrumented ML inference service at Bosmos with custom metrics for latency p50/p95/p99, model drift, and queue depth. Alerting on SLO breach within 60s.",
-      },
-    ],
+      { name: "Snowflake", icon: "SiSnowflake", level: "Advanced", usage: "Cloud data warehouse & analytics", color: "text-blue-300" },
+      { name: "Data Modeling", level: "Advanced", usage: "Star schema, fact/dimension design", color: "text-purple-500" },
+      { name: "AWS S3", icon: "SiAmazon", level: "Intermediate", usage: "Data lake storage", color: "text-orange-400" }
+    ]
   },
   {
-    domain: "Cloud Infrastructure (AWS)",
-    icon: "☁️",
-    description: "Building cost-efficient, fault-tolerant cloud architectures",
+    stage: "Orchestration",
+    emoji: "🎼",
+    description: "Workflow automation & reliability",
     tools: [
-      {
-        name: "AWS S3",
-        level: "Advanced",
-        context: "Data lake storage with lifecycle policies for 5-year retention. S3 Select for query-in-place avoiding data movement. Cost: $0.023/GB vs $0.05 for Snowflake storage.",
-      },
-      {
-        name: "AWS Glue / Lambda",
-        level: "Strong",
-        context: "Event-driven CDC pipeline: Lambda triggers on S3 put events → Glue ETL → Snowflake. Eliminated cron polling, reducing EMR costs by 30%.",
-      },
-      {
-        name: "Terraform",
-        level: "Working",
-        context: "IaC for EMR clusters, S3 bucket policies, and IAM roles. Module library for repeatable environment provisioning (dev/staging/prod).",
-      },
-      {
-        name: "Docker / ECS",
-        level: "Strong",
-        context: "Containerized all ETL jobs for portability. ECS Fargate for stateless inference services — no cluster management overhead.",
-      },
-    ],
+      { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling", color: "text-blue-600" },
+      { name: "Apache Airflow", icon: "SiApacheairflow", level: "Intermediate", usage: "DAG-based orchestration", color: "text-red-400" },
+      { name: "Jenkins", icon: "SiJenkins", level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" }
+    ]
   },
   {
-    domain: "Programming & Scripting",
-    icon: "💻",
-    description: "Core development languages and scripting for automation",
+    stage: "Observability & DevOps",
+    emoji: "📊",
+    description: "Data reliability & deployment",
     tools: [
-      {
-        name: "Python",
-        level: "Advanced",
-        context: "Primary language for all ETL, ML, and automation work. Proficient in async/await, multiprocessing, and C-extension interfacing for performance-critical code.",
-      },
-      {
-        name: "SQL (PostgreSQL, Snowflake, BigQuery)",
-        level: "Advanced",
-        context: "Advanced window functions, CTEs, recursive queries, and query optimization. 5+ years of production SQL across 3 different DW platforms.",
-      },
-      {
-        name: "Bash / Shell Scripting",
-        level: "Strong",
-        context: "Automation of DevOps tasks, cron job management, log aggregation pipelines. 500+ line ETL bash scripts for legacy system integration.",
-      },
-    ],
-  },
+      { name: "Git", icon: "SiGit", level: "Advanced", usage: "Version control & collaboration", color: "text-orange-600" },
+      { name: "Docker", icon: "SiDocker", level: "Intermediate", usage: "Containerized environments", color: "text-blue-500" }
+    ]
+  }
 ];
 
 // ============================================================================
@@ -659,6 +593,8 @@ export const PIPELINE_STAGES: PipelineStage[] = [
   },
 ];
 
+import { Star, Database } from "lucide-react";
+
 // ============================================================================
 // LEVEL HELPERS
 // ============================================================================
@@ -671,6 +607,8 @@ export function getLevelColor(level: string): string {
       return "text-blue-400 bg-blue-400/10";
     case "Working":
       return "text-yellow-400 bg-yellow-400/10";
+    case "Intermediate":
+      return "text-blue-400 bg-blue-400/10";
     default:
       return "text-gray-400 bg-gray-400/10";
   }
@@ -681,10 +619,26 @@ export function getLevelIcon(level: string): string {
     case "Advanced":
       return "★";
     case "Strong":
-      return "◆";
+      return "★";
     case "Working":
       return "●";
+    case "Intermediate":
+      return "◆";
     default:
       return "";
+  }
+}
+
+export function getLevelProgressWidth(level: string): string {
+  switch (level) {
+    case "Advanced":
+    case "Strong":
+      return "w-full";
+    case "Working":
+      return "w-1/2";
+    case "Intermediate":
+      return "w-3/4";
+    default:
+      return "w-1/4";
   }
 }

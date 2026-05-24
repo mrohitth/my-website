@@ -2,12 +2,53 @@
 
 import { useEffect } from "react";
 import profilePic from "@/assets/profile4.webp";
-import { BarChart3, Database, Zap, Cloud, Code2 } from "lucide-react";
+import { BarChart3, Database, Zap, Cloud, Code2, Star } from "lucide-react";
 import {
   SKILL_DOMAINS,
   getLevelColor,
   getLevelIcon,
+  getLevelProgressWidth,
+  PipelineStage,
 } from "@/data/portfolio";
+import {
+  SiPython,
+  SiApachespark,
+  SiApacheairflow,
+  SiAmazon,
+  SiKubernetes,
+  SiMongodb,
+  SiSnowflake,
+  SiJenkins,
+  SiGit,
+  SiPostgresql,
+  SiRedis,
+  SiDocker,
+  SiTerraform,
+  SiGrafana,
+  SiDbt,
+  SiElasticsearch,
+  SiInformatica,
+} from "react-icons/si";
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  SiPython,
+  SiApachespark,
+  SiApacheairflow,
+  SiAmazon,
+  SiKubernetes,
+  SiMongodb,
+  SiSnowflake,
+  SiJenkins,
+  SiGit,
+  SiPostgresql,
+  SiRedis,
+  SiDocker,
+  SiTerraform,
+  SiGrafana,
+  SiDbt,
+  SiElasticsearch,
+  SiInformatica,
+};
 
 const STATS = [
   { value: "3+", label: "Years Experience" },
@@ -81,6 +122,20 @@ export function AboutSection() {
   );
 }
 
+function getToolColor(level: string): string {
+  switch (level) {
+    case "Advanced":
+    case "Strong":
+      return "w-full bg-emerald-400";
+    case "Intermediate":
+      return "w-3/4 bg-blue-400";
+    case "Working":
+      return "w-1/2 bg-yellow-400";
+    default:
+      return "w-1/4 bg-gray-400";
+  }
+}
+
 export function TechStackSection() {
   return (
     <section
@@ -97,52 +152,76 @@ export function TechStackSection() {
         <div className="text-center mb-12 fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
             <BarChart3 className="text-portfolio-primary h-8 w-8" />
-            <h2 className="text-4xl font-bold text-portfolio-foreground">
-              Data Engineering Stack
-            </h2>
+            <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
           </div>
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-            Each skill is grounded in a <span className="text-portfolio-primary font-medium">real production use case</span> —
-            not just a self-assessed level.
+            <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure —{' '}
+            <span className="text-emerald-400">Processing millions of records daily</span>
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SKILL_DOMAINS.map((domain, di) => {
-            const icon = DOMAIN_ICONS[domain.domain] ?? <BarChart3 className="text-gray-400 h-5 w-5" />;
-            return (
-              <div
-                key={di}
-                className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-portfolio-primary/10 border border-portfolio-primary/20">
-                    {icon}
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-portfolio-foreground">{domain.domain}</h3>
-                    {domain.description && (
-                      <p className="text-xs text-portfolio-muted-foreground mt-0.5">{domain.description}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  {domain.tools.map((tool, ti) => (
-                    <div key={ti} className="bg-portfolio-background/50 border border-portfolio-border/30 rounded-lg p-3 hover:bg-portfolio-background/80 transition-colors">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-semibold text-sm text-portfolio-foreground">{tool.name}</span>
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
-                          {getLevelIcon(tool.level)}{tool.level}
-                        </span>
-                      </div>
-                      <p className="text-xs text-portfolio-muted-foreground leading-relaxed">{tool.context}</p>
-                    </div>
-                  ))}
+          {SKILL_DOMAINS.map((stage: PipelineStage, stageIndex: number) => (
+            <div
+              key={stageIndex}
+              className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer"
+            >
+              {/* Stage Header */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">{stage.emoji}</span>
+                <div>
+                  <h3 className="text-lg font-bold text-portfolio-foreground">{stage.stage}</h3>
+                  <p className="text-xs text-portfolio-muted-foreground">{stage.description}</p>
                 </div>
               </div>
-            );
-          })}
+
+              {/* Compact Tools Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {stage.tools.map((tool, toolIndex) => {
+                  const IconComponent = tool.icon ? ICON_MAP[tool.icon] : null;
+                  return (
+                    <div
+                      key={toolIndex}
+                      className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-1 transform cursor-pointer"
+                      data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, "")}`}
+                    >
+                      {/* Tech Icon and Name */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
+                          {IconComponent && <IconComponent />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
+                            {tool.name}
+                          </h4>
+                        </div>
+                      </div>
+
+                      {/* Level Badge */}
+                      <div className="flex items-center justify-between">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
+                          {getLevelIcon(tool.level)}
+                          {tool.level}
+                        </span>
+
+                        {/* Mini Progress Bar */}
+                        <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
+                          <div
+                            className={`h-1 rounded-full transition-all duration-500 ${getLevelProgressWidth(tool.level)} ${
+                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-emerald-400" :
+                              tool.level === "Intermediate" ? "bg-blue-400" :
+                              tool.level === "Working" ? "bg-yellow-400" :
+                              "bg-gray-400"
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
