@@ -1461,7 +1461,7 @@ const experiences = [
       <footer className="py-8 px-4 bg-portfolio-background border-t border-portfolio-border">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-portfolio-muted-foreground" data-testid="footer-text">
-            © 2025 Mathew Rohit Thomson. All rights reserved. Built with ❤️ and modern web technologies.
+            © 2026 Mathew Rohit Thomson. All rights reserved. Built with ❤️ and modern web technologies.
           </p>
         </div>
       </footer>
