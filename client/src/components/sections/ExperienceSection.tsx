@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import freddieMacLogo from "@/assets/logos/fm.png";
 import bosmosLogo from "@/assets/logos/bosmos-logo.png";
 import drcLogo from "@/assets/logos/drc.png";
@@ -47,44 +46,34 @@ const EXPERIENCE_CARDS = [
   },
 ];
 
-function ExperienceCard({
-  logo,
-  company,
-  title,
-  period,
-  bullets,
-  techBadges,
-}: (typeof EXPERIENCE_CARDS)[number]) {
+function ExperienceCard({ logo, company, title, period, bullets, techBadges }: (typeof EXPERIENCE_CARDS)[number]) {
   return (
-    <div className="border border-slate-800 bg-slate-950/40 rounded-xl p-5">
-      {/* Header — natural vertical stack */}
+    <div className="bg-portfolio-card border border-portfolio-border/50 rounded-xl p-5 transition-all duration-300 hover:border-portfolio-primary/30 hover:bg-portfolio-card/80">
+      {/* Header — logo left + company/title stacked */}
       <div className="flex items-center gap-3 mb-4">
         <img src={logo} alt={company} className="w-10 h-10 object-contain" />
         <div>
-          <h3 className="font-semibold text-white text-base">{company}</h3>
-          <p className="text-slate-400 text-sm">{title}</p>
+          <h3 className="font-semibold text-portfolio-foreground text-base">{company}</h3>
+          <p className="text-portfolio-muted-foreground text-sm">{title}</p>
         </div>
       </div>
 
       {/* Date badge — on its own line */}
-      <span className="font-mono text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded inline-block mb-4">
+      <span className="font-mono text-xs text-portfolio-muted-foreground bg-portfolio-input px-2 py-1 rounded inline-block mb-4">
         {period}
       </span>
 
-      {/* Bullet list — clean, well-spaced */}
-      <ul className="list-disc pl-5 space-y-2 text-slate-200 text-sm">
+      {/* Bullet list */}
+      <ul className="list-disc pl-5 space-y-2 text-portfolio-foreground text-sm leading-relaxed">
         {bullets.map((b, i) => (
           <li key={i}>{b}</li>
         ))}
       </ul>
 
       {/* Tech badges */}
-      <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-slate-800">
+      <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-portfolio-border/30">
         {techBadges.map((badge) => (
-          <span
-            key={badge}
-            className="font-mono text-xs bg-slate-800 text-blue-300 px-2 py-0.5 rounded border border-slate-700/50"
-          >
+          <span key={badge} className="font-mono text-xs text-portfolio-primary bg-portfolio-primary/10 px-2 py-0.5 rounded border border-portfolio-border/30">
             {badge}
           </span>
         ))}
@@ -93,19 +82,13 @@ function ExperienceCard({
   );
 }
 
-function ExperienceSectionInner() {
+export function ExperienceSection() {
   return (
-    <section className="py-20 px-6" id="experience">
+    <section id="experience" className="py-20 px-4">
       <div className="max-w-5xl mx-auto">
-        <h2
-          className="text-2xl font-semibold mb-12 flex items-center justify-center gap-2"
-          aria-label="Professional Experience"
-        >
-          <TrendingUp className="text-emerald-400 h-5 w-5" aria-hidden="true" />
-          <span className="text-white">Experience</span>
+        <h2 className="text-4xl font-bold text-center mb-12 text-portfolio-foreground" data-testid="experience-title">
+          Experience
         </h2>
-
-        {/* Mobile-first vertical stack */}
         <div className="flex flex-col gap-6">
           {EXPERIENCE_CARDS.map((card) => (
             <ExperienceCard key={card.id} {...card} />
@@ -114,8 +97,4 @@ function ExperienceSectionInner() {
       </div>
     </section>
   );
-}
-
-export function ExperienceSection() {
-  return <ExperienceSectionInner />;
 }
