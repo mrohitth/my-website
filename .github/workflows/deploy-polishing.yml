@@ -1,0 +1,49 @@
+name: Deploy Polishing Branch to GitHub Pages
+
+on:
+  push:
+    branches:
+      - polishing
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-polishing
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build:frontend
+
+      - name: Sync to docs/
+        run: |
+          rm -rf docs/assets
+          cp -r client/dist-frontend/assets docs/
+          cp client/dist-frontend/index.html docs/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
