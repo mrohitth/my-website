@@ -11,7 +11,6 @@ function AppRouter() {
   return (
     <Router>
       <Route path="/" component={Portfolio} />
-      <Route path="/:rest*" component={Portfolio} />
     </Router>
   )
 }

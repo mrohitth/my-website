@@ -129,7 +129,7 @@ export function HeroSection() {
                 width={2750}
                 height={2580}
                 className="w-full h-full object-cover"
-                fetchPriority="high"
+                fetchpriority="high"
                 decoding="async"
               />
             </div>
