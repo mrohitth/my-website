@@ -49,7 +49,7 @@ const EXPERIENCE_CARDS = [
 function ExperienceCard({ logo, company, title, period, bullets, techBadges }: (typeof EXPERIENCE_CARDS)[number]) {
   return (
     <div className="bg-portfolio-card border border-portfolio-border/50 rounded-xl p-5 transition-all duration-300 hover:border-portfolio-primary/30 hover:bg-portfolio-card/80">
-      {/* Header — logo left + company/title stacked */}
+      {/* Header - logo left + company/title stacked */}
       <div className="flex items-center gap-3 mb-4">
         <img src={logo} alt={company} className="w-10 h-10 object-contain" />
         <div>
@@ -58,7 +58,7 @@ function ExperienceCard({ logo, company, title, period, bullets, techBadges }: (
         </div>
       </div>
 
-      {/* Date badge — on its own line */}
+      {/* Date badge - on its own line */}
       <span className="font-mono text-xs text-portfolio-muted-foreground bg-portfolio-input px-2 py-1 rounded inline-block mb-4">
         {period}
       </span>

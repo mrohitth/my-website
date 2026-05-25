@@ -75,17 +75,17 @@ interface LogEntry {
 
 const SCHEMA_DRIFT_EVENTS = [
   "[ERROR] Schema Drift Detected on column 'dw_mod_dt' (Expected: TIMESTAMP, Found: VARCHAR)",
-  "[WARN] Schema incompatibility: 3 new columns detected in source — downstream parser not updated",
-  "[ERROR] Column type mismatch on 'payment_timestamp' — source: VARCHAR(32), target: TIMESTAMP",
+  "[WARN] Schema incompatibility: 3 new columns detected in source - downstream parser not updated",
+  "[ERROR] Column type mismatch on 'payment_timestamp' - source: VARCHAR(32), target: TIMESTAMP",
   "[WARN] Nullable flag mismatch on 'customer_key': source=NOT NULL, target=NULL. ETL may fail.",
   "[ERROR] Schema Drift: Column 'record_version' dropped upstream without notice",
-  "[WARN] Schema Registry version mismatch — consumer schema v14, producer schema v16",
+  "[WARN] Schema Registry version mismatch - consumer schema v14, producer schema v16",
 ];
 
 const FRESHNESS_EVENTS = [
   "[WARN] Freshness Gap Exceeded SLA: Target < 15m, Current: 48m",
   "[ERROR] SLO Violation: Table 'orders' freshness at 92m (threshold: 30m)",
-  "[WARN] Pipeline stale for 52m — no upstream heartbeats detected",
+  "[WARN] Pipeline stale for 52m - no upstream heartbeats detected",
   "[ERROR] Freshness breach on 'inventory_snapshot': 127m (SLO: 30m)",
   "[WARN] DownstreamLagMonitor: 3 of 12 tables exceed freshness threshold",
   "[ERROR] SLA Violation: 'fact_orders' updated 58m ago (target: <15m)",
@@ -97,17 +97,17 @@ const DATA_QUALITY_EVENTS = [
   "[WARN] Duplicate key detection: 847 duplicate orders in staging table",
   "[ERROR] Completeness Violation: 'email_address' NULL rate at 18.7% (threshold: 5%)",
   "[WARN] Uniqueness breach on 'transaction_id': 234 duplicate values detected",
-  "[ERROR] Freshness score degraded to 68% — SCD Type-2 audit trail may be corrupted",
+  "[ERROR] Freshness score degraded to 68% - SCD Type-2 audit trail may be corrupted",
   "[WARN] Referential integrity: 1,247 orphaned FK records in 'fact_orders' (fk: dim_product)",
 ];
 
 const SLO_TRACKER_EVENTS = [
   "[ERROR] SLO Violation: Table 'orders' freshness at 92m (threshold: 30m)",
-  "[INFO] Pipeline execution completed in 847s — 40,234,817 records processed",
+  "[INFO] Pipeline execution completed in 847s - 40,234,817 records processed",
   "[ERROR] SLO Breach: 'fact_orders' row count delta +23% vs 7-day rolling average",
   "[WARN] SLO Warning: 'dim_customer' processing time approaching threshold (28s / 30s limit)",
   "[INFO] Snowpipe ingestion on track: 14.2M rows / min, well within 60m SLA window",
-  "[ERROR] SLO Violation: Data quality score at 71% — P1 threshold (95%) breached",
+  "[ERROR] SLO Violation: Data quality score at 71% - P1 threshold (95%) breached",
 ];
 
 const LINEAGE_EVENTS = [
@@ -1433,10 +1433,10 @@ function DataObservabilitySimulator() {
   // Seed some initial logs on mount
   useEffect(() => {
     const seedLogs: LogEntry[] = [
-      { id: "init-1", timestamp: Date.now() - 120000, event_type: "HEARTBEAT", severity: "INFO", slo_violation: false, message: "Observability engine initialized — monitoring 847 metrics across 23 data pipelines" },
+      { id: "init-1", timestamp: Date.now() - 120000, event_type: "HEARTBEAT", severity: "INFO", slo_violation: false, message: "Observability engine initialized - monitoring 847 metrics across 23 data pipelines" },
       { id: "init-2", timestamp: Date.now() - 90000, event_type: "SCHEMA_REGISTRY", severity: "INFO", slo_violation: false, message: "Schema Registry connected: 142 schemas loaded, version v14.2.1" },
       { id: "init-3", timestamp: Date.now() - 60000, event_type: "SLO_TRACKER", severity: "INFO", slo_violation: false, message: "SLO baseline refreshed: 96.4% of pipelines within SLA (target: 95%)" },
-      { id: "init-4", timestamp: Date.now() - 30000, event_type: "DATA_QUALITY", severity: "WARN", slo_violation: false, message: "Anomaly detected on 'customer_id' NULL rate: 3.1% — above 2.5% baseline, below threshold" },
+      { id: "init-4", timestamp: Date.now() - 30000, event_type: "DATA_QUALITY", severity: "WARN", slo_violation: false, message: "Anomaly detected on 'customer_id' NULL rate: 3.1% - above 2.5% baseline, below threshold" },
     ];
     setTerminalLogs(seedLogs);
   }, []);
@@ -1710,7 +1710,7 @@ function DataObservabilitySimulator() {
               <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
               <div className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
             </div>
-            <span className="ml-2 text-xs font-mono text-slate-400">AlertDispatcher — live telemetry stream</span>
+            <span className="ml-2 text-xs font-mono text-slate-400">AlertDispatcher - live telemetry stream</span>
             <div className="ml-auto flex items-center gap-2">
               <span className="flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />

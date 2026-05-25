@@ -95,7 +95,7 @@ export function AboutSection() {
             <div>
               <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                I design and optimize batch data pipelines on AWS EMR and Snowflake, with PySpark performance tuning and partition-aware optimization. I build Snowflake data models and SCD Type-2 historical warehouses for reporting at scale — focusing on production reliability and cost-efficient EMR cluster utilization.
+                I design and optimize batch data pipelines on AWS EMR and Snowflake, with PySpark performance tuning and partition-aware optimization. I build Snowflake data models and SCD Type-2 historical warehouses for reporting at scale - focusing on production reliability and cost-efficient EMR cluster utilization.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
@@ -150,7 +150,7 @@ export function TechStackSection() {
             <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
           </div>
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-            <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure —{' '}
+            <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure -{' '}
             <span className="text-emerald-400">Processing millions of records daily</span>
           </p>
         </div>

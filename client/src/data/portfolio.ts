@@ -1,5 +1,5 @@
 // ============================================================================
-// ROLES — Typing animation role strings (technically precise)
+// ROLES - Typing animation role strings (technically precise)
 // ============================================================================
 
 export const ROLES: string[] = [
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     category: "Data Engineering",
     impact: "SCD Type-2 versioning · Deterministic batch reprocessing · Late-arriving data handling",
     architecture:
-      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabling deterministic replay without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for auditability. Late-arriving data handling ensures temporal consistency without requiring full pipeline re-execution.",
+      "Chose append-only JSON log over direct CDC to decouple producer from consumer - enabling deterministic replay without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for auditability. Late-arriving data handling ensures temporal consistency without requiring full pipeline re-execution.",
     scale: "Incremental CDC loads · SCD Type-2 versioning · Temporal consistency",
     highlight: "SCD Type-2 versioning · Deterministic replay · Late-arriving data handling",
     tags: ["batch", "infrastructure", "observability"],
@@ -96,7 +96,7 @@ export const PROJECTS: Project[] = [
     category: "Data Engineering",
     impact: "Statistical baselining · Rolling-window profiling · Schema drift detection",
     architecture:
-      "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours — the baseline adapts to diurnal patterns automatically. Z-score over IQR because data distributions were skewed by weekend drops; IQR would have required manual season adjustment. YAML configuration drives threshold parameters without code changes.",
+      "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours - the baseline adapts to diurnal patterns automatically. Z-score over IQR because data distributions were skewed by weekend drops; IQR would have required manual season adjustment. YAML configuration drives threshold parameters without code changes.",
     scale: "Configuration-driven thresholds · Statistical baselining · Rolling-window metrics",
     highlight: "Statistical baselining · Freshness validation · Schema drift detection",
     tags: ["observability", "batch"],
@@ -148,7 +148,7 @@ export const PROJECTS: Project[] = [
     category: "Machine Learning",
     impact: "96% accuracy on 4-class classification · outperformed ResNet50 by 4% on held-out test set · inference in 230ms on CPU",
     architecture:
-      "Chose GLCM+HOG+PCA feature engineering over transfer learning from ResNet50 because the training set was small (412 samples) and CNNs overfit badly in this regime. Random Forest over SVM for final classification because it handles multi-class natively and provides probability estimates without calibration. Benchmarked against DenseNet169 to confirm classical ML ceiling — DenseNet achieved 91%, confirming the classical ML result was near-optimal for this data size.",
+      "Chose GLCM+HOG+PCA feature engineering over transfer learning from ResNet50 because the training set was small (412 samples) and CNNs overfit badly in this regime. Random Forest over SVM for final classification because it handles multi-class natively and provides probability estimates without calibration. Benchmarked against DenseNet169 to confirm classical ML ceiling - DenseNet achieved 91%, confirming the classical ML result was near-optimal for this data size.",
     scale: "412 labeled MRI scans · 4 tumor classes · 230ms inference (CPU)",
     highlight: "96% accuracy · outperformed ResNet50 by 4% · 230ms CPU inference",
     tags: ["ml"],
@@ -174,7 +174,7 @@ export const PROJECTS: Project[] = [
     category: "Deep Learning",
     impact: "Pixel-level terrain classification for autonomous rover navigation · IoU score of 0.84 on held-out Mars terrain test set",
     architecture:
-      "Chose U-Net over FCN and DeepLabV3 because U-Net's skip connections preserve spatial detail critical for terrain boundary detection — FCNs lose fine edge information in the downsampling path. Depth data integration improved IoU by 0.12 over RGB-only models, specifically for rocky terrain classes that are ambiguous in 2D imagery alone.",
+      "Chose U-Net over FCN and DeepLabV3 because U-Net's skip connections preserve spatial detail critical for terrain boundary detection - FCNs lose fine edge information in the downsampling path. Depth data integration improved IoU by 0.12 over RGB-only models, specifically for rocky terrain classes that are ambiguous in 2D imagery alone.",
     scale: "AI4Mars dataset (200K+ labeled pixels) · 5 terrain classes · IoU 0.84",
     highlight: "IoU 0.84 on 5-class terrain segmentation · 12% improvement from depth data integration",
     tags: ["ml"],
@@ -201,7 +201,7 @@ export const PROJECTS: Project[] = [
     category: "Deep Learning",
     impact: "94% test accuracy on flowers (102 categories) · 98.7% on MNIST digits · built from scratch in pure NumPy + PyTorch",
     architecture:
-      "Built from scratch in pure NumPy first to internalize backprop mechanics before using PyTorch autograd — this revealed exactly where gradient flow breaks and why batch normalization matters. Autoencoder for dimensionality reduction reduced 784-dim MNIST to 32-dim latent space while preserving 97% of variance, useful for downstream retrieval tasks.",
+      "Built from scratch in pure NumPy first to internalize backprop mechanics before using PyTorch autograd - this revealed exactly where gradient flow breaks and why batch normalization matters. Autoencoder for dimensionality reduction reduced 784-dim MNIST to 32-dim latent space while preserving 97% of variance, useful for downstream retrieval tasks.",
     scale: "102 flower categories · MNIST + custom digit datasets · 32-dim autoencoder latent space",
     highlight: "94% accuracy (flowers) · 98.7% (MNIST) · built from scratch, no PyTorch nn layer shortcuts",
     tags: ["ml"],
@@ -227,7 +227,7 @@ export const PROJECTS: Project[] = [
     category: "Computer Vision",
     impact: "Real-time overlay at 30fps on moving camera · corner detection accuracy: 94% · sub-5ms homography estimation",
     architecture:
-      "Used SIFT over ORB for initial feature detection because book covers have repetitive text patterns — ORB fails on these due to binary descriptor sensitivity. 8-point algorithm over 7-point for fundamental matrix estimation because the additional constraint improves robustness on low-texture book covers where RANSAC iterations converge to wrong solutions.",
+      "Used SIFT over ORB for initial feature detection because book covers have repetitive text patterns - ORB fails on these due to binary descriptor sensitivity. 8-point algorithm over 7-point for fundamental matrix estimation because the additional constraint improves robustness on low-texture book covers where RANSAC iterations converge to wrong solutions.",
     scale: "30fps real-time · 94% corner detection accuracy · sub-5ms per-frame homography",
     highlight: "30fps real-time AR · 94% corner accuracy · sub-5ms homography estimation",
     tags: ["ml"],
@@ -252,7 +252,7 @@ export const PROJECTS: Project[] = [
     category: "Computer Vision",
     impact: "3D point cloud from 12-image sequence in 4.2s · mean reprojection error: 0.8 pixels · dense reconstruction with 50K+ points",
     architecture:
-      "7-point algorithm handles the minimal case for the essential matrix — used when you know the camera intrinsics exactly. 8-point algorithm used for the fundamental matrix when intrinsics are uncertain (which applies to most consumer cameras with imperfect calibration). RANSAC with 2000 iterations balances accuracy vs runtime for scenes with 40%+ outliers.",
+      "7-point algorithm handles the minimal case for the essential matrix - used when you know the camera intrinsics exactly. 8-point algorithm used for the fundamental matrix when intrinsics are uncertain (which applies to most consumer cameras with imperfect calibration). RANSAC with 2000 iterations balances accuracy vs runtime for scenes with 40%+ outliers.",
     scale: "12-image sequences · 50K+ dense points · 4.2s reconstruction · 0.8px reprojection error",
     highlight: "50K+ dense 3D points · 0.8px reprojection error · 4.2s from 12 images",
     tags: ["ml"],
@@ -277,7 +277,7 @@ export const PROJECTS: Project[] = [
     category: "Computer Vision",
     impact: "Tracks objects across 300+ frame sequences · robust to 40% illumination variation · 25fps tracking on 720p video",
     architecture:
-      "Iterative refinement (forward-additive Lucas-Kanade) converges in 3-5 iterations vs 10-15 for classical Lucas-Kanade, cutting computation by 60%. Template warping handles non-rigid deformation — important for tracking people where rigid models fail after the first occlusion. Appearance adaptation prevents drift when illumination changes gradually over a sequence, which pure template matching cannot handle.",
+      "Iterative refinement (forward-additive Lucas-Kanade) converges in 3-5 iterations vs 10-15 for classical Lucas-Kanade, cutting computation by 60%. Template warping handles non-rigid deformation - important for tracking people where rigid models fail after the first occlusion. Appearance adaptation prevents drift when illumination changes gradually over a sequence, which pure template matching cannot handle.",
     scale: "300+ frame sequences · 40% illumination robustness · 25fps on 720p",
     highlight: "25fps tracking · 300+ frame sequences · robust to 40% illumination variation",
     tags: ["ml"],
@@ -302,7 +302,7 @@ export const PROJECTS: Project[] = [
     category: "Computer Vision",
     impact: "Reconstructed surface normals from 9 lighting conditions · depth accuracy: 0.05mm on test objects · works on non-Lambertian surfaces",
     architecture:
-      "Chose 9-light configuration over 3-light minimum because albedo estimation errors compound with fewer lights — 9 gives robust normals even on slightly non-Lambertian surfaces. Regularized SVD for normal estimation prevents noise amplification on low-SNR images. Depth integration via Poisson solver rather than linear blending because it respects surface boundary conditions better.",
+      "Chose 9-light configuration over 3-light minimum because albedo estimation errors compound with fewer lights - 9 gives robust normals even on slightly non-Lambertian surfaces. Regularized SVD for normal estimation prevents noise amplification on low-SNR images. Depth integration via Poisson solver rather than linear blending because it respects surface boundary conditions better.",
     scale: "9 lighting conditions · 0.05mm depth accuracy · non-Lambertian surface support",
     highlight: "0.05mm depth accuracy · 9-light photometric setup · non-Lambertian surface handling",
     tags: ["ml"],
@@ -329,7 +329,7 @@ export const PROJECTS: Project[] = [
     category: "Computer Vision",
     impact: "78.3% accuracy on 8-category scene classification · spatial pyramid improved over flat BoVW by 11%",
     architecture:
-      "Spatial pyramid (3 levels: 1×1, 2×2, 4×4) captures location information that flat BoVW destroys. TF-IDF weighting over raw frequency reduces the impact of common visual words (sky, grass) that appear across many categories. KNN with cosine distance outperformed Euclidean on high-dimensional BoVW histograms — cosine measures angular similarity which is more appropriate for normalized histogram comparison.",
+      "Spatial pyramid (3 levels: 1×1, 2×2, 4×4) captures location information that flat BoVW destroys. TF-IDF weighting over raw frequency reduces the impact of common visual words (sky, grass) that appear across many categories. KNN with cosine distance outperformed Euclidean on high-dimensional BoVW histograms - cosine measures angular similarity which is more appropriate for normalized histogram comparison.",
     scale: "8 scene categories · 78.3% accuracy · 11% improvement from spatial pyramid",
     highlight: "78.3% on 8-class scene recognition · 11% gain from spatial pyramid over flat BoVW",
     tags: ["ml"],
@@ -337,7 +337,7 @@ export const PROJECTS: Project[] = [
 ];
 
 // ============================================================================
-// EXPERIENCE TYPES & DATA — outcome-first framing
+// EXPERIENCE TYPES & DATA - outcome-first framing
 // ============================================================================
 
 export interface Experience {
@@ -349,7 +349,7 @@ export interface Experience {
   description: string;
   // Outcome-first bullets
   metrics: string[];
-  logos: string[]; // import() URLs — resolved at render site
+  logos: string[]; // import() URLs - resolved at render site
   highlights: string[];
   technologies: string[];
 }
@@ -408,7 +408,7 @@ export const EXPERIENCES: Experience[] = [
 ];
 
 // ============================================================================
-// SKILLS — organized by competency domain
+// SKILLS - organized by competency domain
 // ============================================================================
 
 export interface SkillTool {
@@ -425,7 +425,7 @@ export interface SkillDomain {
 }
 
 // ============================================================================
-// SKILL DOMAINS — organized by pipeline stage (from feature branch)
+// SKILL DOMAINS - organized by pipeline stage (from feature branch)
 // ============================================================================
 
 export interface PipelineTool {
@@ -509,7 +509,7 @@ export const SKILL_DOMAINS: PipelineStage[] = [
 ];
 
 // ============================================================================
-// PIPELINE STAGES — (retained for backward compat, prefer SKILL_DOMAINS)
+// PIPELINE STAGES - (retained for backward compat, prefer SKILL_DOMAINS)
 // ============================================================================
 
 export interface PipelineTool {

@@ -24,7 +24,7 @@ export function HeroSection() {
   const [currentSection, setCurrentSection] = useState("hero-top");
   const reducedMotion = useReducedMotion();
 
-  // Typing animation — disabled when reduced motion preferred
+  // Typing animation - disabled when reduced motion preferred
   useEffect(() => {
     if (reducedMotion) {
       setDisplayedText(ROLES[currentRoleIndex]);
@@ -97,7 +97,7 @@ export function HeroSection() {
           </Suspense>
         </div>
 
-        {/* Subtle Flow Animation Background — disabled when reduced motion preferred */}
+        {/* Subtle Flow Animation Background - disabled when reduced motion preferred */}
         {!reducedMotion && (
           <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
             {subtleFlowElements.map((element) => (
@@ -149,14 +149,14 @@ export function HeroSection() {
               <span className="typing-animation">{displayedText}</span>
             </div>
 
-            {/* SCALE-METRIC TAGLINE — outcome-first */}
+            {/* SCALE-METRIC TAGLINE - outcome-first */}
             <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Data Engineer — Pipelines, Scale, and Systems That Actually Ship.
+              Data Engineer - Pipelines, Scale, and Systems That Actually Ship.
             </p>
 
             {/* SUBHEADLINE */}
             <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-6 max-w-2xl mx-auto leading-relaxed">
-              I build production batch and streaming pipelines on AWS EMR and Snowflake — currently processing 40M+ records per batch for a Fortune 500 financial services client.
+              I build production batch and streaming pipelines on AWS EMR and Snowflake - currently processing 40M+ records per batch for a Fortune 500 financial services client.
             </p>
 
             {/* ONE-LINE BIO */}
