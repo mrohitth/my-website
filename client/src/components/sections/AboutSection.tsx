@@ -95,7 +95,7 @@ export function AboutSection() {
             <div>
               <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                I design and optimize idempotent batch data pipelines processing 40M+ records per batch on AWS EMR and Snowflake, with partition-aware shuffle optimization enforcing data tiering across raw/enriched/curated layers. I build SCD Type-2 historical warehouses and deterministic CDC platforms with sub-10 minute Spark processing constraints — zero data loss, full auditability, and enterprise-level cost-efficiency.
+                I design and optimize batch data pipelines on AWS EMR and Snowflake, with PySpark performance tuning and partition-aware optimization. I build Snowflake data models and SCD Type-2 historical warehouses for reporting at scale — focusing on production reliability and cost-efficient EMR cluster utilization.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">

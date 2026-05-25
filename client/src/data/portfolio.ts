@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     id: "cdc-historical-warehouse",
     title: "CDC & Historical Warehouse Platform",
     description:
-      "Architected a deterministic CDC platform with idempotent execution blocks and append-only JSON log intermediate for safe replay across 3+ downstream consumers. Implemented SCD Type-2 versioning with dw_* metadata columns for point-in-time historical reconstruction, schema drift detection at extraction layer, and temporal consistency guarantees for late-arriving data. Eliminated repeated full-table scans from downstream consumers, reducing direct DB load by 60%.",
+      "Built an SCD Type-2 historical warehouse supporting scalable CDC patterns with idempotent batch execution and deterministic replay. Implemented versioned record tracking and late-arriving data handling for temporal consistency, with schema drift detection at the extraction layer.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -69,12 +69,12 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "40M records/batch · 75% runtime reduction (14h → 3.5h) · 0 data loss incidents in 18 months · 60% DB load reduction",
+    impact: "40M+ records/batch · batch runtime under 10 min · 22yr history modeled in Snowflake",
     architecture:
-      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabled deterministic replay across 3 downstream systems without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for Freddie Mac audits. Schema drift detection at the extraction layer prevents silent failures before downstream consumers break. Idempotent execution blocks mean safe replay across any failure point.",
+      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabling deterministic replay without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement. Schema drift detection at the extraction layer catches unannounced changes before downstream consumers are affected.",
     scale: "40M records per batch · 22 years of history · 3 consumer systems · 18 months production uptime",
-    costImpact: "Reduced direct DB load by 60%, eliminating repeated full-table scans from downstream consumers. Nightly batch window shrank from 14h to 3.5h, freeing EMR cluster hours.",
-    highlight: "40M records/batch · 14h → 3.5h batch (75% faster) · 0 data loss",
+    costImpact: "Eliminated repeated full-table scans through incremental loading, reducing processing time and unnecessary recomputation.",
+    highlight: "40M+ records/batch · batch: ~40 min → under 10 min · 22yr Snowflake history",
     tags: ["batch", "infrastructure"],
   },
   {
@@ -100,7 +100,7 @@ export const PROJECTS: Project[] = [
       "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours — the baseline adapts to diurnal patterns automatically. Z-score over IQR because the data distributions were skewed by weekend drops; IQR would have required manual season adjustment. Threshold learning automates what would otherwise be a 2-person-hour weekly task.",
     scale: "Monitors 50+ pipeline streams · detects anomalies within 15-min of ingestion · handles schema evolution across 12 source systems",
     costImpact: "Prevented 3 production incidents in 6 months, each estimated at 4-8 hours of engineer time. Silent failures caught before downstream reporting was affected.",
-    highlight: "80% fewer silent failures · 48h advance warning on schema drift · 65% fewer false positive alerts",
+    highlight: "Rolling-window baselining · freshness validation · SLA violation detection",
     tags: ["observability", "batch"],
   },
   {
@@ -365,16 +365,13 @@ export const EXPERIENCES: Experience[] = [
     period: "Apr 2024 - Present",
     technologies: ["Python", "PySpark", "AWS EMR", "Snowflake", "Control-M", "SCD Type-2", "PostgreSQL", "Docker"],
     description:
-      "Architected a metadata-driven change-data-capture platform with deterministic reprocessing — mitigating shuffle bottlenecks through partition-aware redistribution across raw, enriched, and curated data tiers. Reduced nightly batch from 14 hours to 3.5 hours through cluster tuning, cutting compute time by ~10.5 hours per run. Designed historical models enabling 40+ analysts to self-serve point-in-time data without DE support.",
+      "Architected a metadata-driven CDC platform with partition-aware shuffle optimization across data tiers. Reduced nightly batch runtime from ~40 min to under 10 min through Spark and EMR cluster tuning. Built Snowflake data models for senior stakeholder reporting, and spearheaded Snowpark-based standardization reducing code divergence by 40%.",
     metrics: [
-      "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
-      "Mitigated shuffle bottlenecks through partition-aware shuffle optimization",
-      "60% reduction in direct DB load (eliminated repeated full-table scans)",
-      "Enforced data tiering across raw/enriched/curated layers · 22 years of history modeled",
-      "40+ analysts enabled for self-service analytics · 0 data loss incidents in 18 months",
+      "40M+ records/batch · nightly batch: ~40 min → under 10 min",
+      "Partition-aware shuffle optimization on EMR EC2 & EKS",
     ],
     logos: [],
-    highlights: ["40M records/batch", "14h→3.5h batch", "22yr history modeled", "partition-aware shuffle optimization"],
+    highlights: ["40M+ records/batch", "~40 min → 10 min batch", "22yr history modeled", "Snowpark standardization"],
   },
   {
     id: "bosmos-lead-ai",
@@ -388,8 +385,8 @@ export const EXPERIENCES: Experience[] = [
       "Sub-50ms p99 latency at 10K requests/minute",
       "5-engineer team led: full ML lifecycle from ingestion to monitoring",
       "80% reduction in model staleness incidents (5/week → 1/week)",
-      "Zero downtime deployments over 6-month period",
-      "Achieved production-grade reliability on TensorFlow Serving with auto-scaling",
+      "Managed full ML lifecycle across 5-engineer team",
+      "Inference optimization for sustained real-time workloads",
     ],
     logos: [],
     highlights: ["5-engineer team", "Sub-50ms p99", "80% fewer incidents"],
