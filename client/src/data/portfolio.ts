@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     id: "cdc-historical-warehouse",
     title: "CDC & Historical Warehouse Platform",
     description:
-      "Engineered a metadata-driven CDC pipeline extracting PostgreSQL changes into append-only JSON logs with deterministic replay. Implemented SCD Type-2 versioning and idempotent batch execution to maintain complete historical lineage and auditability for analytics and ML feature generation.",
+      "Architected a deterministic CDC platform with idempotent execution blocks and append-only JSON log intermediate for safe replay across 3+ downstream consumers. Implemented SCD Type-2 versioning with dw_* metadata columns for point-in-time historical reconstruction, schema drift detection at extraction layer, and temporal consistency guarantees for late-arriving data. Eliminated repeated full-table scans from downstream consumers, reducing direct DB load by 60%.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     category: "Data Engineering",
     impact: "40M records/batch · 75% runtime reduction (14h → 3.5h) · 0 data loss incidents in 18 months · 60% DB load reduction",
     architecture:
-      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabled replay across 3 downstream systems without re-running source queries. Used SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for Freddie Mac audits. Append-only design meant consumers never blocked the source DB.",
+      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabled deterministic replay across 3 downstream systems without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for Freddie Mac audits. Schema drift detection at the extraction layer prevents silent failures before downstream consumers break. Idempotent execution blocks mean safe replay across any failure point.",
     scale: "40M records per batch · 22 years of history · 3 consumer systems · 18 months production uptime",
     costImpact: "Reduced direct DB load by 60%, eliminating repeated full-table scans from downstream consumers. Nightly batch window shrank from 14h to 3.5h, freeing EMR cluster hours.",
     highlight: "40M records/batch · 14h → 3.5h batch (75% faster) · 0 data loss",
@@ -107,7 +107,7 @@ export const PROJECTS: Project[] = [
     id: "batch-analytics",
     title: "Batch Analytics Platform",
     description:
-      "Built a containerized ELT platform orchestrated with Airflow and dbt to process large-scale event data. Implemented idempotent transformations, partition-aware modeling, and automated quality validation to simulate production-grade analytics workloads.",
+      "Architected a configuration-driven ELT framework (DataStack) with declarative DAG generation via YAML/JSON manifests — separating pipeline logic from execution topology. Implemented environment promotion across dev/staging/prod through parameter substitution, achieving multi-environment parity. Enforced partition-aware data modeling and idempotent transformations to eliminate duplicate records across 120+ dbt models and 8 data marts.",
     image:
       "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -121,9 +121,9 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/batch-analytics-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "Simulates production-grade 50M+ record workloads · idempotent runs eliminate duplicate records · partition pruning cut query cost by 45%",
+    impact: "Configuration-driven DAG generation · 120+ dbt models · 45% query cost reduction via partition pruning · 0 duplicate records in 12 months",
     architecture:
-      "Chose dbt over raw SQL transformations because it provides lineage tracking, test coverage, and CI/CD integration out of the box — transforming SQL without dbt means you're reinventing change management. Partition-aware modeling means queries only scan relevant partitions rather than full table scans, cutting Snowflake credit usage significantly. Idempotent execution model means rerunning a DAG never produces duplicate records regardless of failure point.",
+      "Chose dbt over raw SQL transformations for declarative pipeline logic with built-in lineage tracking, test coverage, and CI/CD — separating what runs from how it executes. YAML/JSON manifests parameterize execution topology across environments without modifying pipeline logic. Partition-aware modeling prunes full-table scans to relevant partitions only, cutting Snowflake credit consumption by 45%. Idempotent execution blocks mean rerunning a DAG never produces duplicate records regardless of failure point.",
     scale: "50M+ records per run · 120+ dbt models · 8 data marts · automated quality gates on every run",
     costImpact: "Partition pruning reduced Snowflake query credit consumption by 45% compared to full-table scans. Idempotent design eliminates wasted rerun credits.",
     highlight: "50M+ records/run · 45% query cost reduction via partition pruning · 0 duplicate records in 12 months",
@@ -363,16 +363,16 @@ export const EXPERIENCES: Experience[] = [
     company: "Capco (Client: Freddie Mac)",
     period: "Apr 2024 - Present",
     description:
-      "Led the design and delivery of a metadata-driven CDC platform processing 40M+ records per batch — eliminating manual reconciliation for the entire credit risk reporting team. Reduced nightly batch runtime from 14 hours to 3.5 hours through partition-aware shuffle optimization, saving ~10.5h of EMR cluster time per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve historical data without DE support.",
+      "Architected a metadata-driven CDC platform with deterministic reprocessing — mitigating shuffle bottlenecks through partition-aware redistribution enforced across raw/enriched/curated data tiers. Reduced nightly batch from 14 hours to 3.5h through EMR cluster tuning (EC2/EKS compute contexts), cutting EMR cluster time by ~10.5h per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve point-in-time historical data without DE support.",
     metrics: [
       "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
+      "Mitigated shuffle bottlenecks through partition-aware shuffle optimization",
       "60% reduction in direct DB load (eliminated repeated full-table scans)",
-      "22 years of history modeled · 0 data loss incidents in 18 months",
-      "40+ analysts enabled for self-service analytics without DE support",
-      "Nightly batch window shrank from 14h to 3.5h — ~10.5h EMR cluster time saved per run",
+      "Enforced data tiering across raw/enriched/curated layers · 22 years of history modeled",
+      "40+ analysts enabled for self-service analytics · 0 data loss incidents in 18 months",
     ],
     logos: [],
-    highlights: ["40M records/batch", "14h→3.5h batch", "22yr history modeled"],
+    highlights: ["40M records/batch", "14h→3.5h batch", "22yr history modeled", "partition-aware shuffle optimization"],
   },
   {
     id: "bosmos-lead-ai",
