@@ -22,7 +22,7 @@ export function SandboxSection() {
             aria-label={isOpen ? "Collapse Data Platform Sandbox" : "Expand Data Platform Sandbox"}
             aria-expanded={isOpen}
             aria-controls="data-platform-sandbox-content"
-            className="w-full flex items-center justify-between px-6 py-4 transition-all duration-300 hover:bg-portfolio-primary/5 group"
+            className="w-full flex items-center justify-between px-6 py-4 transition-all duration-300 hover:bg-portfolio-primary/5 group focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 outline-none"
           >
             <div className="flex items-center gap-4">
               {/* Animated icon cluster */}

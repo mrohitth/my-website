@@ -123,7 +123,7 @@ function ExperienceTimeline() {
                     <img
                       src={logos[0]}
                       alt={exp.company}
-                      className={`w-12 h-12 object-contain ${exp.company === "Bosmos" || exp.company.includes("Freddie Mac") ? "scale-125" : ""}`}
+                      className={`w-9 h-9 max-w-9 max-h-9 object-contain ${exp.company === "Bosmos" || exp.company.includes("Freddie Mac") ? "scale-125" : ""}`}
                     />
                   ) : (
                     <div className="flex flex-col gap-1">
@@ -134,7 +134,7 @@ function ExperienceTimeline() {
                   )}
                 </div>
                 <div className="min-w-0 pb-4 ml-4">
-                  <div className="flex flex-col mb-2">
+                  <div className="flex flex-col items-start gap-1 mb-2">
                     <h4 className="text-lg font-semibold text-portfolio-foreground">{exp.title}</h4>
                     <span className="text-sm text-portfolio-primary font-medium">{exp.period}</span>
                   </div>

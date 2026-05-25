@@ -83,7 +83,7 @@ export function ProjectsSection() {
           <div className="mb-6 border-b border-portfolio-border/30">
             <div className="flex space-x-8">
               <button
-                className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 ${
+                className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none ${
                   activeTab === "ml"
                     ? "border-portfolio-primary text-portfolio-foreground"
                     : "border-transparent text-portfolio-muted-foreground"
@@ -96,7 +96,7 @@ export function ProjectsSection() {
                 Deep Learning &amp; Machine Learning ({mlProjects.length})
               </button>
               <button
-                className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 ${
+                className={`pb-2 px-1 text-sm font-medium transition-colors duration-200 border-b-2 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none ${
                   activeTab === "cv"
                     ? "border-portfolio-primary text-portfolio-foreground"
                     : "border-transparent text-portfolio-muted-foreground"
@@ -111,7 +111,7 @@ export function ProjectsSection() {
             </div>
           </div>
 
-          <div className="min-h-[400px]">
+          <div className="min-h-[520px]">
             {activeTab === "ml" && (
               <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container" aria-label="Machine Learning project cards, scroll horizontally" style={{ WebkitOverflowScrolling: "touch", maskImage: "linear-gradient(to right, black 80%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
                 {mlProjects.length === 0 ? (

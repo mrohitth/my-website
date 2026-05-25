@@ -1617,7 +1617,7 @@ function DataObservabilitySimulator() {
                 aria-label={`${opt.label}: ${opt.desc}`}
                 aria-pressed={anomalyType === opt.id}
                 className={cn(
-                  "rounded-lg px-3 py-2 text-left text-xs font-medium transition-all duration-200",
+                  "rounded-lg px-3 py-2 text-left text-xs font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 outline-none",
                   anomalyType === opt.id
                     ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
                     : "bg-slate-700/50 text-slate-400 border border-slate-700",
@@ -1647,7 +1647,7 @@ function DataObservabilitySimulator() {
         aria-label="Run anomaly evaluation"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition-all hover:bg-cyan-400"
+        className="flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition-all hover:bg-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 outline-none"
       >
         <Eye className="h-4 w-4" />
         Run Anomaly Evaluation
@@ -1685,7 +1685,7 @@ function DataObservabilitySimulator() {
                   aria-label={`${label} toggle, currently ${isActive ? "armed" : "off"}`}
                   aria-pressed={isActive}
                   className={cn(
-                    "flex flex-col items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all duration-200",
+                    "flex flex-col items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 outline-none",
                     colors[color][isActive ? "active" : "inactive"],
                     isActive && colors[color].ring,
                   )}
@@ -1766,7 +1766,7 @@ function DataObservabilitySimulator() {
             <button
               onClick={() => setTerminalLogs([])}
               aria-label="Clear terminal log"
-              className="text-[10px] font-mono text-slate-500 hover:text-slate-300 transition-colors"
+              className="text-[10px] font-mono text-slate-500 hover:text-slate-300 transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 outline-none"
             >
               CLEAR
             </button>
@@ -2324,7 +2324,7 @@ function SchemaDesignerSimulator() {
         <label className="text-sm font-medium text-slate-300">Preset Schema:</label>
         {PRESET_SCHEMAS.map((p, i) => (
           <button key={i} onClick={() => setPresetIdx(i)} aria-label={`Load ${p.name} schema preset`} aria-pressed={presetIdx === i} className={cn(
-            "rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
+            "rounded-lg px-3 py-1.5 text-xs font-medium transition-all focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 outline-none",
             presetIdx === i ? "bg-purple-500/30 text-purple-300 ring-1 ring-purple-500/50" : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
           )}>{p.name}</button>
         ))}
@@ -2364,7 +2364,7 @@ function SchemaDesignerSimulator() {
               {selected.name}
               <span className="ml-2 text-xs text-slate-400">- {selected.columns.length} columns</span>
             </h4>
-            <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} aria-label="Generate DDL for selected table" className="text-xs text-purple-400 hover:text-purple-300">
+            <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} aria-label="Generate DDL for selected table" className="text-xs text-purple-400 hover:text-purple-300 focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 outline-none">
               Generate DDL →
             </button>
           </div>
@@ -2402,7 +2402,7 @@ function SchemaDesignerSimulator() {
         <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Generated DDL</span>
-            <button onClick={() => setShowSql(false)} className="text-xs text-slate-400 hover:text-white">✕ Close</button>
+            <button onClick={() => setShowSql(false)} className="text-xs text-slate-400 hover:text-white focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 outline-none">✕ Close</button>
           </div>
           <pre className="overflow-x-auto font-mono text-xs text-emerald-400">{sqlOutput}</pre>
         </div>

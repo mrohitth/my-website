@@ -120,7 +120,7 @@ export function HeroSection() {
         )}
 
         {/* Hero Content */}
-        <div className="relative z-20 max-w-4xl mx-auto text-center">
+        <div className="relative z-20 max-w-7xl mx-auto w-full text-center">
           <div className="fade-in mb-6 md:mb-12 flex justify-center">
             <div className="relative w-32 h-32 sm:w-48 md:w-64 sm:h-48 md:h-64 rounded-full overflow-hidden border-portfolio-primary/30 shadow-lg">
               <img
@@ -167,13 +167,13 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={() => scrollToSection("projects")}
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
+                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 View Projects
               </Button>
               <Button
                 onClick={() => scrollToSection("contact")}
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump"
+                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 Get In Touch
               </Button>
@@ -186,7 +186,7 @@ export function HeroSection() {
               <button
                 onClick={() => scrollToSection("about")}
                 aria-label="Scroll down to About section"
-                className="bg-portfolio-primary/80 hover:bg-portfolio-primary text-white rounded-full p-2 shadow-lg transition-all animate-bounce"
+                className="bg-portfolio-primary/80 hover:bg-portfolio-primary text-white rounded-full p-2 shadow-lg transition-all animate-bounce focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
                 style={{ animationDuration: "1.5s" }}
               >
                 <svg

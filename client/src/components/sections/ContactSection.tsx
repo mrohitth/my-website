@@ -97,7 +97,7 @@ export function ContactSection() {
           <Button
             onClick={scrollToTop}
             aria-label="Scroll to top of page"
-            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce"
+            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
             style={{ animationDuration: "2s" }}
           >
             <img
