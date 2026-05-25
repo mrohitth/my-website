@@ -1,0 +1,1 @@
+const e={nodeAreaDivisor:12500,connectionDistancePx:120,nodeRadiusPx:2,nodeAlpha:.05,nodeVelocity:.5},a={maxNodes:5,nodeLifeFrames:60,velocity:.2,baseAlpha:.1,alphaRange:.3,radiusPx:3};export{a as C,e as N};
