@@ -7,7 +7,6 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { TechStackSection } from "@/components/sections/AboutSection";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
-import { SandboxSection } from "@/components/sections/SandboxSection";
 import { PhilosophySection } from "@/components/sections/PhilosophySection";
 import { ContactSection } from "@/components/sections/ContactSection";
 
@@ -29,11 +28,10 @@ export default function Portfolio() {
       {/* Page sections */}
       <main id="main-content" aria-label="Portfolio sections">
         <HeroSection />
+        <ExperienceSection />
         <AboutSection />
         <TechStackSection />
-        <ExperienceSection />
         <ProjectsSection />
-        <SandboxSection />
         <PhilosophySection />
         <ContactSection />
       </main>

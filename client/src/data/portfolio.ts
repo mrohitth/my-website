@@ -9,7 +9,6 @@ export const ROLES: string[] = [
   "Cloud Data Platform Lead",
   "ETL / ELT Pipeline Specialist",
   "Data Observability Engineer",
-  "ML Feature Platform Builder",
 ];
 
 // ============================================================================

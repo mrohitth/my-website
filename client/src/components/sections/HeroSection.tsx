@@ -149,19 +149,14 @@ export function HeroSection() {
               <span className="typing-animation">{displayedText}</span>
             </div>
 
-            {/* SCALE-METRIC TAGLINE - outcome-first */}
-            <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Data Engineer - Pipelines, Scale, and Systems That Actually Ship.
+            {/* Tier 1 — Production engineering claim */}
+            <p className="text-lg md:text-xl text-portfolio-muted-foreground mb-6 max-w-2xl mx-auto leading-relaxed">
+              I build production batch pipelines on AWS EMR and Snowflake - currently processing 40M+ records per batch for a Fortune 500 financial services client.
             </p>
 
-            {/* SUBHEADLINE */}
-            <p className="text-base md:text-lg text-portfolio-muted-foreground/80 mb-6 max-w-2xl mx-auto leading-relaxed">
-              I build production batch and streaming pipelines on AWS EMR and Snowflake - currently processing 40M+ records per batch for a Fortune 500 financial services client.
-            </p>
-
-            {/* ONE-LINE BIO */}
+            {/* Tier 2 — Credentials + targeting signal */}
             <p className="text-sm md:text-base text-portfolio-muted-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed">
-              CMU grad. 2.5+ years in production DE at regulated financial scale. Open to mid-level DE roles at companies building data infrastructure that matters.
+              CMU grad. 2.5 years in production data engineering at regulated financial scale. Targeting DE roles at companies where batch reliability and data correctness are non-negotiable.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -173,7 +168,7 @@ export function HeroSection() {
               </Button>
               <Button
                 onClick={() => scrollToSection("contact")}
-                className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="bg-transparent border border-portfolio-primary text-portfolio-primary hover:bg-portfolio-primary/10 px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 Get In Touch
               </Button>

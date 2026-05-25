@@ -18,6 +18,7 @@ type Tab = "ml" | "cv";
 
 export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<Tab>("ml");
+  const [showAcademic, setShowAcademic] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,8 +76,20 @@ export function ProjectsSection() {
           </div>
         </div>
 
+        {/* Toggle for academic section */}
+        <div className="flex justify-center mt-8 mb-0">
+          <button
+            onClick={() => setShowAcademic((v) => !v)}
+            className="text-sm text-portfolio-muted-foreground hover:text-portfolio-foreground border border-portfolio-border/40 hover:border-portfolio-border/70 px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+          >
+            {showAcademic ? "Hide Academic & Research Projects" : "Show Academic & Research Projects (ML / CV)"}
+            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showAcademic ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+
         {/* Academic Research & ML Projects */}
-        <div className="mb-8">
+        {showAcademic && (
+        <div className="mb-8 mt-8">
           <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
             📚 Academic Research &amp; ML Projects
           </h3>
@@ -250,6 +263,7 @@ export function ProjectsSection() {
             )}
           </div>
         </div>
+        )}
       </div>
     </section>
   );
