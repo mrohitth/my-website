@@ -53,35 +53,34 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     id: "cdc-historical-warehouse",
-    title: "CDC & Historical Warehouse Platform",
+    title: "CDC Historical Warehouse Platform",
     description:
-      "Built an SCD Type-2 historical warehouse supporting scalable CDC patterns with idempotent batch execution and deterministic replay. Implemented versioned record tracking and late-arriving data handling for temporal consistency, with schema drift detection at the extraction layer.",
+      "Built an SCD Type-2 historical warehouse supporting scalable CDC patterns with idempotent batch execution and deterministic replay. Implemented versioned record tracking and late-arriving data handling for temporal consistency and auditability. Developed deterministic batch reprocessing logic ensuring data integrity across incremental loads.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
       "Python",
       "PostgreSQL",
-      "Docker",
+      "CDC",
       "SCD Type 2",
-      "Bash Scripting",
+      "Docker",
       "JSON Logs",
     ],
     github: "https://github.com/mrohitth/cdc-historical-warehouse-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "40M+ records/batch · batch runtime under 10 min · 22yr history modeled in Snowflake",
+    impact: "SCD Type-2 versioning · Deterministic batch reprocessing · Late-arriving data handling",
     architecture:
-      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabling deterministic replay without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement. Schema drift detection at the extraction layer catches unannounced changes before downstream consumers are affected.",
-    scale: "40M records per batch · 22 years of history · 3 consumer systems · 18 months production uptime",
-    costImpact: "Eliminated repeated full-table scans through incremental loading, reducing processing time and unnecessary recomputation.",
-    highlight: "40M+ records/batch · batch: ~40 min → under 10 min · 22yr Snowflake history",
-    tags: ["batch", "infrastructure"],
+      "Chose append-only JSON log over direct CDC to decouple producer from consumer — enabling deterministic replay without re-running source queries. SCD Type-2 over Type-1 because historical lineage was a regulatory requirement for auditability. Late-arriving data handling ensures temporal consistency without requiring full pipeline re-execution.",
+    scale: "Incremental CDC loads · SCD Type-2 versioning · Temporal consistency",
+    highlight: "SCD Type-2 versioning · Deterministic replay · Late-arriving data handling",
+    tags: ["batch", "infrastructure", "observability"],
   },
   {
     id: "data-observability",
     title: "Data Observability Platform",
     description:
-      "Designed a statistical data observability framework using rolling-window baselining and Z-score anomaly detection to identify freshness gaps, schema drift, and volume anomalies. Automated threshold learning to prevent silent data failures in distributed batch pipelines.",
+      "Designed a configuration-driven data observability framework with statistical baselining, freshness validation, and automated anomaly detection. Implemented rolling-window metric profiling to proactively detect schema drift, freshness gaps, and SLA violations in distributed batch workloads.",
     image:
       "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -95,39 +94,37 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/mrohitth/data-observability-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "Detected schema drift 48h before下游 consumers broke · 80% fewer silent data failures · threshold learning reduced false positives by 65%",
+    impact: "Statistical baselining · Rolling-window profiling · Schema drift detection",
     architecture:
-      "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours — the baseline adapts to diurnal patterns automatically. Z-score over IQR because the data distributions were skewed by weekend drops; IQR would have required manual season adjustment. Threshold learning automates what would otherwise be a 2-person-hour weekly task.",
-    scale: "Monitors 50+ pipeline streams · detects anomalies within 15-min of ingestion · handles schema evolution across 12 source systems",
-    costImpact: "Prevented 3 production incidents in 6 months, each estimated at 4-8 hours of engineer time. Silent failures caught before downstream reporting was affected.",
-    highlight: "Rolling-window baselining · freshness validation · SLA violation detection",
+      "Chose rolling-window baselining over point-in-time checks because batch pipelines have known quiet hours — the baseline adapts to diurnal patterns automatically. Z-score over IQR because data distributions were skewed by weekend drops; IQR would have required manual season adjustment. YAML configuration drives threshold parameters without code changes.",
+    scale: "Configuration-driven thresholds · Statistical baselining · Rolling-window metrics",
+    highlight: "Statistical baselining · Freshness validation · Schema drift detection",
     tags: ["observability", "batch"],
   },
   {
     id: "batch-analytics",
-    title: "Batch Analytics Platform",
+    title: "Config-Driven Batch ELT Framework",
     description:
-      "Architected a configuration-driven ELT framework (DataStack) with declarative DAG generation via YAML/JSON manifests — separating pipeline logic from execution topology. Implemented environment promotion across dev/staging/prod through parameter substitution, achieving multi-environment parity. Enforced partition-aware data modeling and idempotent transformations to eliminate duplicate records across 120+ dbt models and 8 data marts.",
+      "Architected a production-style batch ELT framework with config-driven orchestration simulating enterprise-scale workloads (50M+ record synthetic datasets). Designed reusable DAG abstractions enabling plug-and-play dataset onboarding across heterogeneous schemas. Validated Spark optimization strategies with dynamic partitioning and shuffle tuning under simulated enterprise-scale workloads.",
     image:
       "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
       "Apache Airflow",
       "dbt",
       "PostgreSQL",
-      "MinIO",
-      "Docker",
       "Python",
+      "PySpark",
+      "AWS EMR",
     ],
     github: "https://github.com/mrohitth/batch-analytics-platform",
     featured: true,
     category: "Data Engineering",
-    impact: "Configuration-driven DAG generation · 120+ dbt models · 45% query cost reduction via partition pruning · 0 duplicate records in 12 months",
+    impact: "Config-driven DAG generation · 50M+ record synthetic workloads · reusable pipeline abstractions for heterogeneous schemas",
     architecture:
-      "Chose dbt over raw SQL transformations for declarative pipeline logic with built-in lineage tracking, test coverage, and CI/CD — separating what runs from how it executes. YAML/JSON manifests parameterize execution topology across environments without modifying pipeline logic. Partition-aware modeling prunes full-table scans to relevant partitions only, cutting Snowflake credit consumption by 45%. Idempotent execution blocks mean rerunning a DAG never produces duplicate records regardless of failure point.",
-    scale: "50M+ records per run · 120+ dbt models · 8 data marts · automated quality gates on every run",
-    costImpact: "Partition pruning reduced Snowflake query credit consumption by 45% compared to full-table scans. Idempotent design eliminates wasted rerun credits.",
-    highlight: "50M+ records/run · 45% query cost reduction via partition pruning · 0 duplicate records in 12 months",
-    tags: ["batch", "lakehouse"],
+      "Chose Apache Airflow as the orchestration layer for its DAG visualization and retry handling. YAML/JSON configuration manifests parameterize pipeline logic independently of execution topology. PySpark dynamic partitioning and shuffle tuning validated under synthetic enterprise-scale workloads.",
+    scale: "50M+ records per synthetic run · Dynamic partitioning validation · Shuffle tuning under load",
+    highlight: "50M+ records/run · Config-driven DAG generation · PySpark partition optimization",
+    tags: ["batch", "infrastructure"],
   },
   {
     id: "brain-tumor-ml",
