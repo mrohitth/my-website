@@ -185,7 +185,8 @@ export function HeroSection() {
             <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30">
               <button
                 onClick={() => scrollToSection("about")}
-                className="bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600 transition-all animate-bounce"
+                aria-label="Scroll down to About section"
+                className="bg-portfolio-primary/80 hover:bg-portfolio-primary text-white rounded-full p-2 shadow-lg transition-all animate-bounce"
                 style={{ animationDuration: "1.5s" }}
               >
                 <svg

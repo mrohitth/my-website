@@ -96,6 +96,7 @@ export function ContactSection() {
         >
           <Button
             onClick={scrollToTop}
+            aria-label="Scroll to top of page"
             className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce"
             style={{ animationDuration: "2s" }}
           >
@@ -200,6 +201,7 @@ export function ContactSection() {
                 type="submit"
                 disabled={formStatus === "submitting"}
                 aria-busy={formStatus === "submitting"}
+                aria-label={formStatus === "submitting" ? "Sending message" : "Send message"}
                 className="w-full bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground font-medium py-3 px-6 focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 focus-visible:ring-offset-portfolio-background"
                 data-testid="button-submit-form"
               >

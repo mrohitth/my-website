@@ -191,6 +191,8 @@ function ToggleSwitch({
       <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(false)}
+          aria-label={`${label}: select ${optionA}`}
+          aria-pressed={!value}
           className={cn(
             "flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200",
             !value
@@ -203,6 +205,8 @@ function ToggleSwitch({
         </button>
         <button
           onClick={() => onChange(true)}
+          aria-label={`${label}: select ${optionB}`}
+          aria-pressed={value}
           className={cn(
             "flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200",
             value
@@ -278,6 +282,8 @@ function TabButton({ id, label, icon, active, onClick, color }: TabButtonProps) 
   return (
     <button
       onClick={onClick}
+      aria-label={`${label} tab`}
+      aria-pressed={active}
       className={cn(
         "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300",
         active
@@ -482,6 +488,7 @@ function CDCpipelineSimulator() {
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <button
             onClick={() => { setPipelineMode("procedural"); }}
+            aria-label="Select Consumer Lag Spike failure scenario"
             className="rounded-lg border border-red-500/30 bg-red-500/10 p-2 text-left hover:bg-red-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-red-400">Consumer Lag Spike</p>
@@ -489,6 +496,7 @@ function CDCpipelineSimulator() {
           </button>
           <button
             onClick={() => { setPipelineMode("setbased"); }}
+            aria-label="Select Schema Incompatibility failure scenario"
             className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-2 text-left hover:bg-yellow-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-yellow-400">Schema Incompatibility</p>
@@ -496,6 +504,7 @@ function CDCpipelineSimulator() {
           </button>
           <button
             onClick={() => { setPipelineMode("setbased"); }}
+            aria-label="Select Idempotency Breach failure scenario"
             className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-2 text-left hover:bg-orange-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-orange-400">Idempotency Breach</p>
@@ -503,6 +512,7 @@ function CDCpipelineSimulator() {
           </button>
           <button
             onClick={() => { setPipelineMode("setbased"); }}
+            aria-label="Select Offset Drift Recovery failure scenario"
             className="rounded-lg border border-blue-500/30 bg-blue-500/10 p-2 text-left hover:bg-blue-500/20 transition-colors"
           >
             <p className="text-xs font-semibold text-blue-400">Offset Drift Recovery</p>
@@ -518,6 +528,8 @@ function CDCpipelineSimulator() {
       <motion.button
         onClick={handleInject}
         disabled={injecting}
+        aria-label={injecting ? "Injecting change event batch" : "Inject change event batch"}
+        aria-disabled={injecting}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className={cn(
@@ -927,6 +939,8 @@ function BatchAnalyticsSimulator() {
               <button
                 key={s.id}
                 onClick={() => setScenario(s.id)}
+                aria-label={`Select ${s.label} scenario`}
+                aria-pressed={scenario === s.id}
                 className={cn(
                   "flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200",
                   scenario === s.id
@@ -1005,6 +1019,8 @@ function BatchAnalyticsSimulator() {
       <motion.button
         onClick={handleExecute}
         disabled={executing}
+        aria-label={executing ? "Executing batch run" : "Execute batch run"}
+        aria-disabled={executing}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className={cn(
@@ -1598,6 +1614,8 @@ function DataObservabilitySimulator() {
                   setAnomalyType(opt.id);
                   setAlerts([]);
                 }}
+                aria-label={`${opt.label}: ${opt.desc}`}
+                aria-pressed={anomalyType === opt.id}
                 className={cn(
                   "rounded-lg px-3 py-2 text-left text-xs font-medium transition-all duration-200",
                   anomalyType === opt.id
@@ -1626,6 +1644,7 @@ function DataObservabilitySimulator() {
       {/* Evaluate Button */}
       <motion.button
         onClick={handleEvaluate}
+        aria-label="Run anomaly evaluation"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className="flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition-all hover:bg-cyan-400"
@@ -1663,6 +1682,8 @@ function DataObservabilitySimulator() {
                 <button
                   key={key}
                   onClick={() => handleToggleChange(key, !isActive)}
+                  aria-label={`${label} toggle, currently ${isActive ? "armed" : "off"}`}
+                  aria-pressed={isActive}
                   className={cn(
                     "flex flex-col items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all duration-200",
                     colors[color][isActive ? "active" : "inactive"],
@@ -1744,6 +1765,7 @@ function DataObservabilitySimulator() {
             <span className="font-mono text-[10px] text-slate-500">{terminalLogs.length} events</span>
             <button
               onClick={() => setTerminalLogs([])}
+              aria-label="Clear terminal log"
               className="text-[10px] font-mono text-slate-500 hover:text-slate-300 transition-colors"
             >
               CLEAR
@@ -2301,7 +2323,7 @@ function SchemaDesignerSimulator() {
       <div className="flex flex-wrap items-center gap-3">
         <label className="text-sm font-medium text-slate-300">Preset Schema:</label>
         {PRESET_SCHEMAS.map((p, i) => (
-          <button key={i} onClick={() => setPresetIdx(i)} className={cn(
+          <button key={i} onClick={() => setPresetIdx(i)} aria-label={`Load ${p.name} schema preset`} aria-pressed={presetIdx === i} className={cn(
             "rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
             presetIdx === i ? "bg-purple-500/30 text-purple-300 ring-1 ring-purple-500/50" : "bg-slate-700/50 text-slate-400 hover:bg-slate-700"
           )}>{p.name}</button>
@@ -2342,7 +2364,7 @@ function SchemaDesignerSimulator() {
               {selected.name}
               <span className="ml-2 text-xs text-slate-400">- {selected.columns.length} columns</span>
             </h4>
-            <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} className="text-xs text-purple-400 hover:text-purple-300">
+            <button onClick={() => { setSqlOutput(generateSql(selected)); setShowSql(true); }} aria-label="Generate DDL for selected table" className="text-xs text-purple-400 hover:text-purple-300">
               Generate DDL →
             </button>
           </div>

@@ -208,10 +208,10 @@ export function TechStackSection() {
                         <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
                           <div
                             className={`h-1 rounded-full transition-all duration-500 ${getLevelProgressWidth(tool.level)} ${
-                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-blue-600" :
-                              tool.level === "Intermediate" ? "bg-blue-400" :
-                              tool.level === "Working" ? "bg-yellow-400" :
-                              "bg-gray-400"
+                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-emerald-500/70 shadow-sm shadow-emerald-400/40" :
+                              tool.level === "Intermediate" ? "bg-blue-500/70 shadow-sm shadow-blue-400/30" :
+                              tool.level === "Working" ? "bg-amber-500/70 shadow-sm shadow-amber-400/30" :
+                              "bg-gray-500/50"
                             }`}
                           />
                         </div>

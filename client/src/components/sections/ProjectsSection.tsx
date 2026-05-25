@@ -89,6 +89,8 @@ export function ProjectsSection() {
                     : "border-transparent text-portfolio-muted-foreground"
                 }`}
                 onClick={() => setActiveTab("ml")}
+                aria-label="ML and Deep Learning projects tab"
+                aria-pressed={activeTab === "ml"}
                 data-testid="tab-ml"
               >
                 Deep Learning &amp; Machine Learning ({mlProjects.length})
@@ -100,6 +102,8 @@ export function ProjectsSection() {
                     : "border-transparent text-portfolio-muted-foreground"
                 }`}
                 onClick={() => setActiveTab("cv")}
+                aria-label="Computer Vision projects tab"
+                aria-pressed={activeTab === "cv"}
                 data-testid="tab-cv"
               >
                 Computer Vision ({cvProjects.length})
@@ -109,7 +113,7 @@ export function ProjectsSection() {
 
           <div className="min-h-[400px]">
             {activeTab === "ml" && (
-              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container" style={{ maskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container" aria-label="Machine Learning project cards, scroll horizontally" style={{ WebkitOverflowScrolling: "touch", maskImage: "linear-gradient(to right, black 80%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
                 {mlProjects.length === 0 ? (
                   <p className="text-portfolio-muted-foreground text-sm">No ML projects found.</p>
                 ) : (
@@ -177,7 +181,7 @@ export function ProjectsSection() {
               </div>
             )}
             {activeTab === "cv" && (
-              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container" style={{ maskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container" aria-label="Computer Vision project cards, scroll horizontally" style={{ WebkitOverflowScrolling: "touch", maskImage: "linear-gradient(to right, black 80%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
                 {cvProjects.length === 0 ? (
                   <p className="text-portfolio-muted-foreground text-sm">No Computer Vision projects found.</p>
                 ) : (
@@ -316,6 +320,7 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
           <div className="mb-3">
             <button
               onClick={() => setExpanded((v) => !v)}
+              aria-label={expanded ? "Collapse architecture explanation" : "Expand architecture explanation"}
               className="flex items-center gap-1.5 text-xs text-portfolio-primary hover:text-portfolio-primary/80 transition-colors font-medium"
             >
               <Layers className="h-3.5 w-3.5" />
