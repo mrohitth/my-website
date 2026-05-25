@@ -354,6 +354,7 @@ export interface Experience {
   metrics: string[];
   logos: string[]; // import() URLs — resolved at render site
   highlights: string[];
+  technologies: string[];
 }
 
 export const EXPERIENCES: Experience[] = [
@@ -362,8 +363,9 @@ export const EXPERIENCES: Experience[] = [
     title: "Data Engineer",
     company: "Capco (Client: Freddie Mac)",
     period: "Apr 2024 - Present",
+    technologies: ["Python", "PySpark", "AWS EMR", "Snowflake", "Control-M", "SCD Type-2", "PostgreSQL", "Docker"],
     description:
-      "Architected a metadata-driven CDC platform with deterministic reprocessing — mitigating shuffle bottlenecks through partition-aware redistribution enforced across raw/enriched/curated data tiers. Reduced nightly batch from 14 hours to 3.5h through EMR cluster tuning (EC2/EKS compute contexts), cutting EMR cluster time by ~10.5h per run. Designed SCD Type-2 historical models enabling 40+ analysts to self-serve point-in-time historical data without DE support.",
+      "Architected a metadata-driven change-data-capture platform with deterministic reprocessing — mitigating shuffle bottlenecks through partition-aware redistribution across raw, enriched, and curated data tiers. Reduced nightly batch from 14 hours to 3.5 hours through cluster tuning, cutting compute time by ~10.5 hours per run. Designed historical models enabling 40+ analysts to self-serve point-in-time data without DE support.",
     metrics: [
       "40M records/batch · nightly batch: 14h → 3.5h (75% faster)",
       "Mitigated shuffle bottlenecks through partition-aware shuffle optimization",
@@ -379,8 +381,9 @@ export const EXPERIENCES: Experience[] = [
     title: "Lead AI Developer",
     company: "Bosmos",
     period: "Sep 2023 - Mar 2024",
+    technologies: ["TensorFlow Serving", "Python", "NLP", "Docker", "Kubernetes", "Prometheus", "Grafana"],
     description:
-      "Led a 5-engineer team to design and deploy a production-grade NLP inference platform on TensorFlow Serving, achieving sub-50ms p99 latency at 10,000 requests/minute. Built automated model drift detection that reduced model staleness incidents by 80%, from ~5 per week to ~1 per week. Managed full ML lifecycle: data ingestion → training → validation → serving → monitoring.",
+      "Led a 5-engineer team to design and deploy a production-grade NLP inference platform, achieving sub-50ms p99 latency at 10,000 requests per minute. Built automated model drift detection that reduced staleness incidents by 80%, from ~5 per week to ~1 per week. Managed the full ML lifecycle from data ingestion through training, validation, serving, and monitoring.",
     metrics: [
       "Sub-50ms p99 latency at 10K requests/minute",
       "5-engineer team led: full ML lifecycle from ingestion to monitoring",
@@ -396,8 +399,9 @@ export const EXPERIENCES: Experience[] = [
     title: "Research Assistant",
     company: "Design Research Collective",
     period: "Dec 2021 - May 2023",
+    technologies: ["Python", "PyTorch", "OpenCV", "NumPy", "scikit-learn", "LaTeX"],
     description:
-      "Conducted ML/CV research at Carnegie Mellon (4.0 GPA), developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant.",
+      "Conducted ML and computer vision research at Carnegie Mellon, developing deep learning and computational modeling systems for high-dimensional data analysis and simulation. Published work on photometric stereo and structure-from-motion; contributed to an NSF-funded research grant on autonomous navigation.",
     metrics: [
       "4.0 GPA across graduate coursework",
       "Published 2 papers on 3D reconstruction and photometric stereo",
