@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none">
+  <!-- Background hint -->
+  <rect width="400" height="200" fill="transparent"/>
+
+  <!-- Source Nodes (left) -->
+  <g id="sources">
+    <!-- PostgreSQL source -->
+    <rect x="10" y="30" width="70" height="36" rx="6" fill="#336791" fill-opacity="0.15" stroke="#336791" stroke-width="1.5"/>
+    <text x="45" y="52" text-anchor="middle" font-family="monospace" font-size="9" fill="#336791" font-weight="bold">PostgreSQL</text>
+
+    <!-- S3 source -->
+    <rect x="10" y="82" width="70" height="36" rx="6" fill="#FF9900" fill-opacity="0.15" stroke="#FF9900" stroke-width="1.5"/>
+    <text x="45" y="104" text-anchor="middle" font-family="monospace" font-size="9" fill="#FF9900" font-weight="bold">AWS S3</text>
+
+    <!-- Snowflake source -->
+    <rect x="10" y="134" width="70" height="36" rx="6" fill="#29B5E8" fill-opacity="0.15" stroke="#29B5E8" stroke-width="1.5"/>
+    <text x="45" y="156" text-anchor="middle" font-family="monospace" font-size="9" fill="#29B5E8" font-weight="bold">Snowflake</text>
+  </g>
+
+  <!-- Connector lines from sources to central bucket -->
+  <g stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3">
+    <line x1="80" y1="48" x2="150" y2="100"/>
+    <line x1="80" y1="100" x2="150" y2="100"/>
+    <line x1="80" y1="152" x2="150" y2="100"/>
+  </g>
+
+  <!-- Arrow heads -->
+  <polygon points="150,97 143,93 143,103" fill="#6B7280"/>
+  <polygon points="150,97 143,93 143,103" fill="#6B7280"/>
+  <polygon points="150,103 143,99 143,107" fill="#6B7280"/>
+
+  <!-- Central Transformation Bucket -->
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="#6366F1" fill-opacity="0.12" stroke="#6366F1" stroke-width="2"/>
+  <ellipse cx="200" cy="100" rx="38" ry="30" fill="#6366F1" fill-opacity="0.08" stroke="#6366F1" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="200" y="96" text-anchor="middle" font-family="monospace" font-size="8" fill="#6366F1" font-weight="bold">TRANSFORM</text>
+  <text x="200" y="107" text-anchor="middle" font-family="monospace" font-size="7" fill="#6366F1">Spark · dbt</text>
+
+  <!-- Branch lines to targets -->
+  <g stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3">
+    <!-- Up branch to warehouse -->
+    <path d="M255,100 Q280,100 290,55" fill="none"/>
+    <!-- Down branch to reporting -->
+    <path d="M255,100 Q280,100 290,145" fill="none"/>
+  </g>
+
+  <!-- Arrow heads -->
+  <polygon points="289,56 282,51 282,59" fill="#6B7280"/>
+  <polygon points="289,144 282,139 282,149" fill="#6B7280"/>
+
+  <!-- Target: Data Warehouse (top right) -->
+  <rect x="290" y="25" width="100" height="60" rx="8" fill="#6366F1" fill-opacity="0.1" stroke="#6366F1" stroke-width="1.5"/>
+  <rect x="290" y="25" width="100" height="22" rx="8" fill="#6366F1" fill-opacity="0.05"/>
+  <text x="340" y="39" text-anchor="middle" font-family="monospace" font-size="8" fill="#6366F1" font-weight="bold">DATA WAREHOUSE</text>
+  <text x="340" y="54" text-anchor="middle" font-family="monospace" font-size="7" fill="#6366F1">Snowflake</text>
+  <text x="340" y="68" text-anchor="middle" font-family="monospace" font-size="6" fill="#6B7280">Analytical Queries</text>
+
+  <!-- Target: Reporting (bottom right) -->
+  <rect x="290" y="115" width="100" height="60" rx="8" fill="#10B981" fill-opacity="0.1" stroke="#10B981" stroke-width="1.5"/>
+  <rect x="290" y="115" width="100" height="22" rx="8" fill="#10B981" fill-opacity="0.05"/>
+  <text x="340" y="129" text-anchor="middle" font-family="monospace" font-size="8" fill="#10B981" font-weight="bold">REPORTING</text>
+  <text x="340" y="144" text-anchor="middle" font-family="monospace" font-size="7" fill="#10B981">Dashboards</text>
+  <text x="340" y="158" text-anchor="middle" font-family="monospace" font-size="6" fill="#6B7280">BI Tools</text>
+</svg>

@@ -109,7 +109,7 @@ export function ProjectsSection() {
 
           <div className="min-h-[400px]">
             {activeTab === "ml" && (
-              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container">
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="ml-projects-container" style={{ maskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
                 {mlProjects.length === 0 ? (
                   <p className="text-portfolio-muted-foreground text-sm">No ML projects found.</p>
                 ) : (
@@ -177,7 +177,7 @@ export function ProjectsSection() {
               </div>
             )}
             {activeTab === "cv" && (
-              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container">
+              <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" data-testid="cv-projects-container" style={{ maskImage: "linear-gradient(to right, black 80%, transparent 100%)" }}>
                 {cvProjects.length === 0 ? (
                   <p className="text-portfolio-muted-foreground text-sm">No Computer Vision projects found.</p>
                 ) : (

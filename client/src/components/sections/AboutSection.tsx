@@ -57,7 +57,7 @@ const STATS = [
 ];
 
 const DOMAIN_ICONS: Record<string, JSX.Element> = {
-  "Stream Processing & Real-Time Systems": <Zap className="text-yellow-400 h-5 w-5" />,
+  "Idempotent Data Pipelines & Incremental Processing Platforms": <Zap className="text-yellow-400 h-5 w-5" />,
   "Distributed Data Processing": <BarChart3 className="text-orange-400 h-5 w-5" />,
   "Data Modeling & Warehouse Architecture": <Database className="text-blue-400 h-5 w-5" />,
   "Data Reliability & Observability": <BarChart3 className="text-emerald-400 h-5 w-5" />,
@@ -86,7 +86,7 @@ export function AboutSection() {
           {/* Profile Picture */}
           <div className="fade-in md:col-span-1">
             <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 mx-auto rounded-2xl" data-testid="profile-picture">
-              <img src={profilePic} alt="Rohit Mathew Thomson, Senior Data Engineer" className="w-full h-full object-cover rounded-2xl" />
+              <img src={profilePic} alt="Mathew R. Thomson, Senior Data Engineer" className="w-full h-full object-cover rounded-2xl" />
             </div>
           </div>
 
@@ -95,12 +95,12 @@ export function AboutSection() {
             <div>
               <h2 className="text-4xl font-bold mb-6" data-testid="about-title">About Me</h2>
               <p className="text-base md:text-lg text-portfolio-muted-foreground max-w-prose">
-                I design and optimize distributed data pipelines on AWS EMR and Snowflake,
-                focusing on performance tuning, cost efficiency, and production reliability.
-                Specializing in cloud-native processing on AWS EMR (EC2/EKS) and Snowflake, I
-                build resilient, metadata-driven pipelines that handle tens of millions of
-                records while optimizing for both compute performance and enterprise-level
-                cost-efficiency.
+                I design and optimize idempotent batch data pipelines on AWS EMR and Snowflake,
+                focusing on PySpark performance tuning, cost efficiency, and production reliability.
+                Specializing in cloud-native batch processing on AWS EMR (EC2/EKS) and Snowflake, I
+                build SCD Type-2 historical warehouses and deterministic CDC platforms that handle
+                tens of millions of records with zero data loss — optimized for enterprise-level
+                cost-efficiency and full auditability.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-portfolio-border/30">
@@ -208,7 +208,7 @@ export function TechStackSection() {
                         <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
                           <div
                             className={`h-1 rounded-full transition-all duration-500 ${getLevelProgressWidth(tool.level)} ${
-                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-emerald-400" :
+                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-blue-600" :
                               tool.level === "Intermediate" ? "bg-blue-400" :
                               tool.level === "Working" ? "bg-yellow-400" :
                               "bg-gray-400"

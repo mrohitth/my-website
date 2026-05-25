@@ -61,7 +61,63 @@ interface AnomalyAlert {
   metric: string;
   value: number;
   threshold: number;
+  slo_violation: boolean;
 }
+
+interface LogEntry {
+  id: string;
+  timestamp: number;
+  event_type: string;
+  severity: "ERROR" | "WARN" | "INFO";
+  slo_violation: boolean;
+  message: string;
+}
+
+const SCHEMA_DRIFT_EVENTS = [
+  "[ERROR] Schema Drift Detected on column 'dw_mod_dt' (Expected: TIMESTAMP, Found: VARCHAR)",
+  "[WARN] Schema incompatibility: 3 new columns detected in source — downstream parser not updated",
+  "[ERROR] Column type mismatch on 'payment_timestamp' — source: VARCHAR(32), target: TIMESTAMP",
+  "[WARN] Nullable flag mismatch on 'customer_key': source=NOT NULL, target=NULL. ETL may fail.",
+  "[ERROR] Schema Drift: Column 'record_version' dropped upstream without notice",
+  "[WARN] Schema Registry version mismatch — consumer schema v14, producer schema v16",
+];
+
+const FRESHNESS_EVENTS = [
+  "[WARN] Freshness Gap Exceeded SLA: Target < 15m, Current: 48m",
+  "[ERROR] SLO Violation: Table 'orders' freshness at 92m (threshold: 30m)",
+  "[WARN] Pipeline stale for 52m — no upstream heartbeats detected",
+  "[ERROR] Freshness breach on 'inventory_snapshot': 127m (SLO: 30m)",
+  "[WARN] DownstreamLagMonitor: 3 of 12 tables exceed freshness threshold",
+  "[ERROR] SLA Violation: 'fact_orders' updated 58m ago (target: <15m)",
+];
+
+const DATA_QUALITY_EVENTS = [
+  "[WARN] Data Quality Score Below Threshold: 73.2% (target: 95%)",
+  "[ERROR] Null value threshold exceeded on 'customer_id' column: 12.4%",
+  "[WARN] Duplicate key detection: 847 duplicate orders in staging table",
+  "[ERROR] Completeness Violation: 'email_address' NULL rate at 18.7% (threshold: 5%)",
+  "[WARN] Uniqueness breach on 'transaction_id': 234 duplicate values detected",
+  "[ERROR] Freshness score degraded to 68% — SCD Type-2 audit trail may be corrupted",
+  "[WARN] Referential integrity: 1,247 orphaned FK records in 'fact_orders' (fk: dim_product)",
+];
+
+const SLO_TRACKER_EVENTS = [
+  "[ERROR] SLO Violation: Table 'orders' freshness at 92m (threshold: 30m)",
+  "[INFO] Pipeline execution completed in 847s — 40,234,817 records processed",
+  "[ERROR] SLO Breach: 'fact_orders' row count delta +23% vs 7-day rolling average",
+  "[WARN] SLO Warning: 'dim_customer' processing time approaching threshold (28s / 30s limit)",
+  "[INFO] Snowpipe ingestion on track: 14.2M rows / min, well within 60m SLA window",
+  "[ERROR] SLO Violation: Data quality score at 71% — P1 threshold (95%) breached",
+];
+
+const LINEAGE_EVENTS = [
+  "[INFO] Lineage scan complete: 847 upstream dependencies resolved for 'fact_orders'",
+  "[WARN] Orphan node detected: 'stg_payments_v2' has no downstream consumers",
+  "[ERROR] Lineage gap: source column 'payment_method' not found in any downstream transforms",
+  "[INFO] Impact analysis: 14 tables affected by 'dim_customer' schema change",
+  "[WARN] Circular dependency detected: dim_customers → stg_events → fact_orders → dim_customers",
+  "[INFO] Data contract violation: 'fact_orders.order_amount' type changed from DECIMAL to VARCHAR",
+];
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -1290,6 +1346,85 @@ function DataObservabilitySimulator() {
   const [lastAlertFingerprint, setLastAlertFingerprint] = useState<string | null>(null);
   const [runCount, setRunCount] = useState(0);
 
+  // Terminal log state
+  const [terminalLogs, setTerminalLogs] = useState<LogEntry[]>([]);
+  const [activeToggles, setActiveToggles] = useState<Record<string, boolean>>({
+    schema_validation: true,
+    freshness_monitor: true,
+    slo_tracker: true,
+    data_quality: true,
+    lineage: false,
+  });
+  const [liveScrollEnabled, setLiveScrollEnabled] = useState(true);
+  const logStreamRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom on new logs
+  useEffect(() => {
+    if (liveScrollEnabled && logStreamRef.current) {
+      logStreamRef.current.scrollTop = logStreamRef.current.scrollHeight;
+    }
+  }, [terminalLogs]);
+
+  const appendLog = useCallback((severity: LogEntry["severity"], event_type: string, message: string, slo_violation = false) => {
+    const entry: LogEntry = {
+      id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      timestamp: Date.now(),
+      event_type,
+      severity,
+      slo_violation,
+      message,
+    };
+    setTerminalLogs((prev) => [...prev.slice(-80), entry]);
+  }, []);
+
+  // Fire alert from toggle interaction (within 500ms)
+  const fireToggleAlert = useCallback((toggleKey: string) => {
+    switch (toggleKey) {
+      case "schema_validation": {
+        const msg = SCHEMA_DRIFT_EVENTS[Math.floor(Math.random() * SCHEMA_DRIFT_EVENTS.length)];
+        appendLog("ERROR", "SCHEMA_DRIFT", msg, true);
+        break;
+      }
+      case "freshness_monitor": {
+        const msg = FRESHNESS_EVENTS[Math.floor(Math.random() * FRESHNESS_EVENTS.length)];
+        appendLog("WARN", "FRESHNESS_BREACH", msg, true);
+        break;
+      }
+      case "slo_tracker": {
+        const msg = SLO_TRACKER_EVENTS[Math.floor(Math.random() * SLO_TRACKER_EVENTS.length)];
+        appendLog(msg.startsWith("[ERROR]") ? "ERROR" : msg.startsWith("[WARN]") ? "WARN" : "INFO", "SLO_VIOLATION", msg, true);
+        break;
+      }
+      case "data_quality": {
+        const msg = DATA_QUALITY_EVENTS[Math.floor(Math.random() * DATA_QUALITY_EVENTS.length)];
+        appendLog(msg.startsWith("[ERROR]") ? "ERROR" : "WARN", "DATA_QUALITY", msg, true);
+        break;
+      }
+      case "lineage": {
+        const msg = LINEAGE_EVENTS[Math.floor(Math.random() * LINEAGE_EVENTS.length)];
+        appendLog(msg.startsWith("[ERROR]") ? "ERROR" : msg.startsWith("[WARN]") ? "WARN" : "INFO", "LINEAGE", msg, false);
+        break;
+      }
+    }
+  }, [appendLog]);
+
+  const handleToggleChange = useCallback((key: string, value: boolean) => {
+    setActiveToggles((prev) => ({ ...prev, [key]: value }));
+    // Fire alert immediately within 500ms
+    setTimeout(() => fireToggleAlert(key), Math.random() * 450 + 50);
+  }, [fireToggleAlert]);
+
+  // Seed some initial logs on mount
+  useEffect(() => {
+    const seedLogs: LogEntry[] = [
+      { id: "init-1", timestamp: Date.now() - 120000, event_type: "HEARTBEAT", severity: "INFO", slo_violation: false, message: "Observability engine initialized — monitoring 847 metrics across 23 data pipelines" },
+      { id: "init-2", timestamp: Date.now() - 90000, event_type: "SCHEMA_REGISTRY", severity: "INFO", slo_violation: false, message: "Schema Registry connected: 142 schemas loaded, version v14.2.1" },
+      { id: "init-3", timestamp: Date.now() - 60000, event_type: "SLO_TRACKER", severity: "INFO", slo_violation: false, message: "SLO baseline refreshed: 96.4% of pipelines within SLA (target: 95%)" },
+      { id: "init-4", timestamp: Date.now() - 30000, event_type: "DATA_QUALITY", severity: "WARN", slo_violation: false, message: "Anomaly detected on 'customer_id' NULL rate: 3.1% — above 2.5% baseline, below threshold" },
+    ];
+    setTerminalLogs(seedLogs);
+  }, []);
+
   const chartData = useMemo(() => generateBaselineData(anomalyType), [anomalyType]);
 
   const staticThreshold = 3000;
@@ -1356,6 +1491,7 @@ function DataObservabilitySimulator() {
           metric: "data_volume",
           value: point.actual,
           threshold,
+          slo_violation: true,
         };
         newAlerts.push(alert);
       }
@@ -1368,7 +1504,7 @@ function DataObservabilitySimulator() {
     }
     setRunCount((c) => c + 1);
     setObsEvaluated(true);
-  }, [anomalyType, detectionMode, hourBaselines]);
+  }, [anomalyType, detectionMode, hourBaselines, appendLog]);
 
   const alertRate = chartData.filter((d) => {
     if (detectionMode === "static") return d.actual < staticThreshold;
@@ -1497,6 +1633,124 @@ function DataObservabilitySimulator() {
         <Eye className="h-4 w-4" />
         Run Anomaly Evaluation
       </motion.button>
+
+      {/* ── SLO Alert Toggles & Live Terminal ─────────────────────────── */}
+      <div className="flex flex-col gap-4">
+        {/* Toggle Control Panel */}
+        <div className="rounded-xl border border-slate-700/50 bg-slate-900/60 p-4">
+          <div className="mb-3 flex items-center gap-2">
+            <Bell className="h-4 w-4 text-cyan-400" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">SLO Alert Toggles</span>
+            <span className="ml-auto text-xs text-slate-500">Click to fire live alert →</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+            {([
+              { key: "schema_validation", label: "Schema Validation", color: "red", icon: <FlaskConical className="h-3.5 w-3.5" /> },
+              { key: "freshness_monitor", label: "Freshness Monitor", color: "amber", icon: <Activity className="h-3.5 w-3.5" /> },
+              { key: "slo_tracker", label: "SLO Tracker", color: "cyan", icon: <ShieldAlert className="h-3.5 w-3.5" /> },
+              { key: "data_quality", label: "Data Quality", color: "emerald", icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+              { key: "lineage", label: "Lineage Tracker", color: "purple", icon: <GitBranch className="h-3.5 w-3.5" /> },
+            ] as const).map(({ key, label, color, icon }) => {
+              const colors: Record<string, { active: string; inactive: string; ring: string }> = {
+                red: { active: "bg-red-500/20 border-red-500/60 text-red-300", inactive: "bg-slate-800/40 border-slate-700/50 text-slate-400", ring: "ring-red-500/50" },
+                amber: { active: "bg-amber-500/20 border-amber-500/60 text-amber-300", inactive: "bg-slate-800/40 border-slate-700/50 text-slate-400", ring: "ring-amber-500/50" },
+                cyan: { active: "bg-cyan-500/20 border-cyan-500/60 text-cyan-300", inactive: "bg-slate-800/40 border-slate-700/50 text-slate-400", ring: "ring-cyan-500/50" },
+                emerald: { active: "bg-emerald-500/20 border-emerald-500/60 text-emerald-300", inactive: "bg-slate-800/40 border-slate-700/50 text-slate-400", ring: "ring-emerald-500/50" },
+                purple: { active: "bg-purple-500/20 border-purple-500/60 text-purple-300", inactive: "bg-slate-800/40 border-slate-700/50 text-slate-400", ring: "ring-purple-500/50" },
+              };
+              const isActive = activeToggles[key];
+              return (
+                <button
+                  key={key}
+                  onClick={() => handleToggleChange(key, !isActive)}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all duration-200",
+                    colors[color][isActive ? "active" : "inactive"],
+                    isActive && colors[color].ring,
+                  )}
+                >
+                  <span style={{ color: isActive ? undefined : "currentColor" }}>{icon}</span>
+                  <span className="text-center leading-tight">{label}</span>
+                  <span className={cn("text-[10px] font-mono", isActive ? "text-green-400" : "text-slate-600")}>
+                    {isActive ? "● ARMED" : "○ OFF"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Terminal Log Stream */}
+        <div className="rounded-xl border border-slate-700/50 bg-slate-950/80 overflow-hidden">
+          {/* Terminal header bar */}
+          <div className="flex items-center gap-2 border-b border-slate-800 bg-slate-900/60 px-4 py-2">
+            <div className="flex gap-1.5">
+              <div className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+              <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
+              <div className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
+            </div>
+            <span className="ml-2 text-xs font-mono text-slate-400">AlertDispatcher — live telemetry stream</span>
+            <div className="ml-auto flex items-center gap-2">
+              <span className="flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+              </span>
+              <span className="text-xs text-cyan-400 font-mono">LIVE</span>
+            </div>
+          </div>
+          {/* Log entries */}
+          <div
+            ref={logStreamRef}
+            className="flex flex-col gap-px overflow-y-auto px-4 py-3"
+            style={{ maxHeight: "340px" }}
+          >
+            {terminalLogs.map((entry) => {
+              const ts = new Date(entry.timestamp);
+              const timeStr = `${ts.getHours().toString().padStart(2, "0")}:${ts.getMinutes().toString().padStart(2, "0")}:${ts.getSeconds().toString().padStart(2, "0")}`;
+              const severityBadges = {
+                ERROR: "bg-red-500/20 text-red-400 border border-red-500/30",
+                WARN: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+                INFO: "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30",
+              };
+              return (
+                <div key={entry.id} className="flex items-start gap-3 rounded px-2 py-1 hover:bg-slate-900/40 transition-colors">
+                  <span className="shrink-0 font-mono text-[10px] text-slate-500 mt-0.5">{timeStr}</span>
+                  <span className={cn("shrink-0 rounded px-1.5 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider", severityBadges[entry.severity])}>
+                    {entry.severity}
+                  </span>
+                  <span className={cn("shrink-0 rounded bg-slate-700/60 px-1.5 py-0.5 text-[10px] font-mono text-slate-400")}>
+                    {entry.event_type}
+                  </span>
+                  {entry.slo_violation && (
+                    <span className="shrink-0 rounded bg-orange-500/20 border border-orange-500/30 px-1.5 py-0.5 text-[10px] font-mono text-orange-400">
+                      SLO
+                    </span>
+                  )}
+                  <span className={cn("font-mono text-xs leading-relaxed", entry.severity === "ERROR" ? "text-red-400" : entry.severity === "WARN" ? "text-amber-400" : "text-cyan-400")}>
+                    {entry.message}
+                  </span>
+                </div>
+              );
+            })}
+            {terminalLogs.length === 0 && (
+              <div className="flex items-center justify-center py-8 text-slate-500">
+                <Activity className="h-4 w-4 mr-2 animate-pulse" />
+                <span className="text-xs font-mono">Waiting for telemetry events...</span>
+              </div>
+            )}
+          </div>
+          {/* Terminal footer */}
+          <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/40 px-4 py-1.5">
+            <span className="font-mono text-[10px] text-slate-500">{terminalLogs.length} events</span>
+            <button
+              onClick={() => setTerminalLogs([])}
+              className="text-[10px] font-mono text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              CLEAR
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ── System Status Bar ─────────────────────────────────────────────── */}
       <div

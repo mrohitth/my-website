@@ -96,13 +96,13 @@ export function ContactSection() {
         >
           <Button
             onClick={scrollToTop}
-            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-180 active:scale-90 animate-bounce"
+            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce"
             style={{ animationDuration: "2s" }}
           >
             <img
               src={cat}
               alt="Scroll to top"
-              className="w-12 h-12 transform transition-transform duration-200 hover:scale-180 hover:-rotate-12"
+              className="w-12 h-12 transform transition-transform duration-200 hover:scale-115 hover:-rotate-12"
             />
           </Button>
         </motion.div>
@@ -139,7 +139,7 @@ export function ContactSection() {
                 className="sr-only"
               >
                 {formStatus === "submitting" && "Sending your message..."}
-                {formStatus === "success" && "Message sent successfully! Rohit will respond soon."}
+                {formStatus === "success" && "Message sent successfully! Mathew R. Thomson will respond soon."}
                 {formStatus === "error" && "Failed to send message. Please try again or contact via email."}
               </div>
               <div>
@@ -310,7 +310,7 @@ export function ContactSection() {
         <footer className="py-8 mt-16 border-t border-portfolio-border">
           <div className="text-center">
             <p className="text-portfolio-muted-foreground" data-testid="footer-text">
-              © 2026 Mathew Rohit Thomson. All rights reserved. Built with ❤️
+              © 2026 Mathew R. Thomson. All rights reserved. Built with ❤️
               and modern web technologies.
             </p>
           </div>

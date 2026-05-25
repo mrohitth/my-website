@@ -42,7 +42,7 @@ export function HeroSection() {
           <div className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white/10 shadow-lg">
             <img
               src={heroProfilePic}
-              alt="Mathew Rohit Thomson, Data Engineer at Freddie Mac"
+              alt="Mathew R. Thomson, Data Engineer at Freddie Mac"
               width={2750}
               height={2580}
               className="w-full h-full object-cover"

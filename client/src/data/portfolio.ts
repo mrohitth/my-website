@@ -3,7 +3,8 @@
 // ============================================================================
 
 export const ROLES: string[] = [
-  "Real-Time Streaming Engineer",
+  "Batch Pipeline Architect",
+  "Idempotent Data Platform Engineer",
   "Lakehouse Architect",
   "Cloud Data Platform Lead",
   "ETL / ELT Pipeline Specialist",
@@ -472,9 +473,9 @@ export const SKILL_DOMAINS: PipelineStage[] = [
     emoji: "⚡",
     description: "Distributed data processing & modeling",
     tools: [
-      { name: "Apache Spark", icon: "SiApachespark", level: "Advanced", usage: "Distributed batch processing", color: "text-orange-500" },
+      { name: "Apache Spark", icon: "SiApachespark", level: "Advanced", usage: "PySpark performance tuning, distributed batch processing", color: "text-orange-500" },
       { name: "SQL", level: "Advanced", usage: "Complex joins, CTEs, window functions", color: "text-blue-600" },
-      { name: "AWS EMR (EC2/EKS)", icon: "SiAmazon", level: "Intermediate", usage: "Managed Spark clusters", color: "text-orange-400" },
+      { name: "AWS EMR (EC2/EKS)", icon: "SiAmazon", level: "Intermediate", usage: "Managed Spark clusters on EC2 and EKS", color: "text-orange-400" },
       { name: "dbt", icon: "SiDbt", level: "Intermediate", usage: "SQL-based transformations & modeling", color: "text-orange-400" }
     ]
   },
@@ -483,19 +484,19 @@ export const SKILL_DOMAINS: PipelineStage[] = [
     emoji: "🏗️",
     description: "Scalable cloud data platforms",
     tools: [
-      { name: "Snowflake", icon: "SiSnowflake", level: "Advanced", usage: "Cloud data warehouse & analytics", color: "text-blue-300" },
-      { name: "Data Modeling", level: "Advanced", usage: "Star schema, fact/dimension design", color: "text-purple-500" },
+      { name: "Snowflake", icon: "SiSnowflake", level: "Advanced", usage: "Cloud data warehouse, SCD Type-2 historical modeling", color: "text-blue-300" },
+      { name: "SCD Type-2 Historical Warehousing", level: "Advanced", usage: "Historical lineage, audit trails, point-in-time reconstruction", color: "text-purple-500" },
       { name: "AWS S3", icon: "SiAmazon", level: "Intermediate", usage: "Data lake storage", color: "text-orange-400" }
     ]
   },
   {
     stage: "Orchestration",
     emoji: "🎼",
-    description: "Workflow automation & reliability",
+    description: "Enterprise job scheduling & batch reliability",
     tools: [
-      { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling", color: "text-blue-600" },
-      { name: "Apache Airflow", icon: "SiApacheairflow", level: "Intermediate", usage: "DAG-based orchestration", color: "text-red-400" },
-      { name: "Jenkins", icon: "SiJenkins", level: "Intermediate", usage: "CI/CD pipelines", color: "text-red-500" }
+      { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling & dependency management", color: "text-blue-600" },
+      { name: "Jenkins", icon: "SiJenkins", level: "Intermediate", usage: "CI/CD pipelines & build orchestration", color: "text-red-500" },
+      { name: "Apache Airflow", icon: "SiApacheairflow", level: "Intermediate", usage: "DAG-based batch workflow orchestration", color: "text-red-400" }
     ]
   },
   {
