@@ -12,7 +12,10 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
-  base: "/my-website/",
+  // Use a relative base so the bundle works regardless of GitHub Pages branch/folder settings.
+  // This avoids hard-coding `/my-website/` into asset URLs, which can produce a white page
+  // if Pages is serving `docs/` from a non-standard path.
+  base: "./",
   build: {
     outDir: path.resolve(import.meta.dirname, "client", "dist-frontend"),
     emptyOutDir: true,
