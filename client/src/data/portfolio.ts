@@ -368,6 +368,7 @@ export interface PipelineStage {
   stage: string;
   emoji: string;
   description: string;
+  accentClass: string;
   tools: PipelineTool[];
 }
 
@@ -375,63 +376,73 @@ export const SKILL_DOMAINS: PipelineStage[] = [
   {
     stage: "Data Sources",
     emoji: "🗄️",
-    description: "Operational and analytical data systems",
+    description: "Operational systems · WAL streams · columnar lake storage",
+    accentClass: "border-l-4 border-l-orange-500/60",
     tools: [
-      { name: "PostgreSQL", icon: "SiPostgresql", level: "Advanced", usage: "Relational modeling, OLTP systems", color: "text-blue-600" },
-      { name: "AWS S3", icon: "SiAmazon", level: "Advanced", usage: "Object storage & data lake", color: "text-orange-400" },
-      { name: "CSV/JSON", level: "Advanced", usage: "Flat file & semi-structured data ingestion", color: "text-gray-600" },
-      { name: "MongoDB", icon: "SiMongodb", level: "Intermediate", usage: "Document-based storage", color: "text-green-500" }
+      { name: "PostgreSQL", icon: "SiPostgresql", level: "Advanced", usage: "WAL-based CDC extraction, LSN tracking, OLTP source query optimization", color: "text-blue-400" },
+      { name: "S3 / Parquet", icon: "SiAmazon", level: "Advanced", usage: "Partitioned data lake, columnar Parquet storage, lifecycle tiering", color: "text-orange-400" },
+      { name: "Informatica", icon: "SiInformatica", level: "Intermediate", usage: "Enterprise cloud integration, hybrid-cloud ETL connector configuration", color: "text-blue-500" },
+      { name: "MongoDB", icon: "SiMongodb", level: "Intermediate", usage: "Document store extraction, semi-structured source ingestion", color: "text-green-500" }
     ]
   },
   {
-    stage: "Data Ingestion",
-    emoji: "📥",
-    description: "Batch ingestion & data integration",
-    tools: [
-      { name: "Python", icon: "SiPython", level: "Advanced", usage: "ETL development, connectors", color: "text-yellow-400" },
-      { name: "AWS S3", icon: "SiAmazon", level: "Advanced", usage: "Data lake storage & ingestion", color: "text-orange-400" },
-      { name: "Informatica IICS", icon: "SiInformatica", level: "Intermediate", usage: "Enterprise data ingestion", color: "text-blue-600" },
-      { name: "Snowpipe", level: "Intermediate", usage: "Snowflake data loading", color: "text-blue-300" }
-    ]
-  },
-  {
-    stage: "Processing & Transformation",
+    stage: "Distributed Processing",
     emoji: "⚡",
-    description: "Distributed data processing & modeling",
+    description: "PySpark AQE optimization · 40M+ records/day",
+    accentClass: "border-l-4 border-l-yellow-400/60",
     tools: [
-      { name: "Apache Spark", icon: "SiApachespark", level: "Advanced", usage: "PySpark performance tuning, distributed batch processing", color: "text-orange-500" },
-      { name: "SQL", level: "Advanced", usage: "Complex joins, CTEs, window functions", color: "text-blue-600" },
-      { name: "AWS EMR (EC2/EKS)", icon: "SiAmazon", level: "Intermediate", usage: "Managed Spark clusters on EC2 and EKS", color: "text-orange-400" },
-      { name: "dbt", icon: "SiDbt", level: "Intermediate", usage: "SQL-based transformations & modeling", color: "text-orange-400" }
+      { name: "PySpark", icon: "SiApachespark", level: "Advanced", usage: "AQE partition tuning, broadcast join thresholds, shuffle spill mitigation — 40M+ records/daily batch", color: "text-orange-500" },
+      { name: "SQL", level: "Advanced", usage: "Window functions, CTEs, correlated subqueries, partition-aware query optimization", color: "text-sky-400" },
+      { name: "EMR / EKS", icon: "SiAmazon", level: "Advanced", usage: "Managed Spark cluster provisioning on EC2 & EKS, cost-optimized instance fleet sizing", color: "text-orange-400" },
+      { name: "dbt", icon: "SiDbt", level: "Intermediate", usage: "SQL-based incremental ELT, SCD Type-2 macros, freshness source tests", color: "text-orange-400" }
     ]
   },
   {
-    stage: "Storage & Warehousing",
+    stage: "Data Modeling & Warehousing",
     emoji: "🏗️",
-    description: "Scalable cloud data platforms",
+    description: "SCD Type-2 temporal fidelity · sub-30s query on 3+ years of history",
+    accentClass: "border-l-4 border-l-blue-400/60",
     tools: [
-      { name: "Snowflake", icon: "SiSnowflake", level: "Advanced", usage: "Cloud data warehouse, SCD Type-2 historical modeling", color: "text-blue-300" },
-      { name: "SCD Type-2 Historical Warehousing", level: "Advanced", usage: "Historical lineage, audit trails, point-in-time reconstruction", color: "text-purple-500" },
-      { name: "AWS S3", icon: "SiAmazon", level: "Intermediate", usage: "Data lake storage", color: "text-orange-400" }
+      { name: "Snowflake", icon: "SiSnowflake", level: "Advanced", usage: "Multi-cluster DWH, clustered tables, materialized views, result-set caching", color: "text-blue-300" },
+      { name: "SCD Type-2", level: "Advanced", usage: "Effective-from/to epoch versioning, point-in-time reconstruction, idempotent incremental upserts", color: "text-purple-400" },
+      { name: "CDC / WAL", level: "Advanced", usage: "WAL-sourced change capture, LSN offset replay, late-arriving event rehydration", color: "text-cyan-400" },
+      { name: "Snowpipe", icon: "SiSnowflake", level: "Intermediate", usage: "Trigger-based continuous data loading into Snowflake stages", color: "text-blue-400" }
     ]
   },
   {
-    stage: "Orchestration",
+    stage: "Pipeline Orchestration",
     emoji: "🎼",
-    description: "Enterprise job scheduling & batch reliability",
+    description: "Enterprise batch scheduling · config-driven DAG generation · CI/CD",
+    accentClass: "border-l-4 border-l-purple-400/60",
     tools: [
-      { name: "Control-M", level: "Advanced", usage: "Enterprise job scheduling & dependency management", color: "text-blue-600" },
-      { name: "Jenkins", icon: "SiJenkins", level: "Intermediate", usage: "CI/CD pipelines & build orchestration", color: "text-red-500" },
-      { name: "Apache Airflow", icon: "SiApacheairflow", level: "Intermediate", usage: "DAG-based batch workflow orchestration", color: "text-red-400" }
+      { name: "Control-M", level: "Advanced", usage: "Enterprise batch scheduling, cross-job SLA dependency chains, automated failure recovery", color: "text-blue-500" },
+      { name: "Airflow", icon: "SiApacheairflow", level: "Intermediate", usage: "YAML-manifest DAG generation, config-driven topology, sensor operator patterns", color: "text-red-400" },
+      { name: "Jenkins", icon: "SiJenkins", level: "Intermediate", usage: "CI/CD pipeline automation, artifact promotion, deployment gating", color: "text-red-500" },
+      { name: "Docker", icon: "SiDocker", level: "Intermediate", usage: "Containerized pipeline environments, reproducible Spark job builds", color: "text-blue-500" }
     ]
   },
   {
-    stage: "Observability & DevOps",
+    stage: "Data Observability",
     emoji: "📊",
-    description: "Data reliability & deployment",
+    description: "Z-score baselining · schema drift detection · fingerprinted deduplication",
+    accentClass: "border-l-4 border-l-emerald-400/60",
     tools: [
-      { name: "Git", icon: "SiGit", level: "Advanced", usage: "Version control & collaboration", color: "text-orange-600" },
-      { name: "Docker", icon: "SiDocker", level: "Intermediate", usage: "Containerized environments", color: "text-blue-500" }
+      { name: "Anomaly Detect.", level: "Advanced", usage: "7-day rolling Z-score baselining, diurnal window analysis, fingerprinted alert deduplication", color: "text-emerald-400" },
+      { name: "Schema Drift", level: "Advanced", usage: "Additive-only column propagation, backward-compatible schema contract validation", color: "text-teal-400" },
+      { name: "Freshness SLA", level: "Intermediate", usage: "Watermark-bound batch completion tracking, breach escalation pipelines", color: "text-yellow-400" },
+      { name: "Pandas", icon: "SiPython", level: "Intermediate", usage: "Z-score computation engines, rolling aggregation, custom baselining frameworks", color: "text-yellow-400" }
+    ]
+  },
+  {
+    stage: "Cloud Infrastructure",
+    emoji: "☁️",
+    description: "AWS data platform · Kubernetes/EKS Spark · GitOps practices",
+    accentClass: "border-l-4 border-l-sky-400/60",
+    tools: [
+      { name: "AWS Platform", icon: "SiAmazon", level: "Advanced", usage: "Data lake architecture, cluster IAM roles, cross-account access, EKS workload deployment", color: "text-orange-400" },
+      { name: "Kubernetes", icon: "SiKubernetes", level: "Intermediate", usage: "Spark-on-EKS pod resource allocation, rolling deploy strategies for distributed batch", color: "text-blue-500" },
+      { name: "Python", icon: "SiPython", level: "Advanced", usage: "Production ETL connectors, WAL extraction frameworks, CDC replay logic", color: "text-yellow-400" },
+      { name: "Git", icon: "SiGit", level: "Advanced", usage: "GitFlow branching, versioned schema migration, PR-gate CI integration", color: "text-orange-600" }
     ]
   }
 ];
