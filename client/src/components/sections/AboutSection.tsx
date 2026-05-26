@@ -144,22 +144,39 @@ export function TechStackSection() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 fade-in">
+        <div className="text-center mb-10 fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
             <BarChart3 className="text-portfolio-primary h-8 w-8" />
             <h2 className="text-4xl font-bold text-portfolio-foreground">Data Engineering Stack</h2>
           </div>
-          <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
-            <span className="text-portfolio-primary font-medium">Scalable</span> end-to-end data infrastructure -{' '}
-            <span className="text-emerald-400">Processing millions of records daily</span>
+          <p className="text-base text-portfolio-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <span className="text-portfolio-primary font-medium">End-to-end data platform architecture</span>
+            {' '}— from WAL-sourced CDC ingestion through{' '}
+            <span className="text-emerald-400">PySpark distributed processing</span>,{' '}
+            SCD Type-2 warehousing, enterprise orchestration, and statistical observability.
           </p>
+        </div>
+
+        {/* Pipeline flow indicator */}
+        <div className="flex items-center justify-center flex-wrap gap-1 mb-8 fade-in">
+          {SKILL_DOMAINS.map((stage, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-portfolio-card border border-portfolio-border/50 text-xs font-mono text-portfolio-muted-foreground hover:text-portfolio-foreground hover:border-portfolio-primary/40 transition-colors duration-200 cursor-default">
+                <span>{stage.emoji}</span>
+                <span>{stage.stage}</span>
+              </span>
+              {i < SKILL_DOMAINS.length - 1 && (
+                <span className="text-portfolio-border text-xs select-none">→</span>
+              )}
+            </div>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SKILL_DOMAINS.map((stage: PipelineStage, stageIndex: number) => (
             <div
               key={stageIndex}
-              className="group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer"
+              className={`group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer ${stage.accentClass}`}
             >
               {/* Stage Header */}
               <div className="flex items-center gap-3 mb-4">
@@ -193,23 +210,11 @@ export function TechStackSection() {
                       </div>
 
                       {/* Level Badge */}
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center">
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
                           {getLevelIcon(tool.level)}
                           {tool.level}
                         </span>
-
-                        {/* Mini Progress Bar */}
-                        <div className="w-12 bg-portfolio-muted/20 rounded-full h-1">
-                          <div
-                            className={`h-1 rounded-full transition-all duration-500 ${getLevelProgressWidth(tool.level)} ${
-                              tool.level === "Advanced" || tool.level === "Strong" ? "bg-emerald-500/70 shadow-sm shadow-emerald-400/40" :
-                              tool.level === "Intermediate" ? "bg-blue-500/70 shadow-sm shadow-blue-400/30" :
-                              tool.level === "Working" ? "bg-amber-500/70 shadow-sm shadow-amber-400/30" :
-                              "bg-gray-500/50"
-                            }`}
-                          />
-                        </div>
                       </div>
                     </div>
                   );
