@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 
 import { Card } from "@/components/ui/card";
 import { Github, ChevronDown, ChevronUp, Scale, Layers } from "lucide-react";
-import { PROJECTS } from "@/data/portfolio";
+import { PROJECTS, type Project } from "@/data/portfolio";
 
 type Tab = "ml" | "cv";
 
@@ -269,6 +269,81 @@ export function ProjectsSection() {
   );
 }
 
+const TECH_BADGE_COLORS: Record<string, string> = {
+  Python: "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20",
+  PostgreSQL: "bg-blue-600/10 text-blue-400 border border-blue-500/20",
+  "Apache Spark": "bg-orange-500/10 text-orange-400 border border-orange-500/20",
+  PySpark: "bg-orange-500/10 text-orange-400 border border-orange-500/20",
+  dbt: "bg-orange-600/10 text-orange-300 border border-orange-600/20",
+  Docker: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+  "Apache Airflow": "bg-red-500/10 text-red-400 border border-red-500/20",
+  Snowflake: "bg-sky-400/10 text-sky-400 border border-sky-400/20",
+  "AWS EMR": "bg-orange-400/10 text-orange-400 border border-orange-400/20",
+  "YAML Config": "bg-purple-500/10 text-purple-400 border border-purple-500/20",
+  CDC: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+  "SCD Type 2": "bg-cyan-600/10 text-cyan-400 border border-cyan-600/20",
+  PyTorch: "bg-red-500/10 text-red-400 border border-red-500/20",
+  OpenCV: "bg-green-600/10 text-green-400 border border-green-600/20",
+  "scikit-learn": "bg-sky-500/10 text-sky-400 border border-sky-500/20",
+};
+
+function techBadgeClass(tech: string): string {
+  return (
+    TECH_BADGE_COLORS[tech] ??
+    "bg-portfolio-primary/10 text-portfolio-primary border border-portfolio-primary/20"
+  );
+}
+
+const SPEC_ACCENT: Record<
+  NonNullable<Project["specAccent"]>,
+  { border: string; label: string; divider: string }
+> = {
+  cyan: {
+    border: "border-l-2 border-l-cyan-500/60",
+    label: "text-cyan-500",
+    divider: "bg-cyan-500/20",
+  },
+  amber: {
+    border: "border-l-2 border-l-amber-500/60",
+    label: "text-amber-500",
+    divider: "bg-amber-500/20",
+  },
+  emerald: {
+    border: "border-l-2 border-l-emerald-500/60",
+    label: "text-emerald-500",
+    divider: "bg-emerald-500/20",
+  },
+};
+
+function TechSpecBlock({ project }: { project: Project }) {
+  if (!project.specStyle && !project.specVolume && !project.specSla) return null;
+  const accent = SPEC_ACCENT[project.specAccent ?? "emerald"];
+  const specs = [
+    { label: "Architecture", value: project.specStyle },
+    { label: "Data Volume", value: project.specVolume },
+    { label: "SLA / Latency", value: project.specSla },
+  ].filter((s) => s.value);
+
+  return (
+    <div
+      className={`mb-3 rounded-lg bg-slate-900/60 border border-slate-700/40 overflow-hidden ${accent.border}`}
+    >
+      <div className="grid grid-cols-3 divide-x divide-slate-700/40">
+        {specs.map((spec) => (
+          <div key={spec.label} className="px-3 py-2">
+            <p className={`text-[10px] uppercase tracking-widest font-medium mb-0.5 ${accent.label}`}>
+              {spec.label}
+            </p>
+            <p className="text-xs font-mono font-semibold text-slate-200 leading-tight">
+              {spec.value}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface ProjectCardProps {
   project: (typeof PROJECTS)[number];
   index: number;
@@ -281,7 +356,7 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
 
   return (
     <Card
-      className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl transition-all duration-300 group relative flex flex-col"
+      className="fade-in bg-portfolio-card border-portfolio-border overflow-hidden hover:shadow-xl hover:border-portfolio-primary/30 transition-all duration-300 group relative flex flex-col"
       data-testid={`project-card-${slug}`}
     >
       {isFeatured && (
@@ -311,11 +386,14 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
 
         {/* Impact badge */}
         <div className="mb-3">
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full transition-opacity duration-200 group-hover:opacity-100">
             <Scale className="h-3 w-3" />
             {project.impact}
           </span>
         </div>
+
+        {/* Technical Spec Block (featured only) */}
+        {isFeatured && <TechSpecBlock project={project} />}
 
         {/* Scale context */}
         <div className="text-xs text-portfolio-muted-foreground mb-3 flex items-center gap-1.5">
@@ -356,7 +434,7 @@ function ProjectCard({ project, slug }: ProjectCardProps) {
           {project.technologies.map((tech, ti) => (
             <span
               key={ti}
-              className="px-2 py-1 bg-portfolio-primary/10 text-portfolio-primary rounded text-xs"
+              className={`px-2 py-1 rounded text-xs font-medium ${isFeatured ? techBadgeClass(tech) : "bg-portfolio-primary/10 text-portfolio-primary"}`}
               data-testid={`project-tech-${slug}-${tech.toLowerCase().replace(/\s+/g, "-")}`}
             >
               {tech}

@@ -13,7 +13,8 @@ const NAV_ITEMS: NavItem[] = [
   { id: "hero", label: "Home" },
   { id: "experience", label: "Experience" },
   { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
+  { id: "projects2", label: "Projects 2" },
+  { id: "sandbox", label: "Playground" },
   { id: "philosophy", label: "Philosophy" },
   { id: "contact", label: "Contact" },
 ]
