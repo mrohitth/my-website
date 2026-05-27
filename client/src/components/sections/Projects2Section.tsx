@@ -256,7 +256,7 @@ function ShowcaseCard({
             aria-hidden={!isExpanded}
           >
             <div className="mt-3 p-4 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
-              <p className="text-xs text-portfolio-muted-foreground leading-relaxed font-mono">
+              <p className="text-sm text-portfolio-muted-foreground leading-relaxed font-mono">
                 {project.rationale}
               </p>
             </div>
@@ -349,7 +349,7 @@ function AcademicCard({
               aria-hidden={!isExpanded}
             >
               <div className="mt-2 p-3 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
-                <p className="text-xs text-portfolio-muted-foreground leading-relaxed font-mono">
+                <p className="text-sm text-portfolio-muted-foreground leading-relaxed font-mono">
                   {project.architecture}
                 </p>
               </div>
