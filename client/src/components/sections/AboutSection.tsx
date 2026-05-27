@@ -201,9 +201,11 @@ export function TechStackSection() {
                         data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, "")}`}
                       >
                         <div className="flex items-center gap-2 mb-2">
-                          <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
-                            {IconComponent && <IconComponent />}
-                          </div>
+                          {IconComponent && (
+                            <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
+                              <IconComponent />
+                            </div>
+                          )}
                           <div className="flex-1 min-w-0">
                             <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                               {tool.name}
@@ -254,9 +256,11 @@ export function TechStackSection() {
                         data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, "")}`}
                       >
                         <div className="flex items-center gap-2 mb-2">
-                          <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
-                            {IconComponent && <IconComponent />}
-                          </div>
+                          {IconComponent && (
+                            <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
+                              <IconComponent />
+                            </div>
+                          )}
                           <div className="flex-1 min-w-0">
                             <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                               {tool.name}
