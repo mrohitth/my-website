@@ -54,13 +54,13 @@ export function SandboxSection() {
               <div className="text-left">
                 <p className="text-base font-bold text-portfolio-foreground flex items-center gap-2">
                   <span className="text-xl">🔬</span>
-                  Production Data Engineering - Live Sandboxes
+                  Production Data Engineering - Interactive Architecture
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   {!isOpen ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 text-xs font-medium text-cyan-400">
                       <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                      Status: Dormant - Click to Initialize
+                      Status: Architecture Demo — Click to Explore
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-400">

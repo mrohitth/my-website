@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Github } from "lucide-react";
+import { Github } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/portfolio";
 
 // ── Local showcase data (featured DE projects) ────────────────────────────────
@@ -58,7 +58,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "Freshness SLA enforcement",
     ],
     rationale:
-      "Rolling 7-day diurnal Z-score over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% — static threshold fires false positives every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. Z-score over IQR: weekend data introduces bimodal distributions that IQR handles poorly without manual seasonal decomposition — Z-score on the 7-day window absorbs the weekend trough naturally. Fingerprinted alert deduplication: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire.",
+      "Rolling 7-day diurnal Z-score over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% — static threshold fires false positives every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. Z-score over IQR: weekend data introduces bimodal distributions that IQR handles poorly without manual seasonal decomposition — Z-score on the 7-day window absorbs the weekend trough naturally. Fingerprinted alert deduplication: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire. Built as a custom, lightweight alternative to Great Expectations — no external dependencies, pure native Python/Pandas, designed to operate inside constrained EMR environments.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python"],
   },
   {
@@ -385,11 +385,13 @@ function AcademicCard({
 // ── Main section ──────────────────────────────────────────────────────────────
 
 export function Projects2Section() {
+  // Top-level tab: Core DE vs Applied ML & Research
+  const [projectTab, setProjectTab] = useState<"de" | "ml">("de");
+
   // Featured DE cards
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  // Academic section visibility + tabs
-  const [showAcademic, setShowAcademic]           = useState(false);
+  // ML/CV subtabs
   const [activeTab, setActiveTab]                 = useState<"ml" | "cv">("ml");
   const [expandedAcademicId, setExpandedAcademicId] = useState<string | null>(null);
 
@@ -408,14 +410,14 @@ export function Projects2Section() {
 
   return (
     <section id="projects2" className="py-20 px-4 bg-portfolio-background relative">
-      {/* Honeycomb background pattern — matches ProjectsSection */}
+      {/* Honeycomb background pattern */}
       <div className="absolute inset-0 opacity-10" aria-hidden="true">
         <div className="honeycomb-pattern" />
       </div>
 
       <div className="max-w-6xl mx-auto relative">
         {/* Section header */}
-        <div className="text-center mb-16 fade-in">
+        <div className="text-center mb-12 fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
             <svg
               className="text-portfolio-primary h-8 w-8"
@@ -438,11 +440,36 @@ export function Projects2Section() {
           </p>
         </div>
 
-        {/* ── Featured DE masonry grid ── */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
-            ⭐ Featured Data Engineering Projects
-          </h3>
+        {/* ── Top-level tab bar ── */}
+        <div className="mb-10 border-b border-portfolio-border/40">
+          <div className="flex gap-0">
+            <button
+              onClick={() => setProjectTab("de")}
+              aria-pressed={projectTab === "de"}
+              className={`relative px-6 py-3 text-base font-semibold transition-all duration-200 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 ${
+                projectTab === "de"
+                  ? "border-portfolio-primary text-portfolio-foreground"
+                  : "border-transparent text-portfolio-muted-foreground hover:text-portfolio-foreground/80"
+              }`}
+            >
+              ⚙️ Core Data Engineering
+            </button>
+            <button
+              onClick={() => setProjectTab("ml")}
+              aria-pressed={projectTab === "ml"}
+              className={`relative px-6 py-3 text-base font-semibold transition-all duration-200 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 ${
+                projectTab === "ml"
+                  ? "border-portfolio-primary text-portfolio-foreground"
+                  : "border-transparent text-portfolio-muted-foreground hover:text-portfolio-foreground/80"
+              }`}
+            >
+              🧠 Applied ML &amp; Research
+            </button>
+          </div>
+        </div>
+
+        {/* ── Core DE tab: Featured masonry grid ── */}
+        {projectTab === "de" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {SHOWCASE_PROJECTS.map((project, index) => (
               <div key={project.id} className={index === 0 ? "lg:col-span-2" : ""}>
@@ -456,34 +483,12 @@ export function Projects2Section() {
               </div>
             ))}
           </div>
-        </div>
+        )}
 
-        {/* ── Academic toggle button ── */}
-        <div className="flex justify-center mt-8 mb-0">
-          <button
-            onClick={() => setShowAcademic((v) => !v)}
-            aria-expanded={showAcademic}
-            aria-controls="p2-academic-section"
-            className="text-sm text-portfolio-muted-foreground hover:text-portfolio-foreground border border-portfolio-border/40 hover:border-portfolio-border/70 px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
-          >
-            {showAcademic
-              ? "Hide Academic & Research Projects"
-              : "Show Academic & Research Projects (ML / CV)"}
-            <ChevronDown
-              className="h-4 w-4 transition-transform duration-200"
-              style={{ transform: showAcademic ? "rotate(180deg)" : "rotate(0deg)" }}
-            />
-          </button>
-        </div>
-
-        {/* ── Academic & Research section ── */}
-        {showAcademic && (
-          <div id="p2-academic-section" className="mt-8">
-            <h3 className="text-2xl font-bold mb-6 text-portfolio-foreground flex items-center gap-2">
-              📚 Academic Research &amp; ML Projects
-            </h3>
-
-            {/* Tabs */}
+        {/* ── Applied ML & Research tab: ML / CV subtabs + horizontal scroll ── */}
+        {projectTab === "ml" && (
+          <div>
+            {/* ML / CV subtabs */}
             <div className="mb-6 border-b border-portfolio-border/30">
               <div className="flex space-x-8">
                 <button

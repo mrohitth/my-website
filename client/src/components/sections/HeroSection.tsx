@@ -156,12 +156,12 @@ export function HeroSection() {
 
             {/* Tier 2 — Credentials + targeting signal */}
             <p className="text-sm md:text-base text-portfolio-muted-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed">
-              CMU grad. 2.5 years in production data engineering at regulated financial scale. Targeting DE roles at companies where batch reliability and data correctness are non-negotiable.
+              CMU grad. 3+ years of experience building and optimizing distributed pipelines at regulated financial scale. Targeting DE roles at companies where batch reliability and data correctness are non-negotiable.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
-                onClick={() => scrollToSection("projects")}
+                onClick={() => scrollToSection("projects2")}
                 className="bg-portfolio-primary hover:bg-portfolio-primary/90 text-portfolio-primary-foreground px-8 py-3 font-medium w-40 flex items-center justify-center btn-jump focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 View Projects

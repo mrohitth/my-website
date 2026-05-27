@@ -3,24 +3,31 @@
 import { useEffect } from "react";
 import { Lightbulb, ShieldCheck, GitBranch } from "lucide-react";
 
+function boldify(text: string) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={i} className="font-semibold text-portfolio-foreground">{part}</strong> : part
+  );
+}
+
 const PRINCIPLES = [
   {
     icon: Lightbulb,
     quote: '"The pipeline is the product, not the data."',
     body: "I've seen teams optimize a query from 2 hours to 20 minutes and call it done. But if that pipeline runs daily for 3 years, that 20-minute improvement is worth 15,000 hours of engineering time. Always optimize for the recurrence - one-time gains are features, recurring gains are products.",
-    context: "At Freddie Mac, I fixed a 14-hour batch that ran every night. Cutting it to 3.5 hours saved ~10.5h of EMR cluster time daily. Over 18 months, that's 5,700+ engineer hours - which is the equivalent of 3 full-time engineers working for an entire year.",
+    context: "At Freddie Mac, I fixed a 14-hour batch that ran every night. Cutting it to 3.5 hours saved **~10.5h** of EMR cluster time daily. Over 18 months, that's **5,700+ engineer hours** — the equivalent of **3 full-time engineers** for an entire year. Snowpark-based transformation standardization on the same project reduced code divergence by **40%** and cut compute costs by **$16K annually**.",
   },
   {
     icon: ShieldCheck,
     quote: '"Reliability is a feature, not a checklist."',
     body: "SLOs without SLO-based alerting are just aspirations. Every pipeline I build has explicit freshness thresholds, anomaly baselines, and blast-radius estimates. If I can't tell you the MTTR impact of a schema change before we make it, we shouldn't make it.",
-    context: "I built the Data Observability Platform specifically because silent failures were the highest-severity incidents we had - they broke dashboards with no alert, affecting 40+ analysts before anyone noticed. Detecting that in 15 minutes vs 48 hours is the difference between a Slack message and a war room.",
+    context: "I built the Data Observability Platform specifically because silent failures were the highest-severity incidents we had — they broke dashboards with no alert, affecting **40+ analysts** before anyone noticed. Detecting that in **15 minutes vs 48 hours** is the difference between a Slack message and a war room.",
   },
   {
     icon: GitBranch,
     quote: '"Architecture survives contact with production. Designs that don\'t, failed to anticipate scale."',
     body: "I learned this at Carnegie Mellon modeling high-dimensional sensor data - a model that works in the lab fails in production because the distribution shifts. Same is true for data platforms. Every design decision should have a failure mode documented before it goes live.",
-    context: "When designing the CDC pipeline at Freddie Mac, I spent 2 weeks on the failure modes before writing a single line of code: What happens when the CDC log is corrupted? What when a consumer falls 3 days behind? What when the schema evolves? Having answers before deployment meant zero data loss incidents in 18 months.",
+    context: "When designing my CDC Historical Warehouse Platform, I spent **2 weeks** on the failure modes before writing a single line of code: What happens when the CDC log is corrupted? What when a consumer falls 3 days behind? What when the schema evolves? Having answers before deployment meant **zero data loss incidents in 18 months**.",
   },
 ];
 
@@ -52,7 +59,7 @@ export function PhilosophySection() {
           <p className="text-lg text-portfolio-muted-foreground max-w-2xl mx-auto">
             Philosophy shaped by{" "}
             <span className="text-portfolio-primary font-semibold">
-              18 months of production at Freddie Mac, 6 months at Bosmos, and 2 years of ML research at Carnegie Mellon.
+              <strong>2+ years</strong> of production DE at Freddie Mac, <strong>6 months</strong> of AI automation at Bosmos, and <strong>2 years</strong> of ML pipeline research at Carnegie Mellon.
             </span>
           </p>
         </div>
@@ -83,7 +90,7 @@ export function PhilosophySection() {
                       Real-world example
                     </div>
                     <p className="text-sm text-portfolio-muted-foreground leading-relaxed">
-                      {principle.context}
+                      {boldify(principle.context)}
                     </p>
                   </div>
                 </div>
