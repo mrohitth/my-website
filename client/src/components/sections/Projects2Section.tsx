@@ -184,8 +184,7 @@ function ShowcaseCard({
 
   return (
     <article
-      className="fade-in bg-portfolio-card border border-portfolio-border/50 rounded-xl overflow-hidden flex flex-col hover:border-portfolio-primary/30 hover:shadow-xl transition-all duration-300 group relative"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className="bg-portfolio-card border border-portfolio-border/50 rounded-xl overflow-hidden flex flex-col hover:border-portfolio-primary/30 hover:shadow-xl transition-all duration-300 group relative"
     >
       {project.featured && (
         <div className="absolute top-3 right-3 z-10 bg-portfolio-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -444,6 +443,7 @@ export function Projects2Section() {
         <div className="mb-10 border-b border-portfolio-border/40">
           <div className="flex gap-0">
             <button
+              type="button"
               onClick={() => setProjectTab("de")}
               aria-pressed={projectTab === "de"}
               className={`relative px-6 py-3 text-base font-semibold transition-all duration-200 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 ${
@@ -455,6 +455,7 @@ export function Projects2Section() {
               ⚙️ Core Data Engineering
             </button>
             <button
+              type="button"
               onClick={() => setProjectTab("ml")}
               aria-pressed={projectTab === "ml"}
               className={`relative px-6 py-3 text-base font-semibold transition-all duration-200 border-b-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-primary focus-visible:ring-offset-2 ${
