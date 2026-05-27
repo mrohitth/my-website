@@ -427,7 +427,7 @@ export const SKILL_DOMAINS: PipelineStage[] = [
     description: "Z-score baselining · schema drift detection · fingerprinted deduplication",
     accentClass: "border-l-4 border-l-emerald-400/60",
     tools: [
-      { name: "Anomaly Detect.", level: "Advanced", usage: "7-day rolling Z-score baselining, diurnal window analysis, fingerprinted alert deduplication", color: "text-emerald-400" },
+      { name: "Anomaly Detection", level: "Advanced", usage: "7-day rolling Z-score baselining, diurnal window analysis, fingerprinted alert deduplication", color: "text-emerald-400" },
       { name: "Schema Drift", level: "Advanced", usage: "Additive-only column propagation, backward-compatible schema contract validation", color: "text-teal-400" },
       { name: "Freshness SLA", level: "Intermediate", usage: "Watermark-bound batch completion tracking, breach escalation pipelines", color: "text-yellow-400" },
       { name: "Pandas", icon: "SiPython", level: "Intermediate", usage: "Z-score computation engines, rolling aggregation, custom baselining frameworks", color: "text-yellow-400" }
