@@ -14,17 +14,9 @@ import { CONTACT } from "@/data/contact";
 export function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollTopBtn, setShowScrollTopBtn] = useState(false);
 
-  // Scroll-to-top visibility
-  useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Scroll-to-top button visibility
+  // Single scroll-to-top listener
   useEffect(() => {
     const handleScroll = () => setShowScrollTopBtn(window.scrollY > 100);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -86,28 +78,29 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="py-20 px-4 bg-portfolio-secondary relative">
-      {/* Scroll-to-top button */}
-      {showScrollTopBtn && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0 }}
-          className="fixed bottom-8 right-8 z-50"
+      {/* Scroll-to-top button — always mounted so the GIF never resets */}
+      <motion.div
+        animate={{
+          scale: showScrollTopBtn ? 1 : 0,
+          opacity: showScrollTopBtn ? 1 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="fixed bottom-8 right-8 z-50"
+        style={{ pointerEvents: showScrollTopBtn ? "auto" : "none" }}
+      >
+        <Button
+          onClick={scrollToTop}
+          aria-label="Scroll to top of page"
+          className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+          style={{ animationDuration: "2s" }}
         >
-          <Button
-            onClick={scrollToTop}
-            aria-label="Scroll to top of page"
-            className="rounded-full p-2 shadow-lg bg-portfolio-primary/90 transform transition-transform duration-200 hover:-rotate-12 hover:scale-115 active:scale-90 animate-bounce focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
-            style={{ animationDuration: "2s" }}
-          >
-            <img
-              src={cat}
-              alt="Scroll to top"
-              className="w-12 h-12 transform transition-transform duration-200 hover:scale-115 hover:-rotate-12"
-            />
-          </Button>
-        </motion.div>
-      )}
+          <img
+            src={cat}
+            alt="Scroll to top"
+            className="w-12 h-12"
+          />
+        </Button>
+      </motion.div>
 
       <div className="max-w-4xl mx-auto relative">
         {/* Header */}

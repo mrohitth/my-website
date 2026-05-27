@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react"
+import { useState, useEffect, memo } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -74,70 +74,62 @@ const MemoizedNavLink = memo(NavLink)
 
 export function NavigationBar() {
   const [activeSection, setActiveSection] = useState("hero")
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
-  // Show/hide navbar based on scroll position
-  useEffect(() => {
-    let ticking = false
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY
-          const threshold = window.innerHeight * 0.05
-          setIsVisible(scrollY <= threshold)
-          setIsScrolled(scrollY > 20)
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
-
-  // IntersectionObserver for active section tracking
+  // Single rAF-throttled handler for all scroll-derived state
   useEffect(() => {
     const sectionIds = NAV_ITEMS.map((n) => n.id)
 
-    const observers: IntersectionObserver[] = []
+    let ticking = false
+    const handleScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        const scrollY = window.scrollY
 
-    sectionIds.forEach((sectionId) => {
-      const el = document.getElementById(sectionId)
-      if (!el) return
+        // Show navbar after scrolling past 80px (stable threshold, no 5%-viewport oscillation)
+        setIsVisible(scrollY > 80)
+        setIsScrolled(scrollY > 20)
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(sectionId)
+        // Scroll-position–based active section: whichever section's top is <= current scroll + offset
+        const offset = 120
+        let active = sectionIds[0]
+        for (const id of sectionIds) {
+          const el = document.getElementById(id)
+          if (el && el.offsetTop <= scrollY + offset) {
+            active = id
           }
-        },
-        { threshold: 0.3, rootMargin: "-72px 0px 0px 0px" }
-      )
+        }
+        setActiveSection(active)
+      })
+    }
 
-      observer.observe(el)
-      observers.push(observer)
-    })
-
-    return () => observers.forEach((o) => o.disconnect())
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    // Sync on mount so initial state is correct
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isVisible ? "-translate-y-full" : "translate-y-0"
-        } ${
-          isScrolled
-            ? "bg-portfolio-background/95 backdrop-blur-md border-b border-portfolio-border/50 shadow-sm"
-            : "bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
         aria-label="Primary navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Background overlay — opacity-only transition avoids animating backdrop-filter */}
+        <div
+          className={`absolute inset-0 bg-portfolio-background/95 backdrop-blur-md border-b border-portfolio-border/50 shadow-sm transition-opacity duration-300 ${
+            isScrolled ? "opacity-100" : "opacity-0"
+          }`}
+          aria-hidden="true"
+        />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <button
@@ -226,8 +218,6 @@ export function NavigationBar() {
           </div>
         </div>
       </nav>
-
-      {/* Scroll-to-top floating button handled in ContactSection */}
     </>
   )
 }
