@@ -4,6 +4,14 @@ import { useState } from "react";
 import { Github } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/portfolio";
 
+// ── Inline bold markup helper ─────────────────────────────────────────────────
+
+function boldify(text: string) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i} className="font-semibold text-portfolio-foreground">{part}</strong> : part
+  );
+}
+
 // ── Local showcase data (featured DE projects) ────────────────────────────────
 
 interface ShowcaseProject {
@@ -38,7 +46,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "0ms data-loss SLA (idempotent replay)",
     ],
     rationale:
-      "WAL-based extraction over trigger-based CDC: triggers fire per-row and create N synchronous write paths under peak load, saturating the source DB connection pool. WAL reads are asynchronous, decoupled from the write path, and replayable from any prior LSN offset. SCD Type-2 over Type-1: regulatory audit requirements mandate point-in-time reconstruction of any record's state at any historical timestamp - Type-1 destroys that lineage on every UPDATE. Late-arriving data via max-watermark advancement: instead of re-running upstream queries, the pipeline computes the logical commit boundary from the WAL offset and correctly sequences late data.",
+      "**WAL-based extraction** over trigger-based CDC: triggers fire per-row and create N synchronous write paths under peak load, saturating the source DB connection pool. WAL reads are **asynchronous, decoupled from the write path, and replayable from any prior LSN offset**. **SCD Type-2 over Type-1**: regulatory audit requirements mandate **point-in-time reconstruction** of any record's state at any historical timestamp - Type-1 destroys that lineage on every UPDATE. **Late-arriving data** via **max-watermark advancement**: instead of re-running upstream queries, the pipeline computes the logical commit boundary from the WAL offset and correctly sequences late data.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python", "PySpark"],
   },
   {
@@ -58,7 +66,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "Freshness SLA enforcement",
     ],
     rationale:
-      "Rolling 7-day diurnal Z-score over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% -static threshold fires false positives every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. Z-score over IQR: weekend data introduces bimodal distributions that IQR handles poorly without manual seasonal decomposition -Z-score on the 7-day window absorbs the weekend trough naturally. Fingerprinted alert deduplication: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire. Built as a custom, lightweight alternative to Great Expectations -no external dependencies, pure native Python/Pandas, designed to operate inside constrained EMR environments.",
+      "**Rolling 7-day diurnal Z-score** over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% - static threshold fires **false positives** every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. **Z-score over IQR**: weekend data introduces **bimodal distributions** that IQR handles poorly without manual seasonal decomposition - Z-score on the 7-day window absorbs the weekend trough naturally. **Fingerprinted alert deduplication**: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire. Built as a custom, lightweight alternative to **Great Expectations** - no external dependencies, pure native Python/Pandas, designed to operate inside constrained EMR environments.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python"],
   },
   {
@@ -78,7 +86,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "Shuffle-optimized Spark execution",
     ],
     rationale:
-      "Config-driven DAG generation over hand-coded workflows: onboarding 20 tables with manual Airflow DAGs means 20 separate PRs and weeks of review lag. YAML configs generate the DAG topology automatically -one PR, instant deployment. Spark execution over naive Python loops: sequential iteration on 50M records saturates memory and takes hours. Spark's distributed shuffle completes in minutes with automatic partition boundary detection.",
+      "**Config-driven DAG generation** over hand-coded workflows: onboarding 20 tables with manual Airflow DAGs means 20 separate PRs and weeks of review lag. **YAML configs generate the DAG topology automatically** - one PR, instant deployment. **Spark execution over naive Python loops**: sequential iteration on 50M records saturates memory and takes hours. **Spark's distributed shuffle** completes in minutes with **automatic partition boundary detection**.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python", "PySpark", "AWS EMR"],
   },
 ];
@@ -257,7 +265,7 @@ function ShowcaseCard({
           >
             <div className="mt-3 p-4 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
               <p className="text-sm text-portfolio-muted-foreground leading-relaxed font-mono">
-                {project.rationale}
+                {boldify(project.rationale)}
               </p>
             </div>
           </div>
@@ -350,7 +358,7 @@ function AcademicCard({
             >
               <div className="mt-2 p-3 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
                 <p className="text-sm text-portfolio-muted-foreground leading-relaxed font-mono">
-                  {project.architecture}
+                  {boldify(project.architecture)}
                 </p>
               </div>
             </div>

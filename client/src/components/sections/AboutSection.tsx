@@ -207,7 +207,7 @@ export function TechStackSection() {
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
+                            <h4 className="font-bold text-base text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                               {tool.name}
                             </h4>
                           </div>
@@ -262,7 +262,7 @@ export function TechStackSection() {
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
+                            <h4 className="font-bold text-base text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                               {tool.name}
                             </h4>
                           </div>
