@@ -58,7 +58,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "Freshness SLA enforcement",
     ],
     rationale:
-      "Rolling 7-day diurnal Z-score over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% — static threshold fires false positives every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. Z-score over IQR: weekend data introduces bimodal distributions that IQR handles poorly without manual seasonal decomposition — Z-score on the 7-day window absorbs the weekend trough naturally. Fingerprinted alert deduplication: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire. Built as a custom, lightweight alternative to Great Expectations — no external dependencies, pure native Python/Pandas, designed to operate inside constrained EMR environments.",
+      "Rolling 7-day diurnal Z-score over point-in-time threshold checks: batch pipelines have predictable quiet hours (2-5am) where volume drops 80% -static threshold fires false positives every night. The 7-day rolling window captures the diurnal pattern and sets the expected baseline per-hour slot automatically. Z-score over IQR: weekend data introduces bimodal distributions that IQR handles poorly without manual seasonal decomposition -Z-score on the 7-day window absorbs the weekend trough naturally. Fingerprinted alert deduplication: under a cascade failure, 12 downstream tables all breach freshness simultaneously. Without fingerprinting, 12 identical alerts fire. Built as a custom, lightweight alternative to Great Expectations -no external dependencies, pure native Python/Pandas, designed to operate inside constrained EMR environments.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python"],
   },
   {
@@ -78,7 +78,7 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       "Shuffle-optimized Spark execution",
     ],
     rationale:
-      "Config-driven DAG generation over hand-coded workflows: onboarding 20 tables with manual Airflow DAGs means 20 separate PRs and weeks of review lag. YAML configs generate the DAG topology automatically — one PR, instant deployment. Spark execution over naive Python loops: sequential iteration on 50M records saturates memory and takes hours. Spark's distributed shuffle completes in minutes with automatic partition boundary detection.",
+      "Config-driven DAG generation over hand-coded workflows: onboarding 20 tables with manual Airflow DAGs means 20 separate PRs and weeks of review lag. YAML configs generate the DAG topology automatically -one PR, instant deployment. Spark execution over naive Python loops: sequential iteration on 50M records saturates memory and takes hours. Spark's distributed shuffle completes in minutes with automatic partition boundary detection.",
     tech: ["Apache Airflow", "dbt", "PostgreSQL", "Python", "PySpark", "AWS EMR"],
   },
 ];
@@ -435,7 +435,7 @@ export function Projects2Section() {
             <h2 className="text-4xl font-bold">Projects Showcase</h2>
           </div>
           <p className="text-xl text-portfolio-muted-foreground max-w-2xl mx-auto">
-            Production systems built for scale, reliability, and precision — with full architectural rationale.
+            Production systems built for scale, reliability, and precision -with full architectural rationale.
           </p>
         </div>
 

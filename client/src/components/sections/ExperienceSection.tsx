@@ -20,8 +20,8 @@ const EXPERIENCE_CARDS = [
     title: "Data Engineer",
     period: "Apr 2024 - Present",
     bullets: [
-      "Designed and productionized PySpark ETL pipelines on AWS EMR (EC2 + EKS), integrating **10+** source systems — including transactional, reference, and regulatory datasets — processing **40M+** records per daily batch with partition-aware execution strategies.",
-      "Tuned PySpark execution plans — dynamic partitioning, broadcast join thresholds, shuffle partition sizing — cutting batch runtimes from **~40 min to sub 10 min** and ensuring on-time SLA delivery for daily risk reporting windows.",
+      "Designed and productionized PySpark ETL pipelines on AWS EMR (EC2 + EKS), integrating **10+** source systems - including transactional, reference, and regulatory datasets - processing **40M+** records per daily batch with partition-aware execution strategies.",
+      "Tuned PySpark execution plans - dynamic partitioning, broadcast join thresholds, shuffle partition sizing - cutting batch runtimes from **~40 min to sub 10 min** and ensuring on-time SLA delivery for daily risk reporting windows.",
       "Operationalized dependency-aware batch workflows in Control-M and Jenkins across daily and monthly cadences, implementing automated failure recovery paths and job-level SLA alerting to maintain pipeline reliability in a regulated production environment.",
       "Modeled Snowflake analytical schemas using SCD Type-2 patterns for historical lineage, designing clustered tables and materialized aggregation layers to support downstream BI tooling with **sub-30s** query response on **3+ years** of transactional history.",
       "Spearheaded Snowpark-based transformation standardization and Snowflake query optimization, reducing code divergence by **40%** and saving **$16K annually**.",

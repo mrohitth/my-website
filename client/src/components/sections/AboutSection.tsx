@@ -151,7 +151,7 @@ export function TechStackSection() {
           </div>
           <p className="text-base text-portfolio-muted-foreground max-w-3xl mx-auto leading-relaxed">
             <span className="text-portfolio-primary font-medium">End-to-end data platform architecture</span>
-            {' '}— from WAL-sourced CDC ingestion through{' '}
+            {' '}- from WAL-sourced CDC ingestion through{' '}
             <span className="text-emerald-400">PySpark distributed processing</span>,{' '}
             SCD Type-2 warehousing, enterprise orchestration, and statistical observability.
           </p>
@@ -178,7 +178,7 @@ export function TechStackSection() {
             <span className="text-xs font-bold tracking-widest uppercase text-portfolio-primary">Core Stack</span>
             <div className="flex-1 h-px bg-portfolio-primary/30" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {SKILL_DOMAINS.slice(0, 4).map((stage: PipelineStage, stageIndex: number) => (
               <div
                 key={stageIndex}
@@ -231,40 +231,40 @@ export function TechStackSection() {
             <span className="text-xs font-bold tracking-widest uppercase text-portfolio-muted-foreground/60">Supporting & Infrastructure</span>
             <div className="flex-1 h-px bg-portfolio-border/40" />
           </div>
-          <div className="grid md:grid-cols-2 gap-6 opacity-80">
+          <div className="grid md:grid-cols-2 gap-6">
             {SKILL_DOMAINS.slice(4).map((stage: PipelineStage, stageIndex: number) => (
               <div
                 key={stageIndex}
-                className={`group bg-portfolio-card/70 border border-portfolio-border/60 rounded-xl p-5 fade-in hover:border-portfolio-primary/30 transition-all duration-500 hover:shadow-xl hover:shadow-portfolio-primary/5 cursor-pointer ${stage.accentClass}`}
+                className={`group bg-portfolio-card border border-portfolio-border rounded-xl p-6 fade-in hover:border-portfolio-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-portfolio-primary/10 hover:-translate-y-2 transform-gpu hover:[transform:translateY(-0.5rem)_rotateX(6deg)_rotateY(3deg)] cursor-pointer ${stage.accentClass}`}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-xl">{stage.emoji}</span>
+                  <span className="text-2xl">{stage.emoji}</span>
                   <div>
-                    <h3 className="text-base font-semibold text-portfolio-foreground/90">{stage.stage}</h3>
-                    <p className="text-xs text-portfolio-muted-foreground/80">{stage.description}</p>
+                    <h3 className="text-lg font-bold text-portfolio-foreground">{stage.stage}</h3>
+                    <p className="text-xs text-portfolio-muted-foreground">{stage.description}</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-3">
                   {stage.tools.map((tool, toolIndex) => {
                     const IconComponent = tool.icon ? ICON_MAP[tool.icon] : null;
                     return (
                       <div
                         key={toolIndex}
-                        className="group relative bg-portfolio-background/40 border border-portfolio-border/40 rounded-lg p-2.5 hover:border-portfolio-primary/30 transition-all duration-300 cursor-pointer"
+                        className="group relative bg-portfolio-background/50 border border-portfolio-border/50 rounded-lg p-3 hover:border-portfolio-primary/50 hover:bg-portfolio-background/80 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-portfolio-primary/20 hover:-translate-y-1 transform cursor-pointer"
                         data-testid={`tech-${tool.name.toLowerCase().replace(/[^a-z0-9]/g, "")}`}
                       >
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <div className={`text-base ${tool.color} opacity-80`}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className={`text-lg ${tool.color} group-hover:scale-110 transition-all duration-300`}>
                             {IconComponent && <IconComponent />}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-xs text-portfolio-foreground/80 truncate">
+                            <h4 className="font-semibold text-sm text-portfolio-foreground group-hover:text-portfolio-primary transition-colors truncate">
                               {tool.name}
                             </h4>
                           </div>
                         </div>
                         <div className="flex items-center">
-                          <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${getLevelColor(tool.level)} opacity-80`}>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(tool.level)}`}>
                             {getLevelIcon(tool.level)}
                             {tool.level}
                           </span>

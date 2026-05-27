@@ -15,13 +15,13 @@ const PRINCIPLES = [
     icon: Lightbulb,
     quote: '"The pipeline is the product, not the data."',
     body: "I've seen teams optimize a query from 2 hours to 20 minutes and call it done. But if that pipeline runs daily for 3 years, that 20-minute improvement is worth 15,000 hours of engineering time. Always optimize for the recurrence - one-time gains are features, recurring gains are products.",
-    context: "At Freddie Mac, I fixed a 14-hour batch that ran every night. Cutting it to 3.5 hours saved **~10.5h** of EMR cluster time daily. Over 18 months, that's **5,700+ engineer hours** — the equivalent of **3 full-time engineers** for an entire year. Snowpark-based transformation standardization on the same project reduced code divergence by **40%** and cut compute costs by **$16K annually**.",
+    context: "At Freddie Mac, I fixed a 14-hour batch that ran every night. Cutting it to 3.5 hours saved **~10.5h** of EMR cluster time daily. Over 18 months, that's **5,700+ engineer hours** - the equivalent of **3 full-time engineers** for an entire year. Snowpark-based transformation standardization on the same project reduced code divergence by **40%** and cut compute costs by **$16K annually**.",
   },
   {
     icon: ShieldCheck,
     quote: '"Reliability is a feature, not a checklist."',
     body: "SLOs without SLO-based alerting are just aspirations. Every pipeline I build has explicit freshness thresholds, anomaly baselines, and blast-radius estimates. If I can't tell you the MTTR impact of a schema change before we make it, we shouldn't make it.",
-    context: "I built the Data Observability Platform specifically because silent failures were the highest-severity incidents we had — they broke dashboards with no alert, affecting **40+ analysts** before anyone noticed. Detecting that in **15 minutes vs 48 hours** is the difference between a Slack message and a war room.",
+    context: "I built the Data Observability Platform specifically because silent failures were the highest-severity incidents we had - they broke dashboards with no alert, affecting **40+ analysts** before anyone noticed. Detecting that in **15 minutes vs 48 hours** is the difference between a Slack message and a war room.",
   },
   {
     icon: GitBranch,

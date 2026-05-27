@@ -60,7 +60,7 @@ export function SandboxSection() {
                   {!isOpen ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 text-xs font-medium text-cyan-400">
                       <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                      Status: Architecture Demo — Click to Explore
+                      Status: Architecture Demo - Click to Explore
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-400">
