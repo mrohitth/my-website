@@ -146,7 +146,7 @@ export const PROJECTS: Project[] = [
     id: "brain-tumor-ml",
     title: "Brain Tumor Classification Using Machine Learning",
     description:
-      "Constructed a memory-bounded vectorized feature extraction pipeline (GLCM texture matrices + HOG gradient histograms) processing 224x224 MRI batches with PCA whitening reducing the feature matrix from 2048 to 128 dimensions - required to prevent kernel trick computational blowup on the 412-sample training set. Classical ML achieved 96% accuracy outperforming ResNet50, empirically confirming that CNN transfer learning overfits at this data scale.",
+      "Vectorized GLCM+HOG feature pipeline on 224×224 MRI batches with PCA whitening (2048→128 dims) to prevent SVM kernel blowup at 412 training samples. Classical ML hit 96% accuracy, outperforming ResNet50 by 4pp and confirming CNN transfer learning overfits at this scale.",
     image:
       "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -173,7 +173,7 @@ export const PROJECTS: Project[] = [
     id: "mars-semantic-segmentation",
     title: "Mars Terrain Semantic Segmentation",
     description:
-      "Pixel-level terrain classification pipeline ingesting AI4Mars depth+RGB tensor pairs through a U-Net encoder-decoder with skip connections. Depth channel fusion via early concatenation - not late fusion - ensures gradient flow from depth features reaches all decoder layers during backprop. Improved IoU by 0.12 on ambiguous rocky terrain classes where 2D texture alone is insufficient for boundary delineation.",
+      "Pixel-level terrain classifier using U-Net with early-concatenated RGBD depth channel fusion — ensuring depth gradients reach every encoder layer, not just the bottleneck. Improved IoU by 0.12 on ambiguous rocky terrain classes where 2D texture alone fails at boundary delineation.",
     image:
       "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -199,7 +199,7 @@ export const PROJECTS: Project[] = [
     id: "neural-networks-visual-recognition",
     title: "Neural Networks for Visual Recognition",
     description:
-      "Implemented feedforward networks, CNNs, and autoencoders from first principles - NumPy vectorized forward and backward passes before migrating to PyTorch autograd. Implementing raw backprop in NumPy exposed exactly where gradient flow breaks under deep architectures (vanishing gradients without batch normalization, exploding gradients without gradient clipping). Autoencoder compresses 784-dim MNIST pixel vectors into a 32-dim latent space via bottleneck encoding - useful as a deterministic feature extractor for downstream retrieval tasks.",
+      "Feedforward nets, CNNs, and autoencoders built from first principles in NumPy — raw backprop implementation exposing gradient vanishing and exploding mechanics before migrating to PyTorch autograd. Bottleneck autoencoder compresses 784-dim MNIST vectors into a 32-dim latent space for downstream cosine-similarity retrieval.",
     image:
       "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -226,7 +226,7 @@ export const PROJECTS: Project[] = [
     id: "ar-planar-homographies",
     title: "Augmented Reality with Planar Homographies",
     description:
-      "Real-time AR pipeline computing per-frame homography matrices via SIFT keypoint matching and RANSAC outlier rejection, warping video frames into the detected book cover plane at 30fps. Sub-5ms per-frame homography estimation achieved by limiting RANSAC to 500 iterations with an adaptive inlier threshold - sufficient for the planar assumption of a flat book cover without full epipolar geometry.",
+      "Real-time AR pipeline computing per-frame homography matrices via SIFT keypoint matching and RANSAC outlier rejection, warping video frames into a detected book-cover plane at 30fps. Sub-5ms estimation achieved by limiting RANSAC to 500 iterations — sufficient for the planar assumption without full epipolar geometry.",
     image:
       "https://images.unsplash.com/photo-1617802690658-1173a812650d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -252,7 +252,7 @@ export const PROJECTS: Project[] = [
     id: "3d-reconstruction",
     title: "3D Reconstruction from Images",
     description:
-      "Structure-from-motion pipeline estimating camera pose and sparse 3D point cloud from a 12-image sequence. Essential matrix decomposed via SVD for rotation/translation extraction, followed by triangulation of matched keypoints into a dense 50K+ point cloud. Bundle adjustment minimizes reprojection error jointly over all camera poses and 3D point positions using Levenberg-Marquardt iterations.",
+      "Structure-from-motion pipeline estimating camera pose and 50K+ sparse 3D points from a 12-image sequence. Essential matrix decomposed via SVD; bundle adjustment via Levenberg-Marquardt minimizes joint reprojection error across all poses and point positions.",
     image:
       "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -277,7 +277,7 @@ export const PROJECTS: Project[] = [
     id: "lucas-kanade-tracking",
     title: "Lucas-Kanade Object Tracking",
     description:
-      "Optical flow tracker using forward-additive Lucas-Kanade with iterative Gauss-Newton refinement - converges in 3-5 iterations vs 10-15 for the classical formulation, reducing per-frame compute by 60%. Template warping handles non-rigid deformation via affine warp composition. Appearance model update (weighted moving average of template) prevents tracker drift under gradual illumination changes across 300+ frame sequences.",
+      "Forward-additive LK tracker with iterative Gauss-Newton refinement — converges in 3-5 iterations vs 10-15 classical, cutting per-frame compute by 60%. EMA appearance model update prevents drift under gradual illumination changes across 300+ frame sequences.",
     image:
       "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -302,7 +302,7 @@ export const PROJECTS: Project[] = [
     id: "photometric-stereo",
     title: "Photometric Stereo for 3D Surface Reconstruction",
     description:
-      "Reconstructed pixel-level surface normals and depth maps by solving the photometric stereo linear system across 9 calibrated lighting directions. Regularized SVD solves the per-pixel albedo and normal estimation problem robustly - the overdetermined 9x3 system provides least-squares noise resilience that the 3-light minimum case cannot. Depth integration via Poisson solver enforces surface integrability boundary conditions, producing smooth depth maps without the integration-path artifacts of simple line-scan accumulation.",
+      "Pixel-level surface normal and depth map reconstruction from 9 calibrated lighting directions. Regularized SVD solves the overdetermined 9×3 per-pixel system; Poisson depth integration enforces surface integrability without scan-path error accumulation.",
     image:
       "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [
@@ -327,7 +327,7 @@ export const PROJECTS: Project[] = [
     id: "spatial-pyramid-scene",
     title: "Spatial Pyramid Matching for Scene Classification",
     description:
-      "Classical scene recognition pipeline: SIFT keypoints vector-quantized into a 1000-word visual vocabulary via k-means, then encoded into 3-level spatial pyramid histograms (1x1, 2x2, 4x4) concatenated into a 21K-dim feature vector. TF-IDF weighting suppresses high-frequency visual words (sky, flat ground) that appear uniformly across categories and contribute no discriminative signal. KNN with cosine distance over Euclidean on L1-normalized histogram vectors.",
+      "SIFT keypoints → 1000-word visual vocabulary → 3-level spatial pyramid histograms (21K-dim) → TF-IDF weighting → cosine KNN. Achieved 78.3% accuracy on 8-category scene classification, 11pp above flat BoVW baseline.",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: [

@@ -283,7 +283,7 @@ function ShowcaseCard({
   );
 }
 
-// ── AcademicCard (horizontal-scroll ML/CV cards) ──────────────────────────────
+// ── AcademicCard (grid-layout ML/CV cards, matches ShowcaseCard style) ───────
 
 function AcademicCard({
   project,
@@ -295,12 +295,12 @@ function AcademicCard({
   onToggle: (id: string) => void;
 }) {
   const isExpanded = expandedId === project.id;
+  const highlights = project.impact.split(" · ");
 
   return (
-    // CRITICAL: flex-shrink-0 + w-80 prevents collapse in overflow-x-auto containers
-    <article className="flex-shrink-0 w-80 bg-portfolio-card border border-portfolio-border/50 rounded-xl overflow-hidden flex flex-col hover:border-portfolio-primary/30 hover:shadow-xl transition-all duration-300 group">
+    <article className="bg-portfolio-card border border-portfolio-border/50 rounded-xl overflow-hidden flex flex-col hover:border-portfolio-primary/30 hover:shadow-xl transition-all duration-300 group relative">
       {/* Image */}
-      <div className="relative overflow-hidden flex-shrink-0" style={{ height: "180px" }}>
+      <div className="relative overflow-hidden flex-shrink-0" style={{ height: "200px" }}>
         <img
           src={project.image}
           alt={project.title}
@@ -319,24 +319,32 @@ function AcademicCard({
           style={{ background: "linear-gradient(to bottom, transparent 20%, hsl(220 25% 11% / 0.95) 100%)" }}
           aria-hidden="true"
         />
+        {/* Category chip */}
+        <div className="absolute top-3 left-3 bg-portfolio-background/80 backdrop-blur-sm border border-portfolio-border/60 text-portfolio-primary text-xs font-semibold px-2.5 py-1 rounded-full">
+          {project.category}
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-1 gap-3">
-        {/* Title */}
-        <h3 className="font-semibold text-lg text-portfolio-card-foreground leading-snug">
-          {project.title}
-        </h3>
+      <div className="p-6 flex flex-col flex-1 gap-4">
+        <div>
+          <h3 className="font-bold text-xl text-portfolio-card-foreground leading-tight mb-1.5">
+            {project.title}
+          </h3>
+          <p className="text-sm text-portfolio-muted-foreground italic leading-snug">
+            {project.description}
+          </p>
+        </div>
 
-        {/* Impact badge */}
-        <span className="inline-flex items-center text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full leading-tight">
-          {project.impact}
-        </span>
-
-        {/* Description */}
-        <p className="text-sm text-portfolio-muted-foreground leading-relaxed line-clamp-3">
-          {project.description}
-        </p>
+        {/* Highlight bullets */}
+        <ul className="space-y-1.5" aria-label="Key highlights">
+          {highlights.map((h) => (
+            <li key={h} className="flex items-center gap-2.5 text-sm text-portfolio-muted-foreground">
+              <span className="w-1.5 h-1.5 rounded-full bg-portfolio-primary flex-shrink-0" aria-hidden="true" />
+              {h}
+            </li>
+          ))}
+        </ul>
 
         {/* Rationale toggle */}
         {project.architecture && (
@@ -345,18 +353,18 @@ function AcademicCard({
               onClick={() => onToggle(project.id)}
               aria-expanded={isExpanded}
               aria-controls={`p2-acad-rationale-${project.id}`}
-              className="flex items-center justify-between gap-2 w-full text-xs font-medium text-portfolio-primary bg-portfolio-primary/10 hover:bg-portfolio-primary/15 border border-portfolio-primary/20 hover:border-portfolio-primary/40 rounded-lg px-3 py-2 transition-all duration-200"
+              className="flex items-center justify-between gap-2 w-full text-sm font-medium text-portfolio-primary bg-portfolio-primary/10 hover:bg-portfolio-primary/15 border border-portfolio-primary/20 hover:border-portfolio-primary/40 rounded-lg px-3 py-2 transition-all duration-200"
             >
-              <span>Why these choices?</span>
+              <span>Why these architectural choices?</span>
               <ChevronIcon expanded={isExpanded} />
             </button>
             <div
               id={`p2-acad-rationale-${project.id}`}
               className="overflow-hidden transition-all duration-500"
-              style={{ maxHeight: isExpanded ? "600px" : "0" }}
+              style={{ maxHeight: isExpanded ? "700px" : "0" }}
               aria-hidden={!isExpanded}
             >
-              <div className="mt-2 p-3 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
+              <div className="mt-3 p-4 bg-portfolio-background/60 border-l-2 border-portfolio-primary/50 rounded-r-lg">
                 <p className="text-sm text-portfolio-muted-foreground leading-relaxed font-mono">
                   {boldify(project.architecture)}
                 </p>
@@ -366,7 +374,7 @@ function AcademicCard({
         )}
 
         {/* Tech badges */}
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-1" aria-label="Technology stack">
+        <div className="flex flex-wrap gap-2 mt-auto" aria-label="Technology stack">
           {project.technologies.map((t) => (
             <span key={t} className={`px-2 py-0.5 rounded text-xs font-medium border ${techBadgeClass(t)}`}>
               {t}
@@ -379,7 +387,7 @@ function AcademicCard({
           href={project.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm text-portfolio-primary hover:text-portfolio-primary/80 transition-colors font-medium mt-1"
+          className="flex items-center gap-1.5 text-sm text-portfolio-primary hover:text-portfolio-primary/80 transition-colors font-medium"
         >
           <Github className="h-3.5 w-3.5" />
           View on GitHub →
@@ -526,16 +534,11 @@ export function Projects2Section() {
             </div>
 
             {/* Tab panels */}
-            <div className="min-h-[480px]">
+            <div>
               {activeTab === "ml" && (
                 <div
-                  className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide"
-                  aria-label="Machine Learning and Deep Learning project cards, scroll horizontally"
-                  style={{
-                    WebkitOverflowScrolling: "touch",
-                    maskImage: "linear-gradient(to right, black 80%, transparent 100%)",
-                    WebkitMaskImage: "linear-gradient(to right, black 80%, transparent 100%)",
-                  }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  aria-label="Machine Learning and Deep Learning projects"
                 >
                   {mlProjects.map((project) => (
                     <AcademicCard
@@ -549,13 +552,8 @@ export function Projects2Section() {
               )}
               {activeTab === "cv" && (
                 <div
-                  className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide"
-                  aria-label="Computer Vision project cards, scroll horizontally"
-                  style={{
-                    WebkitOverflowScrolling: "touch",
-                    maskImage: "linear-gradient(to right, black 80%, transparent 100%)",
-                    WebkitMaskImage: "linear-gradient(to right, black 80%, transparent 100%)",
-                  }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  aria-label="Computer Vision projects"
                 >
                   {cvProjects.map((project) => (
                     <AcademicCard
